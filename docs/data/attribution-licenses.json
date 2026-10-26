@@ -329,5 +329,15 @@
     "paper": "https://rekep-robot.github.io/",
     "implementation": "本地 MuJoCo 适配；使用上游 SubgoalSolver/PathSolver。真值关键点替代 DINO 感知，MuJoCo IK 替代 Lula，Panda 替代 Fetch；模型生成的约束在各布局中复用。",
     "distribution": "仅分发本地仿真录像与解读，不分发上游源码、机器人模型或权重。"
+  },
+  "rpent": {
+    "project": "RPent: Agentic Infrastructure for the Physical World",
+    "authors": "The RPent Authors / RLinf",
+    "source": "https://github.com/RLinf/RPent",
+    "sourceCommit": "d6daf3413dd203f44bbd4a9f3f08c19db0c2063c",
+    "license": "data/licenses/rpent-Apache-2.0.txt",
+    "policyCheckpoint": "https://huggingface.co/RLinf/RLinf-Pi05-LIBERO-130-fullshot-SFT",
+    "implementation": "固定版本官方流程，应用 RV-ICL 兼容补丁但未开启视频示范；CPU SAM3、低内存权重加载和分块记录为本地硬件适配。双视角视频直接并排组合原生记录，无插帧。",
+    "distribution": "仅分发本地仿真录像与说明，不分发权重、机器人资产、原始数据集或上游源码。"
   }
 }

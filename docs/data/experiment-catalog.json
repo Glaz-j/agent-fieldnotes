@@ -3,16 +3,16 @@
   "updatedAt": "2026-10-24T11:57:00+08:00",
   "sourceIndexSha256": "f8d60a8e11685454dc9966bd98bcec5a6b905b2cc7bd54c67f378ce4be1dbcd9",
   "counts": {
-    "cards": 43,
-    "projects": 27,
-    "records": 141,
+    "cards": 44,
+    "projects": 28,
+    "records": 144,
     "pending": 0,
     "byScope": {
-      "embodied": 40,
+      "embodied": 41,
       "reference": 3
     },
     "projectsByScope": {
-      "embodied": 26,
+      "embodied": 27,
       "reference": 1
     }
   },
@@ -931,6 +931,76 @@
             "poster": "media/dimos-spatial-t02-i0-s42.png",
             "alt": "dimOS · 多种空间关系下的抓碗放盘 仿真画面",
             "video": "media/dimos-spatial-t02-i0-s42.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "rpent",
+      "title": "RPent · Agent 与 VLA 技能协作",
+      "question": "语言模型组织任务和观察，VLA 负责短时抓取，几何原语负责搬运；抓取停滞时，根据反馈调整提示或接近位姿。",
+      "cards": [
+        {
+          "id": "rpent-astra-pi05-20261027",
+          "title": "RPent · 大模型指挥 VLA 抓取与几何搬运",
+          "task": "抓瓶放篮与双色杯配对入位",
+          "engine": "MuJoCo / LIBERO-PRO",
+          "source": "fresh",
+          "model": "gpt-6-astra（请求型号）+ π₀.₅ LIBERO SFT",
+          "input": "双相机 RGB-D + 标定 + 机械臂状态 + 冻结经验库",
+          "sourceUrl": "https://github.com/RLinf/RPent",
+          "mechanism": "planning",
+          "scope": "embodied",
+          "sourceLabel": "本机在线 Agent 与 VLA",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-rpent-astra-pi05-20261027",
+          "notes": [
+            "Astra 高层 Agent + π₀.₅ LIBERO SFT 抓取技能 + RGB-D 几何工具 + 冻结操作经验。",
+            "π₀.₅ 使用 LIBERO SFT 权重；固定版本官方流程关闭视频示范接口，模型加载、CPU 分割和数据记录作了本地适配。双色杯轨迹在末杯仍被夹持时触发原生成功，不声称松爪后双杯稳定放置。"
+          ],
+          "cardValue": "3 段演示",
+          "shortDescription": "语言模型组织任务和观察，VLA 负责短时抓取，几何原语负责搬运；抓取停滞时，根据反馈调整提示或接近位姿。",
+          "projectBrief": {
+            "familyId": "rpent",
+            "familyTitle": "RPent · Agent 与 VLA 技能协作",
+            "summary": "语言模型组织任务和观察，VLA 负责短时抓取，几何原语负责搬运；抓取停滞时，根据反馈调整提示或接近位姿。",
+            "technicalRoute": "Astra 高层 Agent + π₀.₅ LIBERO SFT 抓取技能 + RGB-D 几何工具 + 冻结操作经验。",
+            "modelRole": "Astra 在线决定观察位置、技能提示和搬运目标；π₀.₅ 生成短段抓取动作，几何搬运由官方脚本原语和 OSC 控制器执行。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "外部与腕部相机的 RGB-D 图像、标定信息、末端和夹爪状态，以及预先下载的经验库。"
+              },
+              {
+                "label": "决定什么",
+                "text": "选择目标、测量位置、调用或调整抓取技能，并根据抓持偏移规划下一段搬运目标。"
+              },
+              {
+                "label": "如何执行",
+                "text": "官方 pi0_pick 调用动作策略；move_to、move_pose 和夹爪原语通过原生 OSC 控制器推进 Panda 仿真。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新图像、深度投影、夹爪开度与工具执行结果返回模型；LIBERO-PRO 原生条件判定任务达成。"
+              }
+            ],
+            "limitation": "π₀.₅ 使用 LIBERO SFT 权重；固定版本官方流程关闭视频示范接口，模型加载、CPU 分割和数据记录作了本地适配。双色杯轨迹在末杯仍被夹持时触发原生成功，不声称松爪后双杯稳定放置。",
+            "watchFor": "看模型如何在抓取未完成时改写技能提示，以及如何利用腕部图像测量杯子相对夹爪的偏移，再补偿搬运目标。",
+            "result": "模型结合图像与深度测量调用 VLA 抓取，把沙拉酱瓶放入篮子；另展示双色杯配对入位，原生成功在末杯松爪前触发。",
+            "model": "gpt-6-astra（请求型号）+ π₀.₅ LIBERO SFT",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "rpent",
+          "versionLabel": "RPent · 大模型指挥 VLA 抓取与几何搬运",
+          "preview": {
+            "poster": "media/rpent-object_swap2_seed3_a01.jpg",
+            "alt": "RPent · 大模型指挥 VLA 抓取与几何搬运 仿真画面",
+            "video": "media/rpent-object_swap2_seed3_a01.mp4",
             "start": 0
           }
         }
@@ -3137,6 +3207,24 @@
         "video": "media/dimos-astra_v2_i0_s42_20261022_012155.mp4",
         "start": 0,
         "alt": "让抓取过程，可以完整复演 仿真画面"
+      }
+    },
+    {
+      "id": "rpent",
+      "title": "RPent · Agent 与 VLA 技能协作",
+      "summary": "语言模型组织任务和观察，VLA 负责短时抓取，几何原语负责搬运；抓取停滞时，根据反馈调整提示或接近位姿。",
+      "representativeId": "rpent-astra-pi05-20261027",
+      "memberIds": [
+        "rpent-astra-pi05-20261027"
+      ],
+      "demoCount": 3,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/rpent-object_swap2_seed3_a01.jpg",
+        "video": "media/rpent-object_swap2_seed3_a01.mp4",
+        "start": 0,
+        "alt": "RPent · 大模型指挥 VLA 抓取与几何搬运 仿真画面"
       }
     },
     {

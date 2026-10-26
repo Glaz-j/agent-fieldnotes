@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-10-24",
+  "updated": "2026-10-27",
   "featured": "mems-target-shift-libero-three",
   "feature": {
     "label": "ASTRA × MemS",
@@ -5187,6 +5187,151 @@
       ],
       "projectId": "elevator",
       "versionLabel": "多种执行反馈接口"
+    },
+    {
+      "id": "rekep-mujoco-relational-20261027",
+      "title": "ReKep · 用关系约束完成抓取与堆叠",
+      "task": "抓取抬升、积木堆叠与目标移位",
+      "engine": "MuJoCo / robosuite",
+      "route": "planner",
+      "source": "fresh",
+      "model": "gpt-6-astra 生成约束 · ReKep 优化器执行",
+      "input": "仿真真值关键点 + 关节状态 + 解析桌面距离场",
+      "poster": "media/rekep-stack_s2_20261027_005454.jpg",
+      "sourceUrl": "https://github.com/huangwl18/ReKep",
+      "sourceLabel": "ReKep 官方项目",
+      "originalTrialMax": 6,
+      "trials": [
+        {
+          "seed": 2,
+          "steps": 339,
+          "wallSeconds": 27.61,
+          "video": "media/rekep-stack_s2_20261027_005454.mp4",
+          "poster": "media/rekep-stack_s2_20261027_005454.jpg",
+          "success": true,
+          "outcome": "success",
+          "label": "将红色积木叠到绿色积木上",
+          "originalTrialNumber": 1,
+          "statusLabel": "任务完成"
+        },
+        {
+          "seed": 3,
+          "steps": 327,
+          "wallSeconds": 24.57,
+          "video": "media/rekep-stack_s3_20261027_005528.mp4",
+          "poster": "media/rekep-stack_s3_20261027_005528.jpg",
+          "success": true,
+          "outcome": "success",
+          "label": "换个摆放位置，再完成堆叠",
+          "originalTrialNumber": 2,
+          "statusLabel": "任务完成"
+        },
+        {
+          "seed": 1,
+          "steps": 241,
+          "wallSeconds": 19.85,
+          "video": "media/rekep-shift_s1_20261027_005558.mp4",
+          "poster": "media/rekep-shift_s1_20261027_005558.jpg",
+          "success": true,
+          "outcome": "success",
+          "label": "目标移位后重新接近与抓取",
+          "originalTrialNumber": 3,
+          "statusLabel": "任务完成"
+        },
+        {
+          "seed": 2,
+          "steps": 238,
+          "wallSeconds": 23.51,
+          "video": "media/rekep-shift_s2_20261027_005631.mp4",
+          "poster": "media/rekep-shift_s2_20261027_005631.jpg",
+          "success": true,
+          "outcome": "success",
+          "label": "重新跟踪移位目标并抬升",
+          "originalTrialNumber": 4,
+          "statusLabel": "任务完成"
+        },
+        {
+          "seed": 3,
+          "steps": 244,
+          "wallSeconds": 19.28,
+          "video": "media/rekep-shift_s3_20261027_005715.mp4",
+          "poster": "media/rekep-shift_s3_20261027_005715.jpg",
+          "success": true,
+          "outcome": "success",
+          "label": "另一初始布局中的目标移位",
+          "originalTrialNumber": 5,
+          "statusLabel": "任务完成"
+        },
+        {
+          "seed": 3,
+          "steps": 223,
+          "wallSeconds": 16.67,
+          "video": "media/rekep-lift_s3_20261027_005412.mp4",
+          "poster": "media/rekep-lift_s3_20261027_005412.jpg",
+          "success": true,
+          "outcome": "success",
+          "label": "关系约束驱动抓取与抬升",
+          "originalTrialNumber": 6,
+          "statusLabel": "任务完成"
+        }
+      ],
+      "projectBrief": {
+        "familyId": "rekep",
+        "familyTitle": "ReKep · 关系关键点约束",
+        "summary": "把“接近、抓取、抬升、叠放”写成关键点之间的几何关系，再通过优化求出动作；目标改变时使用新关键点重新求解。",
+        "technicalRoute": "语言模型生成关系约束 → ReKep 子目标与路径优化 → MuJoCo IK → Panda 关节位置控制。",
+        "modelRole": "Astra 在运行前生成约束，同一组约束在不同布局复用；执行时由优化器与物理控制器闭环运行，没有逐步请求语言模型。",
+        "controlLoop": [
+          {
+            "label": "看到什么",
+            "text": "仿真真值物体中心、机械臂状态，以及解析桌面距离场。"
+          },
+          {
+            "label": "决定什么",
+            "text": "优化器选择满足接近、抓取、离桌高度和叠放关系的末端姿态与中间路径。"
+          },
+          {
+            "label": "如何执行",
+            "text": "真实 MuJoCo 雅可比 IK 求解关节角，robosuite 关节控制器执行；夹爪靠物理接触抓住物体。"
+          },
+          {
+            "label": "如何反馈",
+            "text": "每个阶段重新读取物体关键点；外力移位后重新优化，最终由原生 Lift / Stack 条件验证完成。"
+          }
+        ],
+        "limitation": "这是明确标注的 MuJoCo 适配：未复现原版 OmniGibson / DINO 感知，使用真值关键点。碰撞仅近似桌面与夹爪或抓持物体点云，未提供完整手臂避障；优化预算也作了本地配置。",
+        "watchFor": "看红块如何被抬起、松爪后留在绿块上；再看目标移位后，新的关系约束如何让接近位置随之改变。",
+        "result": "完成积木抓取、抬升和堆叠；目标被移位后，重新读取关键点、求解约束，再抓取新位置上的方块。",
+        "model": "gpt-6-astra 生成约束 · ReKep 优化器执行",
+        "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+        "schema": "project-explanation/1"
+      },
+      "shortDescription": "把“接近、抓取、抬升、叠放”写成关键点之间的几何关系，再通过优化求出动作；目标改变时使用新关键点重新求解。",
+      "description": "把“接近、抓取、抬升、叠放”写成关键点之间的几何关系，再通过优化求出动作；目标改变时使用新关键点重新求解。",
+      "cardValue": "6 段演示",
+      "cardLabel": "精选成果回放",
+      "metrics": [
+        {
+          "label": "展示内容",
+          "value": "抓取抬升、积木堆叠与目标移位"
+        },
+        {
+          "label": "运行方式",
+          "value": "Astra 在运行前生成约束，同一组约束在不同布局复用；执行时由优化器与物理控制器闭环运行，没有逐步请求语言模型。"
+        },
+        {
+          "label": "输入信息",
+          "value": "仿真真值关键点 + 关节状态 + 解析桌面距离场"
+        }
+      ],
+      "notes": [
+        "语言模型生成关系约束 → ReKep 子目标与路径优化 → MuJoCo IK → Panda 关节位置控制。",
+        "这是明确标注的 MuJoCo 适配：未复现原版 OmniGibson / DINO 感知，使用真值关键点。碰撞仅近似桌面与夹爪或抓持物体点云，未提供完整手臂避障；优化预算也作了本地配置。"
+      ],
+      "playbackNote": "精选成果录像；播放时间可能省略模型等待，实际输入与执行方式见项目解读。",
+      "relatedDemos": [],
+      "projectId": "rekep",
+      "versionLabel": "ReKep · 用关系约束完成抓取与堆叠"
     }
   ],
   "projects": [
@@ -5303,6 +5448,24 @@
         "video": "media/dimos-astra_v2_i0_s42_20261022_012155.mp4",
         "start": 0,
         "alt": "让抓取过程，可以完整复演 仿真画面"
+      }
+    },
+    {
+      "id": "rekep",
+      "title": "ReKep · 关系关键点约束",
+      "summary": "把“接近、抓取、抬升、叠放”写成关键点之间的几何关系，再通过优化求出动作；目标改变时使用新关键点重新求解。",
+      "representativeId": "rekep-mujoco-relational-20261027",
+      "memberIds": [
+        "rekep-mujoco-relational-20261027"
+      ],
+      "demoCount": 6,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/rekep-stack_s2_20261027_005454.jpg",
+        "video": "media/rekep-stack_s2_20261027_005454.mp4",
+        "start": 0,
+        "alt": "ReKep · 用关系约束完成抓取与堆叠 仿真画面"
       }
     },
     {

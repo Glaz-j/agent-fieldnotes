@@ -1,6 +1,6 @@
 # Agent Fieldnotes
 
-具身智能能力探索展厅：26 个项目、42 个版本、135 段精选仿真演示。
+具身智能能力探索展厅：精选完成的仿真演示，探索模型、规划、记忆与动作学习如何配合。
 
 访问网站：https://glaz-j.github.io/agent-fieldnotes/
 

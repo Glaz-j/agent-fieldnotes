@@ -321,5 +321,13 @@
     "applies_to": [
       "astra-elevator-feedback-comparison"
     ]
+  },
+  "rekep": {
+    "project": "ReKep: Spatio-Temporal Reasoning of Relational Keypoint Constraints for Robotic Manipulation",
+    "authors": "Wenlong Huang, Chen Wang, Yunzhu Li, Ruohan Zhang, Li Fei-Fei",
+    "source": "https://github.com/huangwl18/ReKep",
+    "paper": "https://rekep-robot.github.io/",
+    "implementation": "本地 MuJoCo 适配；使用上游 SubgoalSolver/PathSolver。真值关键点替代 DINO 感知，MuJoCo IK 替代 Lula，Panda 替代 Fetch；模型生成的约束在各布局中复用。",
+    "distribution": "仅分发本地仿真录像与解读，不分发上游源码、机器人模型或权重。"
   }
 }

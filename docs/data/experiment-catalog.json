@@ -3,16 +3,16 @@
   "updatedAt": "2026-10-24T11:57:00+08:00",
   "sourceIndexSha256": "f8d60a8e11685454dc9966bd98bcec5a6b905b2cc7bd54c67f378ce4be1dbcd9",
   "counts": {
-    "cards": 44,
-    "projects": 28,
-    "records": 144,
+    "cards": 45,
+    "projects": 29,
+    "records": 147,
     "pending": 0,
     "byScope": {
-      "embodied": 41,
+      "embodied": 42,
       "reference": 3
     },
     "projectsByScope": {
-      "embodied": 27,
+      "embodied": 28,
       "reference": 1
     }
   },
@@ -931,6 +931,76 @@
             "poster": "media/dimos-spatial-t02-i0-s42.png",
             "alt": "dimOS · 多种空间关系下的抓碗放盘 仿真画面",
             "video": "media/dimos-spatial-t02-i0-s42.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "rvicl",
+      "title": "RV-ICL · 分层视频示范与操作",
+      "question": "模型先看任务全貌，再按需要回看接近、抓取、接触与放置片段；把示范中的方法用于当前布局，并根据执行反馈调整。",
+      "cards": [
+        {
+          "id": "rvicl-astra-video-20261027",
+          "title": "RV-ICL · 边看示范，边调整机器人操作",
+          "task": "双色杯配对、拉开抽屉与抓瓶入篮",
+          "engine": "MuJoCo / LIBERO-PRO",
+          "source": "fresh",
+          "model": "gpt-6-astra（请求型号）+ π₀.₅ LIBERO SFT",
+          "input": "分层示范视频与语义索引 + 当前双相机 RGB-D + 标定 + 冻结经验库",
+          "sourceUrl": "https://github.com/BWR-hhh/rvicl",
+          "mechanism": "planning",
+          "scope": "embodied",
+          "sourceLabel": "本机在线 Agent 与示范片段工具",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-rvicl-astra-video-20261027",
+          "notes": [
+            "分层视频上下文检索 + Astra 在线决策 + π₀.₅ 短时技能 + RGB-D 几何控制。模型权重保持冻结，没有本机训练。",
+            "这是带语义和状态注释的示范上下文，不是纯视频端到端策略；π₀.₅ 已经 LIBERO 微调。保留官方任务补丁，并作 CPU 分割、低内存加载与记录器适配。抓瓶与双杯在末物体仍被夹持时触发成功，不能声称松爪后的稳定放置；抽屉演示碰倒了旁边的瓶子。未做隔离视频作用的因果对照，也不声称精确全状态重演。"
+          ],
+          "cardValue": "3 段演示",
+          "shortDescription": "模型先看任务全貌，再按需要回看接近、抓取、接触与放置片段；把示范中的方法用于当前布局，并根据执行反馈调整。",
+          "projectBrief": {
+            "familyId": "rvicl",
+            "familyTitle": "RV-ICL · 分层视频示范与操作",
+            "summary": "模型先看任务全貌，再按需要回看接近、抓取、接触与放置片段；把示范中的方法用于当前布局，并根据执行反馈调整。",
+            "technicalRoute": "分层视频上下文检索 + Astra 在线决策 + π₀.₅ 短时技能 + RGB-D 几何控制。模型权重保持冻结，没有本机训练。",
+            "modelRole": "Astra 选择何时看示范、看哪个阶段或关键时刻，再决定当前场景的观察、技能提示与末端目标；不是照抄示范轨迹。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "示范总览、阶段地图与局部片段；索引含原示范的物体/区域语义、末端与夹爪状态。当前观察是双相机 RGB-D、标定和机器人状态，另有冻结经验库。"
+              },
+              {
+                "label": "决定什么",
+                "text": "先调用 view_task_video 与 view_task_map，再用 view_demo_clip 回看相关动作；从当前深度重新测量目标，选择抓取或接触技能以及后续搬运目标。"
+              },
+              {
+                "label": "如何执行",
+                "text": "RPent 的 pi0_pick / pi0_doubled 调用 π₀.₅；move_to、move_pose 与夹爪原语通过原生 OSC 控制器执行 Panda 的物理操作。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "每段执行返回当前图像、深度投影和夹爪状态；不合适时回看示范、重测或换接近方式，最终核对 LIBERO-PRO 原生终止标志。"
+              }
+            ],
+            "limitation": "这是带语义和状态注释的示范上下文，不是纯视频端到端策略；π₀.₅ 已经 LIBERO 微调。保留官方任务补丁，并作 CPU 分割、低内存加载与记录器适配。抓瓶与双杯在末物体仍被夹持时触发成功，不能声称松爪后的稳定放置；抽屉演示碰倒了旁边的瓶子。未做隔离视频作用的因果对照，也不声称精确全状态重演。",
+            "watchFor": "先看双色杯：模型发现盘子倾斜后抬起重测，并放弃不适用的旧偏移修正；再看抽屉：最初技能方向不对，回看片段并重新接近后拉开中层。",
+            "result": "模型按需要回看示范片段，结合当前 RGB-D 测量完成双色杯入位、拉开中层抽屉和抓瓶入篮；抓放演示在末物体松爪前触发原生成功。",
+            "model": "gpt-6-astra（请求型号）+ π₀.₅ LIBERO SFT",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "rvicl",
+          "versionLabel": "RV-ICL · 边看示范，边调整机器人操作",
+          "preview": {
+            "poster": "media/rvicl-10_swap4_seed2_a01.jpg",
+            "alt": "RV-ICL · 边看示范，边调整机器人操作 仿真画面",
+            "video": "media/rvicl-10_swap4_seed2_a01.mp4",
             "start": 0
           }
         }
@@ -3207,6 +3277,24 @@
         "video": "media/dimos-astra_v2_i0_s42_20261022_012155.mp4",
         "start": 0,
         "alt": "让抓取过程，可以完整复演 仿真画面"
+      }
+    },
+    {
+      "id": "rvicl",
+      "title": "RV-ICL · 分层视频示范与操作",
+      "summary": "模型先看任务全貌，再按需要回看接近、抓取、接触与放置片段；把示范中的方法用于当前布局，并根据执行反馈调整。",
+      "representativeId": "rvicl-astra-video-20261027",
+      "memberIds": [
+        "rvicl-astra-video-20261027"
+      ],
+      "demoCount": 3,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/rvicl-10_swap4_seed2_a01.jpg",
+        "video": "media/rvicl-10_swap4_seed2_a01.mp4",
+        "start": 0,
+        "alt": "RV-ICL · 边看示范，边调整机器人操作 仿真画面"
       }
     },
     {

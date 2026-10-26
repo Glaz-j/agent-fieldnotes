@@ -339,5 +339,17 @@
     "policyCheckpoint": "https://huggingface.co/RLinf/RLinf-Pi05-LIBERO-130-fullshot-SFT",
     "implementation": "固定版本官方流程，应用 RV-ICL 兼容补丁但未开启视频示范；CPU SAM3、低内存权重加载和分块记录为本地硬件适配。双视角视频直接并排组合原生记录，无插帧。",
     "distribution": "仅分发本地仿真录像与说明，不分发权重、机器人资产、原始数据集或上游源码。"
+  },
+  "rvicl": {
+    "project": "Recursive Video In-Context Learning for Agentic Robot",
+    "authors": "Wenrui Bao, Xinxin Liu, Bingxin Xu, Yuzhang Shang; built on RPent / HarnessVLA",
+    "source": "https://github.com/BWR-hhh/rvicl",
+    "sourceCommit": "4052a54caac9acb4ce42c050c9a96d11b3e251a4",
+    "runtimeBase": "RPent d6daf3413dd203f44bbd4a9f3f08c19db0c2063c + official RV-ICL patch",
+    "license": "data/licenses/rvicl-Apache-2.0.txt",
+    "policyCheckpoint": "https://huggingface.co/RLinf/RLinf-Pi05-LIBERO-130-fullshot-SFT",
+    "demonstrationSource": "LIBERO-derived official RV-ICL v0.1 video store; reference assets are not redistributed here.",
+    "implementation": "官方分层示范工具与任务补丁；本地采用 CPU SAM3、低内存权重加载和逐步落盘记录。示范索引附带原示范的物体/区域语义、末端与夹爪状态，不是纯 RGB 输入。当前场景的位置由 RGB-D 测量获得。",
+    "distribution": "仅分发本机运行录像和说明，不分发上游示范库、权重、机器人资产或原始数据集。"
   }
 }

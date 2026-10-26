@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "defaultScope": "all",
+  "labels": {
+    "all": "全部成果",
+    "embodied": "具身主线"
+  },
+  "descriptions": {
+    "all": "精选已经完成的演示：看机器人做到了什么，探索背后的控制、记忆、规划与学习方法。",
+    "embodied": "聚焦机器人操作、移动和物理控制的成果演示。"
+  },
+  "rule": "Default inclusion, with explicit exceptions by demo ID; this affects collection display only, never recorded results or deep links.",
+  "outsideEmbodied": {},
+  "retainedContext": {
+    "WorldCoder": "抽象导航和规则学习保留为具身世界模型的方法参考，不将其等同于真实机器人操作。"
+  }
+}

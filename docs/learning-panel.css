@@ -1,0 +1,10 @@
+.learning-panel{margin:28px 0;padding:22px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.learning-panel h3{margin:0 0 14px}.learning-stages{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.learning-stages button{border:1px solid var(--line);border-radius:20px;padding:9px 12px;font-size:12px;background:var(--paper)}
+.learning-stages button[aria-pressed=true]{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.learning-description{font-size:13px;line-height:1.9;margin-bottom:16px}.learning-code details{margin:12px 0}
+.learning-code summary{cursor:pointer;font-size:12px;font-weight:600;padding:8px 0}.learning-code pre{max-width:100%;max-height:360px;overflow:auto;padding:14px;background:var(--dark);color:var(--white);font-size:12px;line-height:1.7;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere}
+.learning-panel .button{margin-top:10px}.detail-copy{min-width:0}
+.learning-figure { margin: 16px 0; }
+.learning-figure img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.learning-figure figcaption { margin-top: 7px; color: #63716b; font-size: .8rem; }

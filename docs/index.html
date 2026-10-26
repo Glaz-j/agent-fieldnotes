@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101713">
+  <meta name="description" content="Agent Fieldnotes：具身智能能力探索展厅。观看精选机器人演示，理解模型如何通过规划、空间记忆与动作策略完成任务。">
+  <title>Agent Fieldnotes · 让智能成为动作</title>
+  <link rel="stylesheet" href="styles.css?v=agent-actions-1">
+  <link rel="stylesheet" href="learning-panel.css?v=worldcoder-1">
+  <link rel="stylesheet" href="project-explainers.css?v=project-guide-1">
+  <link rel="stylesheet" href="hover-previews.css?v=hover-1">
+  <link rel="stylesheet" href="project-versions.css?v=projects-1">
+  <script src="hover-previews.js?v=hover-1" defer></script>
+  <script src="learning-panel.js?v=project-guide-1" defer></script>
+  <script src="app.js?v=featured-order-1" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#gallery">跳到实验展厅</a>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="Agent Fieldnotes 首页"><span class="brand-mark" aria-hidden="true">a<span>f</span></span><span>AGENT<br>FIELDNOTES</span></a>
+    <nav aria-label="主导航"><a href="#gallery">实验展厅 <span>↗</span></a><a href="experiments.html">实验总览</a><a href="#method">如何阅读</a><a href="#routes">技术路线</a></nav>
+    <span class="edition"><i aria-hidden="true"></i> SIMULATION / VOL. 01</span>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="small-line"></span> A NOTEBOOK FOR EMBODIED AGENTS</p>
+        <h1 id="hero-title">让智能，<br>成为<span class="serif-word">动作。</span></h1>
+        <p class="hero-description">从一次抓取，到一段自主探索。<br>用精彩的机器人演示，探索模型如何理解世界、组织动作，以及运用工具完成目标。</p>
+        <div class="hero-actions"><a class="button lime" href="#gallery">进入实验展厅 <span>↘</span></a><button class="text-button" id="hero-detail">查看这次实验 <span>↗</span></button></div>
+        <div class="hero-footnote"><span class="cross">+</span><p>精选成果演示 · 有趣的技术路线<br><span>在线 Agent、学习策略、生成代码，分别解读。</span></p></div>
+      </div>
+      <div class="hero-stage">
+        <div class="stage-top"><span><i></i> FEATURED EXPERIMENT</span><span>01 / MANIPULATION</span></div>
+        <div class="hero-video-wrap"><video id="hero-video" controls muted loop playsinline preload="metadata" aria-label="MemS 与 Astra 在目标碗被推走后更新记忆并完成抓放"></video><div class="video-corner" aria-hidden="true">PANDA / MuJoCo</div></div>
+        <div class="stage-caption"><div><span class="eyebrow muted" id="hero-project-label">ASTRA × MemS</span><h2 id="hero-project-title">目标变了，重新找到它。</h2></div><button class="round-button" id="hero-open" aria-label="打开 MemS 空间记忆实验详情">↗</button></div>
+        <div class="hero-metrics" id="hero-metrics"><p>正在载入实验记录…</p></div>
+        <p class="stage-note" id="hero-note">录像以仿真帧率播放，省略模型等待时间。</p>
+      </div>
+    </section>
+    <div class="collection-strip" aria-label="展厅概览"><span>EXPLORING EMBODIED INTELLIGENCE.</span><p>从精彩动作，找到有趣的方法。</p><div id="collection-count">正在读取实验…</div></div>
+    <section class="gallery-section" id="gallery" aria-labelledby="gallery-title">
+      <p id="curation-notice" class="error-message" role="status" hidden>这个项目暂未收录在精选展厅，请从下方选择其他成果演示。</p>
+      <div class="section-heading"><div><p class="eyebrow muted">THE COLLECTION / 持续更新</p><h2 id="gallery-title">走进实验现场<span class="heading-dot">.</span></h2></div><p id="scope-description">聚焦机器人与物理控制，保留抽象导航与规则学习作为方法参考。</p></div>
+      <div class="filter-bar">
+        <div class="collection-tools"><label class="sort-control" for="scope-filter">展厅范围<select id="scope-filter" aria-describedby="scope-description"><option value="all" selected>全部成果</option><option value="embodied">具身主线</option></select></label><label class="search-control" for="experiment-search">搜索实验<input id="experiment-search" type="search" placeholder="搜索机器人、任务或模型，例如 空间记忆" autocomplete="off"></label><label class="sort-control" for="experiment-sort">显示顺序<select id="experiment-sort"><option value="catalog">精选推荐</option><option value="newest">最近加入</option></select></label></div>
+        <div class="quick-filters" aria-label="快速筛选"><button class="filter-chip active" data-quick="all" aria-pressed="true">全部成果</button><button class="filter-chip" data-quick="fresh" aria-pressed="false">在线 Agent</button><button class="filter-chip" data-quick="multi" aria-pressed="false">多个演示</button></div>
+        <div class="select-filters"><label for="route-filter">技术路线<select id="route-filter" aria-label="技术路线"><option value="all">全部路线</option></select></label><label for="engine-filter">仿真引擎<select id="engine-filter" aria-label="仿真引擎"><option value="all">全部引擎</option></select></label><label for="source-filter">记录来源<select id="source-filter" aria-label="记录来源"><option value="all">全部来源</option></select></label><label for="task-filter">任务<select id="task-filter" aria-label="任务"><option value="all">全部任务</option></select></label></div>
+      </div>
+      <div class="result-line"><p id="result-count" role="status" aria-live="polite">正在载入…</p><button id="reset-filters" class="text-button">重置筛选 ↺</button></div>
+      <div class="demo-grid" id="demo-grid"></div>
+      <div class="empty-state" id="empty-state" hidden><span>↗</span><h3>这个组合还没有收录实验。</h3><p>换一条路线，继续探索已有的真实轨迹。</p><button class="button" id="empty-reset">显示全部记录</button></div>
+    </section>
+    <section class="method-section" id="method" aria-labelledby="method-title">
+      <div><p class="eyebrow">UNDERSTAND THE METHOD</p><h2 id="method-title">看见动作。<br><span>也读懂方法。</span></h2><p class="method-intro">这里精选已经做出成果的演示。跟随一次真实执行，理解模型、工具和机器人如何配合。</p></div>
+      <div class="method-points"><article><span>01</span><div><h3>模型负责哪一层</h3><p>在线逐步决策、提前写好控制代码、训练好的动作策略，各自代表不同的技术路线。</p></div></article><article><span>02</span><div><h3>一次目标如何变成动作</h3><p>看模型如何运用运动规划、空间记忆、视觉反馈与已有技能，让机器人完成一个具体目标。</p></div></article><article><span>03</span><div><h3>这段演示做成了什么</h3><p>每个项目用具体行为解释成果，同时标明使用的感知输入、执行工具和仿真条件。</p></div></article></div>
+    </section>
+    <section class="routes-section" id="routes" aria-labelledby="routes-title"><div class="section-heading"><div><p class="eyebrow muted">DIFFERENT WAYS TO MOVE</p><h2 id="routes-title">同一个物理世界，不同的解题方式。</h2></div></div><div class="route-grid"><article><span class="route-symbol">↗</span><p class="eyebrow muted">01 / AGENT + PLANNER</p><h3>想好，再交给规划器。</h3><p>语言模型选择末端目标；IK 与路径规划将目标转换为关节运动。执行反馈回到 Agent，形成闭环。</p><div class="route-chain">场景状态 → Agent → IK / 规划 → 执行</div></article><article><span class="route-symbol">◎</span><p class="eyebrow muted">02 / VISION TO ACTION</p><h3>从观察，直接走向动作。</h3><p>视觉 Agent 逐次决定动作；VLA 则通过已学习的策略输出动作序列。两者的输入与训练条件分别记录。</p><div class="route-chain">图像 / 状态 → 模型 → 动作 → 新观察</div></article><article><span class="route-symbol">⌁</span><p class="eyebrow muted">03 / FEEDBACK CONTROL</p><h3>从反馈中保持稳定。</h3><p>LQR 与官方脚本展示经典控制和明确动作结构，帮助理解上层智能与底层执行的分工。</p><div class="route-chain">状态 → 控制器 → 动作 → 新状态</div></article></div></section>
+  </main>
+  <footer><a class="footer-brand" href="#">AGENT FIELDNOTES<span>好奇心，落在每一步动作里。</span></a><div><p>独立复现实验 · 全部展示为虚拟环境</p><p id="updated-date">真实记录，持续更新。</p><a href="data/showcase.json">查看公开实验索引 ↗</a> · <a href="data/showcase-review.json">轨迹展示规则 ↗</a></div><a href="#" class="back-top" aria-label="回到顶部">↑</a><a href="attributions.html">来源与许可 ↗</a></footer>
+  <dialog id="demo-dialog" aria-labelledby="dialog-title"><div class="dialog-top"><span class="eyebrow muted" id="dialog-kicker"></span><button class="close-button" id="close-dialog" aria-label="关闭实验详情">×</button></div><div class="dialog-content"><div class="detail-view"><video id="detail-video" controls playsinline preload="metadata"></video><div class="agent-jump-controls" id="agent-jump-controls" hidden><button id="jump-to-agent" class="button small" disabled aria-describedby="agent-jump-basis">跳到模型动作 →</button><span id="agent-jump-basis">按录像返回帧定位，不是独立物理时间</span><p id="agent-seek-status" role="status" aria-live="polite"></p></div><p id="detail-playback-note"></p><section id="project-versions" class="project-versions" aria-label="同项目的其他成果" hidden><div class="project-version-heading"><h3 id="project-family-title"></h3><p id="project-versions-summary"></p></div><div id="project-version-list" class="project-version-list"></div></section><div class="trial-controls"><label for="trial-select">选择当前版本的演示<select id="trial-select" aria-label="选择轨迹"></select></label><button id="next-trial" class="button small">下一条 →</button></div><div class="trial-dots" id="trial-dots" aria-label="轨迹与结果"></div>
+  <div class="trial-share"><button id="copy-trial-link" class="share-button" aria-controls="manual-trial-link" aria-expanded="false">复制此轨迹链接 ↗</button><span id="share-scope" class="share-scope"></span><p id="share-status" role="status" aria-live="polite">接收者需要能访问当前站点地址。</p><div id="manual-trial-link" hidden><label for="trial-link">当前轨迹链接</label><input id="trial-link" type="url" readonly spellcheck="false" aria-describedby="share-scope share-status"></div></div>
+  <div class="trial-details" id="trial-details"></div></div><div class="detail-copy"><div class="detail-intro"><p class="eyebrow" id="detail-route"></p><h2 id="dialog-title"></h2><p id="dialog-description"></p></div><div id="project-explainer" class="project-explainer"></div><details id="detail-evidence" class="evidence-details"><summary>展开运行配置与方法说明</summary><p id="detail-original-description"></p><div id="detail-badges" class="badges"></div><dl id="detail-metrics" class="detail-metrics"></dl><h3>实现条件</h3><ul id="detail-notes"></ul></details><a class="source-link" id="detail-source" target="_blank" rel="noopener noreferrer">查看开源项目 ↗</a></div></div></dialog>
+  <template id="decision-template"><section id="decision-panel" class="decision-panel" aria-labelledby="decision-heading"><h3 id="decision-heading">这一步，Agent 发出了什么动作？</h3><p class="decision-help">点击序号，跳到录像中的对应动作。</p><div id="decision-buttons" class="decision-buttons" aria-label="模型决策时间轴"></div><div id="decision-detail" class="decision-detail" aria-live="polite"></div></section></template>
+</body>
+</html>

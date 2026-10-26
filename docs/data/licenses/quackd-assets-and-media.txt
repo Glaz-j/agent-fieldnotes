@@ -1,0 +1,12 @@
+Quackd by Rok Benko and contributors, Apache-2.0.
+https://github.com/rokbenko/quackd/tree/92224c9f3795e1c770e3c8d5043bb607a11890fb
+
+Microduck robot model and meshes: Pollen Robotics, microduck_rl commit 2b25a48b08f1f17bc38c90bb03144c81fbd9ed07.
+https://github.com/pollen-robotics/microduck_rl/tree/2b25a48b08f1f17bc38c90bb03144c81fbd9ed07
+Upstream states Creative Commons BY-SA-NC without an explicit version. Non-commercial and share-alike model terms are retained for these locally generated renders.
+
+Walking/standing ONNX policies: Pollen Robotics microduck-policies revision 6677ec007142bbaf05123a468f6ae58d13808786, Apache-2.0.
+https://huggingface.co/pollen-robotics/microduck-policies/tree/6677ec007142bbaf05123a468f6ae58d13808786
+
+Media changes: original native GIF sampled views converted to MP4 at2fps, preserving durations and final hold. No new physics, training or video upscaling. Seed2 is a static initial-state clip.
+No source code, robot mesh, policy weights, raw actor logs or private prompts are included. No affiliation or endorsement is implied.

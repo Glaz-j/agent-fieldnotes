@@ -1,0 +1,28 @@
+SO101 painting simulation — local reproduction attribution
+
+Original project author: mishig
+Project: https://huggingface.co/buckets/mishig/so101-painting
+
+The gallery uses locally generated, unedited native RGB recordings and the
+native rectified camera-canvas images. It does not include author reference
+movies, original simulation/controller source, model weights, or robot meshes.
+Gallery descriptions and evidence summaries were written for this reproduction.
+
+The original README attributes the SO-101 robot model and meshes to
+TheRobotStudio/SO-ARM100 under Apache License 2.0:
+https://github.com/TheRobotStudio/SO-ARM100/tree/main/Simulation/SO101
+The supplied root LICENSE is preserved as so101-painting-LICENSE.txt. The README
+explicitly identifies the robot-asset scope; no additional claim is made here
+about separately licensing the original controller scripts.
+
+The original project bundles the unmodified Inter font under the SIL Open Font
+License 1.1. The supplied font license is preserved as
+so101-painting-Inter-LICENSE.txt. The gallery does not bundle that font file.
+
+The local run uses a fixed geometric controller, zero online model calls and no
+training. Astra participation in the original author's development has not been
+independently verified and is not claimed as an established fact.
+
+MuJoCo computes the robot and brush contacts. Paint is a separate contact-driven
+2D pigment model, not a 3D fluid solver. Native completion and the brown/blue RGB
+diagnostic score have distinct meanings; the score is not an artistic pass test.

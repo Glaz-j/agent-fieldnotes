@@ -1,0 +1,3442 @@
+{
+  "schema": "embodied-experiment-catalog/1",
+  "updatedAt": "2026-10-24T11:57:00+08:00",
+  "sourceIndexSha256": "f8d60a8e11685454dc9966bd98bcec5a6b905b2cc7bd54c67f378ce4be1dbcd9",
+  "counts": {
+    "cards": 42,
+    "projects": 26,
+    "records": 135,
+    "pending": 0,
+    "byScope": {
+      "embodied": 39,
+      "reference": 3
+    },
+    "projectsByScope": {
+      "embodied": 25,
+      "reference": 1
+    }
+  },
+  "countingNote": "精选已经完成的成果演示，聚焦技术路线、模型作用和实现条件。",
+  "mechanisms": [
+    {
+      "id": "planning",
+      "title": "目标与运动规划",
+      "description": "模型决定做什么，IK、规划器或原生控制器负责执行。"
+    },
+    {
+      "id": "vision",
+      "title": "视觉闭环控制",
+      "description": "看图、发动作、观察后果，研究对齐、接触和操作反馈。"
+    },
+    {
+      "id": "memory",
+      "title": "感知与空间记忆",
+      "description": "主动观察、几何定位、记忆更新，以及遮挡和扰动后的恢复。"
+    },
+    {
+      "id": "skills",
+      "title": "示范与技能复用",
+      "description": "示范迁移、动作修改和操作经验复用。"
+    },
+    {
+      "id": "policies",
+      "title": "学习到的动作策略",
+      "description": "预训练 VLA、ACT 和灵巧操作技能在物理环境中的执行。"
+    },
+    {
+      "id": "world_models",
+      "title": "世界模型与预测规划",
+      "description": "区分预训练潜在动力学与生成可执行规则。"
+    },
+    {
+      "id": "mobility",
+      "title": "移动与飞行",
+      "description": "高层目标如何通过步态、速度和飞行控制落地。"
+    },
+    {
+      "id": "programs",
+      "title": "代码生成与机器人设计",
+      "description": "模型生成控制程序或机器人设计，再交给仿真检验。"
+    },
+    {
+      "id": "baselines",
+      "title": "传统控制参照",
+      "description": "用固定控制器和基线确认环境与任务条件。"
+    }
+  ],
+  "sources": {
+    "fresh": "本机新跑 Agent",
+    "authored": "模型生成的固定控制器",
+    "published_policy": "作者公开策略",
+    "demonstration": "人类示范 / 示范迁移",
+    "vla": "本机 VLA 推理",
+    "baseline": "传统控制基线",
+    "replay": "公开轨迹回放",
+    "online_learning": "在线学习（无 LLM）"
+  },
+  "families": [
+    {
+      "id": "mems",
+      "title": "MemS + Astra · 空间记忆",
+      "question": "从图像建立可更新的空间记忆，完成抓取，并在目标被推走后重新定位、继续操作。",
+      "cards": [
+        {
+          "id": "mems-visual-memory-libero-three",
+          "title": "MemS + Astra · 把图像变成可修正的空间记忆",
+          "engine": "MuJoCo / LIBERO",
+          "model": "gpt-6-astra · 独立上下文逐条执行",
+          "input": "双RGB + 相机标定 + 机器人状态 + 匿名接触反馈",
+          "task": "奶酪盒放到碗上 · 官方 On 判据 · 三个布局",
+          "cardValue": "3 段演示",
+          "shortDescription": "把图像中的对应点变成可查询空间记忆，再用新观察修正记忆并继续抓放。",
+          "mechanism": "memory",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-mems-visual-memory-libero-three",
+          "sourceUrl": "https://github.com/darthjaja6/MemS",
+          "notes": [
+            "视觉对应点 + 标定几何重建 + 空间记忆 + 在线 Agent 操作。",
+            "本地适配不是完整上游 IK/RoboDojo 复现；每集清空上下文与记忆。无记忆消融缺失，不能声称因果提升或跨集学习。"
+          ],
+          "projectBrief": {
+            "familyId": "mems",
+            "familyTitle": "MemS · 可更新的视觉空间记忆",
+            "summary": "把图像中的对应点变成可查询空间记忆，再用新观察修正记忆并继续抓放。",
+            "technicalRoute": "视觉对应点 + 标定几何重建 + 空间记忆 + 在线 Agent 操作。",
+            "modelRole": "Astra 在线选择图像对应点、查询记忆并决定动作。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "双 RGB、相机标定、机器人状态与接触反馈；Actor 不读取物体真值。"
+              },
+              {
+                "label": "决定什么",
+                "text": "几何工具从选点拟合物体位置写入记忆；模型据此选择末端与夹爪目标。"
+              },
+              {
+                "label": "如何执行",
+                "text": "本地 LIBERO 适配层通过原生 OSC 控制器执行。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新图像与接触信息允许更新记忆，再选择下一步动作。"
+              }
+            ],
+            "limitation": "本地适配不是完整上游 IK/RoboDojo 复现；每集清空上下文与记忆。无记忆消融缺失，不能声称因果提升或跨集学习。",
+            "watchFor": "看记忆中的坐标何时变化，以及后续动作是否确实使用新位置。",
+            "result": "模型从双相机图像建立可查询的空间记忆，结合几何工具完成抓碗放盘。",
+            "model": "gpt-6-astra · 独立上下文逐条执行",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "mems",
+          "versionLabel": "视觉空间记忆与抓放",
+          "preview": {
+            "poster": "media/mems-visual-memory-libero-three-t00.jpg",
+            "alt": "MemS + Astra · 把图像变成可修正的空间记忆 仿真画面",
+            "video": "media/mems-visual-memory-libero-three-t00.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "mems-target-shift-libero-three",
+          "title": "MemS + Astra · 目标碗被推走后会怎样",
+          "engine": "MuJoCo / LIBERO",
+          "model": "gpt-6-astra · 三个独立上下文",
+          "input": "双RGB + 相机标定 + 机器人状态 + 匿名接触",
+          "task": "抓取奶酪盒，目标碗在操作中受到一次侧推",
+          "cardValue": "3 段演示",
+          "shortDescription": "把图像中的对应点变成可查询空间记忆，再用新观察修正记忆并继续抓放。",
+          "mechanism": "memory",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-mems-target-shift-libero-three",
+          "sourceUrl": "https://github.com/darthjaja6/MemS",
+          "notes": [
+            "视觉对应点 + 标定几何重建 + 空间记忆 + 在线 Agent 操作。",
+            "本地适配不是完整上游 IK/RoboDojo 复现；每集清空上下文与记忆。无记忆消融缺失，不能声称因果提升或跨集学习。"
+          ],
+          "projectBrief": {
+            "familyId": "mems",
+            "familyTitle": "MemS · 可更新的视觉空间记忆",
+            "summary": "把图像中的对应点变成可查询空间记忆，再用新观察修正记忆并继续抓放。",
+            "technicalRoute": "视觉对应点 + 标定几何重建 + 空间记忆 + 在线 Agent 操作。",
+            "modelRole": "Astra 在线选择图像对应点、查询记忆并决定动作。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "双 RGB、相机标定、机器人状态与接触反馈；Actor 不读取物体真值。"
+              },
+              {
+                "label": "决定什么",
+                "text": "几何工具从选点拟合物体位置写入记忆；模型据此选择末端与夹爪目标。"
+              },
+              {
+                "label": "如何执行",
+                "text": "本地 LIBERO 适配层通过原生 OSC 控制器执行。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新图像与接触信息允许更新记忆，再选择下一步动作。"
+              }
+            ],
+            "limitation": "本地适配不是完整上游 IK/RoboDojo 复现；每集清空上下文与记忆。无记忆消融缺失，不能声称因果提升或跨集学习。",
+            "watchFor": "看记忆中的坐标何时变化，以及后续动作是否确实使用新位置。",
+            "result": "碗被外力推离原位后，模型重新观察、更新记忆坐标，再使用新目标继续完成抓放。",
+            "model": "gpt-6-astra · 三个独立上下文",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "mems",
+          "versionLabel": "目标移动后的记忆更新与恢复",
+          "preview": {
+            "poster": "media/mems-target-shift-libero-three-t00.jpg",
+            "alt": "MemS + Astra · 目标碗被推走后会怎样 仿真画面",
+            "video": "media/mems-target-shift-libero-three-t00.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "robomme",
+      "title": "RoboMME · 视觉操作记忆",
+      "question": "记住次数、顺序、遮挡换位和示范路径，再依据历史观察完成操作。",
+      "cards": [
+        {
+          "id": "robomme-pick-count",
+          "title": "数清次数，再按下结束按钮",
+          "engine": "SAPIEN / PhysX",
+          "model": "gpt-6-astra（请求标识）",
+          "input": "前视历史 + 当前腕部RGB + 本体状态与标定；无物体真值",
+          "task": "时序计数与抓放",
+          "cardValue": "3 段演示",
+          "shortDescription": "先看演示或物体变化，记住历史，再用机械臂完成依赖记忆的任务。",
+          "mechanism": "memory",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-robomme-pick-count",
+          "sourceUrl": "https://github.com/jackbjed/embodied-astra-robomme",
+          "notes": [
+            "视觉历史记忆 + 在线语言决策 + 原生机械臂规划执行。",
+            "小样本，非完整基准；模型思考期间物理仿真暂停，不能按现实时间理解动态难度。"
+          ],
+          "projectBrief": {
+            "familyId": "robomme",
+            "familyTitle": "RoboMME · 观察历史与操作记忆",
+            "summary": "先看演示或物体变化，记住历史，再用机械臂完成依赖记忆的任务。",
+            "technicalRoute": "视觉历史记忆 + 在线语言决策 + 原生机械臂规划执行。",
+            "modelRole": "Astra 在运行时读取历史画面与当前观察，决定下一步操作。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "前视历史、当前腕部 RGB、机器人状态与相机标定；不读取物体真值。"
+              },
+              {
+                "label": "决定什么",
+                "text": "识别历史顺序、数量或目标身份，选择末端姿态和夹爪动作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "原生 MPLib 规划与 Panda 控制器执行；没有把整段抓放封装成一次工具调用。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "执行后的图像、机器人状态与原生任务判定返回。"
+              }
+            ],
+            "limitation": "小样本，非完整基准；模型思考期间物理仿真暂停，不能按现实时间理解动态难度。",
+            "watchFor": "区分演示阶段与模型操作阶段，看最终选择是否真的依赖过去的画面。",
+            "result": "模型记住抓放次数，在满足任务要求后按下结束按钮。",
+            "model": "gpt-6-astra（请求标识）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "robomme",
+          "versionLabel": "抓放次数记忆",
+          "preview": {
+            "poster": "media/robomme-pick-count-test0.png",
+            "alt": "数清次数，再按下结束按钮 仿真画面",
+            "video": "media/robomme-pick-count-test0.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "robomme-video-unmask-swap",
+          "title": "容器换位后，还记得方块在哪吗？",
+          "engine": "SAPIEN / PhysX",
+          "model": "gpt-6-astra（请求标识）",
+          "input": "前视历史 + 当前腕部RGB + 本体状态与标定；无物体真值",
+          "task": "遮挡后的空间记忆",
+          "cardValue": "2 段演示",
+          "shortDescription": "先看演示或物体变化，记住历史，再用机械臂完成依赖记忆的任务。",
+          "mechanism": "memory",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 2,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-robomme-video-unmask-swap",
+          "sourceUrl": "https://github.com/RoboMME/robomme_benchmark/blob/856bc3a189d4172f3f47dbee4424d585f8d78db3/src/robomme/robomme_env/VideoUnmaskSwap.py",
+          "notes": [
+            "视觉历史记忆 + 在线语言决策 + 原生机械臂规划执行。",
+            "小样本，非完整基准；模型思考期间物理仿真暂停，不能按现实时间理解动态难度。"
+          ],
+          "projectBrief": {
+            "familyId": "robomme",
+            "familyTitle": "RoboMME · 观察历史与操作记忆",
+            "summary": "先看演示或物体变化，记住历史，再用机械臂完成依赖记忆的任务。",
+            "technicalRoute": "视觉历史记忆 + 在线语言决策 + 原生机械臂规划执行。",
+            "modelRole": "Astra 在运行时读取历史画面与当前观察，决定下一步操作。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "前视历史、当前腕部 RGB、机器人状态与相机标定；不读取物体真值。"
+              },
+              {
+                "label": "决定什么",
+                "text": "识别历史顺序、数量或目标身份，选择末端姿态和夹爪动作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "原生 MPLib 规划与 Panda 控制器执行；没有把整段抓放封装成一次工具调用。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "执行后的图像、机器人状态与原生任务判定返回。"
+              }
+            ],
+            "limitation": "小样本，非完整基准；模型思考期间物理仿真暂停，不能按现实时间理解动态难度。",
+            "watchFor": "区分演示阶段与模型操作阶段，看最终选择是否真的依赖过去的画面。",
+            "result": "观察容器换位过程后，模型仍能根据历史画面找到目标方块所在的容器。",
+            "model": "gpt-6-astra（请求标识）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "robomme",
+          "versionLabel": "容器换位与目标记忆",
+          "preview": {
+            "poster": "media/robomme-video-unmask-swap-test2.png",
+            "alt": "容器换位后，还记得方块在哪吗？ 仿真画面",
+            "video": "media/robomme-video-unmask-swap-test2.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "robomme-stop-cube",
+          "title": "等方块第 N 次经过，再按下按钮",
+          "engine": "SAPIEN / PhysX",
+          "model": "gpt-6-astra（请求标识）",
+          "input": "前视历史＋当前腕部RGB＋本体状态与标定；无物体真值/隐藏时钟",
+          "task": "时间推理与按键操作",
+          "cardValue": "1 段演示",
+          "shortDescription": "先看演示或物体变化，记住历史，再用机械臂完成依赖记忆的任务。",
+          "mechanism": "memory",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 1,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-robomme-stop-cube",
+          "sourceUrl": "https://github.com/RoboMME/robomme_benchmark/blob/856bc3a189d4172f3f47dbee4424d585f8d78db3/src/robomme/robomme_env/StopCube.py",
+          "notes": [
+            "视觉历史记忆 + 在线语言决策 + 原生机械臂规划执行。",
+            "小样本，非完整基准；模型思考期间物理仿真暂停，不能按现实时间理解动态难度。"
+          ],
+          "projectBrief": {
+            "familyId": "robomme",
+            "familyTitle": "RoboMME · 观察历史与操作记忆",
+            "summary": "先看演示或物体变化，记住历史，再用机械臂完成依赖记忆的任务。",
+            "technicalRoute": "视觉历史记忆 + 在线语言决策 + 原生机械臂规划执行。",
+            "modelRole": "Astra 在运行时读取历史画面与当前观察，决定下一步操作。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "前视历史、当前腕部 RGB、机器人状态与相机标定；不读取物体真值。"
+              },
+              {
+                "label": "决定什么",
+                "text": "识别历史顺序、数量或目标身份，选择末端姿态和夹爪动作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "原生 MPLib 规划与 Panda 控制器执行；没有把整段抓放封装成一次工具调用。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "执行后的图像、机器人状态与原生任务判定返回。"
+              }
+            ],
+            "limitation": "小样本，非完整基准；模型思考期间物理仿真暂停，不能按现实时间理解动态难度。",
+            "watchFor": "区分演示阶段与模型操作阶段，看最终选择是否真的依赖过去的画面。",
+            "result": "根据方块经过的次数选择按键时机，完成原生动态观察与按钮任务。",
+            "model": "gpt-6-astra（请求标识）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "robomme",
+          "versionLabel": "动态计数与按键",
+          "preview": {
+            "poster": "media/robomme-stop-cube-test3.png",
+            "alt": "等方块第 N 次经过，再按下按钮 仿真画面",
+            "video": "media/robomme-stop-cube-test3.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "robomme-pattern-lock",
+          "title": "看一遍示范，再用小棒复现路径",
+          "engine": "SAPIEN / PhysX",
+          "model": "gpt-6-astra（请求标识）",
+          "input": "公开前视历史＋当前腕部RGB＋棒尖TCP状态与相机标定；无隐藏路径/目标真值",
+          "task": "视觉轨迹记忆与顺序操作",
+          "cardValue": "3 段演示",
+          "shortDescription": "先看演示或物体变化，记住历史，再用机械臂完成依赖记忆的任务。",
+          "mechanism": "memory",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-robomme-pattern-lock",
+          "sourceUrl": "https://github.com/RoboMME/robomme_benchmark/blob/856bc3a189d4172f3f47dbee4424d585f8d78db3/src/robomme/robomme_env/PatternLock.py",
+          "notes": [
+            "视觉历史记忆 + 在线语言决策 + 原生机械臂规划执行。",
+            "小样本，非完整基准；模型思考期间物理仿真暂停，不能按现实时间理解动态难度。"
+          ],
+          "projectBrief": {
+            "familyId": "robomme",
+            "familyTitle": "RoboMME · 观察历史与操作记忆",
+            "summary": "先看演示或物体变化，记住历史，再用机械臂完成依赖记忆的任务。",
+            "technicalRoute": "视觉历史记忆 + 在线语言决策 + 原生机械臂规划执行。",
+            "modelRole": "Astra 在运行时读取历史画面与当前观察，决定下一步操作。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "前视历史、当前腕部 RGB、机器人状态与相机标定；不读取物体真值。"
+              },
+              {
+                "label": "决定什么",
+                "text": "识别历史顺序、数量或目标身份，选择末端姿态和夹爪动作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "原生 MPLib 规划与 Panda 控制器执行；没有把整段抓放封装成一次工具调用。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "执行后的图像、机器人状态与原生任务判定返回。"
+              }
+            ],
+            "limitation": "小样本，非完整基准；模型思考期间物理仿真暂停，不能按现实时间理解动态难度。",
+            "watchFor": "区分演示阶段与模型操作阶段，看最终选择是否真的依赖过去的画面。",
+            "result": "看过任务示范后，模型用小棒复现对应路径，完成不同难度的图案操作。",
+            "model": "gpt-6-astra（请求标识）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "robomme",
+          "versionLabel": "看示范复现路径",
+          "preview": {
+            "poster": "media/robomme-pattern-lock-test0.png",
+            "alt": "看一遍示范，再用小棒复现路径 仿真画面",
+            "video": "media/robomme-pattern-lock-test0.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "robomme-video-place-order",
+          "title": "记住第几次放置，再找到同一个目标",
+          "engine": "SAPIEN / PhysX",
+          "model": "gpt-6-astra（请求标识）",
+          "input": "公开前视历史＋当前腕部RGB＋Panda TCP/真实手指位置与相机标定；无隐藏目标身份或位姿",
+          "task": "视觉事件次序与目标记忆",
+          "cardValue": "3 段演示",
+          "shortDescription": "先看演示或物体变化，记住历史，再用机械臂完成依赖记忆的任务。",
+          "mechanism": "memory",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-robomme-video-place-order",
+          "sourceUrl": "https://github.com/RoboMME/robomme_benchmark/blob/856bc3a189d4172f3f47dbee4424d585f8d78db3/src/robomme/robomme_env/VideoPlaceOrder.py",
+          "notes": [
+            "视觉历史记忆 + 在线语言决策 + 原生机械臂规划执行。",
+            "小样本，非完整基准；模型思考期间物理仿真暂停，不能按现实时间理解动态难度。"
+          ],
+          "projectBrief": {
+            "familyId": "robomme",
+            "familyTitle": "RoboMME · 观察历史与操作记忆",
+            "summary": "先看演示或物体变化，记住历史，再用机械臂完成依赖记忆的任务。",
+            "technicalRoute": "视觉历史记忆 + 在线语言决策 + 原生机械臂规划执行。",
+            "modelRole": "Astra 在运行时读取历史画面与当前观察，决定下一步操作。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "前视历史、当前腕部 RGB、机器人状态与相机标定；不读取物体真值。"
+              },
+              {
+                "label": "决定什么",
+                "text": "识别历史顺序、数量或目标身份，选择末端姿态和夹爪动作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "原生 MPLib 规划与 Panda 控制器执行；没有把整段抓放封装成一次工具调用。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "执行后的图像、机器人状态与原生任务判定返回。"
+              }
+            ],
+            "limitation": "小样本，非完整基准；模型思考期间物理仿真暂停，不能按现实时间理解动态难度。",
+            "watchFor": "区分演示阶段与模型操作阶段，看最终选择是否真的依赖过去的画面。",
+            "result": "记住演示中的放置顺序，再从当前画面定位对应目标并完成操作。",
+            "model": "gpt-6-astra（请求标识）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "robomme",
+          "versionLabel": "放置顺序记忆",
+          "preview": {
+            "poster": "media/robomme-video-place-order-test0.png",
+            "alt": "记住第几次放置，再找到同一个目标 仿真画面",
+            "video": "media/robomme-video-place-order-test0.mp4",
+            "start": 53.9
+          }
+        }
+      ]
+    },
+    {
+      "id": "openrua",
+      "title": "OpenRUA 操作经验",
+      "question": "先完成操作并形成方法，再将冻结的方法提供给新上下文尝试复用。",
+      "cards": [
+        {
+          "id": "openrua-astra-skill-reuse-local",
+          "title": "Astra × OpenRUA：从操作反馈形成可复用方法",
+          "engine": "LIBERO-PRO / robosuite / MuJoCo · CPU",
+          "model": "gpt-6-astra",
+          "input": "官方 ROS 多视角 RGB-D、标定与机器人状态",
+          "task": "Pick the akita black bowl not between the plate and the ramekin and place it on the plate",
+          "cardValue": "3 段演示",
+          "shortDescription": "先完成操作并形成方法，再将冻结的方法提供给新上下文尝试复用。",
+          "mechanism": "skills",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-openrua-astra-skill-reuse-local",
+          "sourceUrl": "https://github.com/terminalworld/OpenRUA",
+          "notes": [
+            "视觉工具 Agent + 方法提炼 + 冻结技能复用，对照空上下文。",
+            "A 形成文字方法，B0 独立操作，B1 读取冻结笔记；复用时仍须根据当前场景重新测量。"
+          ],
+          "projectBrief": {
+            "familyId": "openrua",
+            "familyTitle": "OpenRUA · 将一次操作整理成可复用方法",
+            "summary": "先完成操作并形成方法，再将冻结的方法提供给新上下文尝试复用。",
+            "technicalRoute": "视觉工具 Agent + 方法提炼 + 冻结技能复用，对照空上下文。",
+            "modelRole": "Astra 在线操作；方法由 A 阶段形成，合格后冻结交给 B1。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "ROS 多视角 RGB-D、标定与机器人状态。"
+              },
+              {
+                "label": "决定什么",
+                "text": "通过代码工具选择动作，并把经验整理为可调用的方法。"
+              },
+              {
+                "label": "如何执行",
+                "text": "原生机器人执行接口运行代码并返回结果。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "A 为形成方法阶段，B0 使用空上下文，B1 使用冻结方法；分别记录终态。"
+              }
+            ],
+            "limitation": "A 形成文字方法，B0 独立操作，B1 读取冻结笔记；复用时仍须根据当前场景重新测量。",
+            "watchFor": "对照 B0 与 B1 的工具调用过程，看复用改变了哪些步骤。",
+            "result": "先从操作反馈形成方法，再在新上下文中读取冻结笔记，结合当前图像重新测量并完成抓放。",
+            "model": "gpt-6-astra",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "openrua",
+          "versionLabel": "Astra × OpenRUA：从操作反馈形成可复用方法",
+          "preview": {
+            "poster": "media/openrua-astra-skill-reuse-local-A.jpg",
+            "alt": "Astra × OpenRUA：从操作反馈形成可复用方法 仿真画面",
+            "video": "media/openrua-astra-skill-reuse-local-A.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "drone",
+      "title": "RoboUse 无人机",
+      "question": "模型选择飞行目标，原生飞行控制器负责稳定无人机。",
+      "cards": [
+        {
+          "id": "robouse-astra-drone",
+          "title": "让 Astra 驾驶无人机完成三个目标",
+          "engine": "MuJoCo",
+          "model": "gpt-6-astra（collaboration元数据）",
+          "input": "公开状态与地标＋按需原生RGB；每条轨迹按实际图像查看标识，封面不自动算输入",
+          "task": "无人机导航与检查",
+          "cardValue": "9 段演示",
+          "shortDescription": "模型选择飞行目标，原生飞行控制器负责稳定无人机。",
+          "mechanism": "mobility",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 9,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-robouse-astra-drone",
+          "sourceUrl": "https://github.com/benchflow-ai/robouse/tree/19b644846cdc5cac70fb16b866eb08501db8f0cc/tasks/drone",
+          "notes": [
+            "高层 Agent + 飞行工具：目标选择与低层姿态稳定分开。",
+            "各任务重复使用其规定初始条件，不能据此推断未知场景导航能力。"
+          ],
+          "projectBrief": {
+            "familyId": "drone",
+            "familyTitle": "RoboUse · 语言决策与飞行控制",
+            "summary": "模型选择飞行目标，原生飞行控制器负责稳定无人机。",
+            "technicalRoute": "高层 Agent + 飞行工具：目标选择与低层姿态稳定分开。",
+            "modelRole": "Astra 在线选择飞行指令。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "公开状态、地标，以及可选原生 RGB；图像实际调用情况单独记录。"
+              },
+              {
+                "label": "决定什么",
+                "text": "航点、悬停、越墙与着陆等飞行目标。"
+              },
+              {
+                "label": "如何执行",
+                "text": "原生飞行控制器将目标变成无人机动作。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "状态、图像与原任务成绩反馈给模型。"
+              }
+            ],
+            "limitation": "各任务重复使用其规定初始条件，不能据此推断未知场景导航能力。",
+            "watchFor": "看接近目标时如何减速与悬停，以及越墙后如何重新定位着陆点。",
+            "result": "模型通过飞行工具完成航点悬停、塔上标记与越墙着陆，低层控制器负责飞行稳定。",
+            "model": "gpt-6-astra（collaboration元数据）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "drone",
+          "versionLabel": "让 Astra 驾驶无人机完成三个目标",
+          "preview": {
+            "poster": "media/robouse-astra-drone-waypoint.png",
+            "alt": "让 Astra 驾驶无人机完成三个目标 仿真画面",
+            "video": "media/robouse-astra-drone-waypoint.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "see2act",
+      "title": "See2Act 主动感知",
+      "question": "策略主动选择有用视角，再迭代调整抓取与放置姿态。",
+      "cards": [
+        {
+          "id": "see2act-active-view-bin-picking",
+          "title": "See2Act · 换个视角，找到藏着的方块",
+          "engine": "PyBullet",
+          "model": "See2Act · 作者任务权重",
+          "input": "主动选择的虚拟RGB视角 · 任务嵌入",
+          "task": "遮挡场景抓取放置",
+          "cardValue": "3 段演示",
+          "shortDescription": "策略主动选择有用视角，再迭代调整抓取与放置姿态。",
+          "mechanism": "memory",
+          "source": "published_policy",
+          "sourceLabel": "作者公开策略",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-see2act-active-view-bin-picking",
+          "sourceUrl": "https://github.com/KuanchengWang/See2Act",
+          "notes": [
+            "主动选视角 + 作者发布的扩散策略 + 固定动作执行原语。",
+            "虚拟相机可直接换视角，不包含真实相机可达性规划；成功容差为 XY<5 cm、Z<10 cm，不等于严格网格容纳。"
+          ],
+          "projectBrief": {
+            "familyId": "see2act",
+            "familyTitle": "See2Act · 主动感知与扩散动作",
+            "summary": "策略主动选择有用视角，再迭代调整抓取与放置姿态。",
+            "technicalRoute": "主动选视角 + 作者发布的扩散策略 + 固定动作执行原语。",
+            "modelRole": "预训练策略推理，无 Astra 调用，也没有本机新训练。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "可主动选择的虚拟 RGB 视角与任务嵌入。"
+              },
+              {
+                "label": "决定什么",
+                "text": "通过 100 次观察迭代细化抓取、放置位姿。"
+              },
+              {
+                "label": "如何执行",
+                "text": "固定运动原语将策略目标变成机器人动作。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "原生位置容差判定结果，录制重跑另行核对一致性。"
+              }
+            ],
+            "limitation": "虚拟相机可直接换视角，不包含真实相机可达性规划；成功容差为 XY<5 cm、Z<10 cm，不等于严格网格容纳。",
+            "watchFor": "看策略选了哪些视角，以及位姿估计如何随观察变化。",
+            "result": "预训练策略主动选择虚拟视角，迭代调整抓取与放置位姿，完成原生位置容差目标。",
+            "model": "See2Act · 作者任务权重",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "see2act",
+          "versionLabel": "See2Act · 换个视角，找到藏着的方块",
+          "preview": {
+            "poster": "media/see2act-active-view-bin-picking-200003.png",
+            "alt": "See2Act · 换个视角，找到藏着的方块 仿真画面",
+            "video": "media/see2act-active-view-bin-picking-200003.mp4",
+            "start": 10
+          }
+        }
+      ]
+    },
+    {
+      "id": "dimos",
+      "title": "dimOS + Astra",
+      "question": "语言决策结合 IK 与路径规划，完成抓碗放盘；详情收录初版、完整复演与多场景操作。",
+      "cards": [
+        {
+          "id": "dimos-astra",
+          "title": "把黑碗，放到盘子上",
+          "engine": "MuJoCo",
+          "model": "gpt-6-astra（请求标识）",
+          "input": "仿真真值",
+          "task": "抓取与放置",
+          "cardValue": "4 段演示",
+          "shortDescription": "语言模型选择抓取和放置姿态，运动规划器把目标变成机械臂能够执行的关节运动。",
+          "mechanism": "planning",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 4,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-dimos-astra",
+          "sourceUrl": "https://github.com/dimensionalOS/dimos",
+          "notes": [
+            "通用语言模型 + 逆运动学（IK）+ 路径规划。IK 计算到达目标姿态所需的关节角，规划器再寻找运动路径。",
+            "使用真值感知；规划碰撞模型有 FR3 网格近似、固定手指等适配。首次成功即结束，不说明松手后的长期稳定性。"
+          ],
+          "projectBrief": {
+            "familyId": "dimos",
+            "familyTitle": "dimOS · 语言决策与运动规划",
+            "summary": "语言模型选择抓取和放置姿态，运动规划器把目标变成机械臂能够执行的关节运动。",
+            "technicalRoute": "通用语言模型 + 逆运动学（IK）+ 路径规划。IK 计算到达目标姿态所需的关节角，规划器再寻找运动路径。",
+            "modelRole": "Astra 在运行时反复决策；底层由 dimOS 规划与机器人控制器执行。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "物体位置、尺寸等仿真真值，以及机械臂状态。"
+              },
+              {
+                "label": "决定什么",
+                "text": "下一步末端位置、朝向、夹爪开合；规划失败时修改目标。"
+              },
+              {
+                "label": "如何执行",
+                "text": "dimOS 的 IK 与路径规划求出关节路径，Panda 控制器在 MuJoCo 中执行。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新的场景状态、执行错误和剩余预算返回模型；由 LIBERO 原生条件判断任务是否完成。"
+              }
+            ],
+            "limitation": "使用真值感知；规划碰撞模型有 FR3 网格近似、固定手指等适配。首次成功即结束，不说明松手后的长期稳定性。",
+            "watchFor": "看规划失败后是否换姿态，以及抓住碗后如何补偿碗与指尖的位置偏差。",
+            "result": "机械臂选择抓取姿态，将黑碗从桌面搬到盘子上。展示语言决策、IK 与路径规划如何配合完成操作。",
+            "model": "gpt-6-astra（请求标识）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "dimos",
+          "versionLabel": "初版抓碗放盘",
+          "preview": {
+            "poster": "media/dimos-astra-t06-i11.jpg",
+            "alt": "MuJoCo 中的 Panda 机械臂将黑碗放在白色盘子上",
+            "video": "media/dimos-astra-t06-i11.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "dimos-astra-v2",
+          "title": "让抓取过程，可以完整复演",
+          "engine": "MuJoCo",
+          "model": "gpt-6-astra（请求标识）",
+          "input": "仿真真值 + 规划执行反馈",
+          "task": "抓取与放置",
+          "cardValue": "3 段演示",
+          "shortDescription": "语言模型选择抓取和放置姿态，运动规划器把目标变成机械臂能够执行的关节运动。",
+          "mechanism": "planning",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-dimos-astra-v2",
+          "sourceUrl": "https://github.com/dimensionalOS/dimos",
+          "notes": [
+            "通用语言模型 + 逆运动学（IK）+ 路径规划。IK 计算到达目标姿态所需的关节角，规划器再寻找运动路径。",
+            "使用真值感知；规划碰撞模型有 FR3 网格近似、固定手指等适配。首次成功即结束，不说明松手后的长期稳定性。"
+          ],
+          "projectBrief": {
+            "familyId": "dimos",
+            "familyTitle": "dimOS · 语言决策与运动规划",
+            "summary": "语言模型选择抓取和放置姿态，运动规划器把目标变成机械臂能够执行的关节运动。",
+            "technicalRoute": "通用语言模型 + 逆运动学（IK）+ 路径规划。IK 计算到达目标姿态所需的关节角，规划器再寻找运动路径。",
+            "modelRole": "Astra 在运行时反复决策；底层由 dimOS 规划与机器人控制器执行。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "物体位置、尺寸等仿真真值，以及机械臂状态。"
+              },
+              {
+                "label": "决定什么",
+                "text": "下一步末端位置、朝向、夹爪开合；规划失败时修改目标。"
+              },
+              {
+                "label": "如何执行",
+                "text": "dimOS 的 IK 与路径规划求出关节路径，Panda 控制器在 MuJoCo 中执行。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新的场景状态、执行错误和剩余预算返回模型；由 LIBERO 原生条件判断任务是否完成。"
+              }
+            ],
+            "limitation": "使用真值感知；规划碰撞模型有 FR3 网格近似、固定手指等适配。首次成功即结束，不说明松手后的长期稳定性。",
+            "watchFor": "看规划失败后是否换姿态，以及抓住碗后如何补偿碗与指尖的位置偏差。",
+            "result": "完成抓碗放盘，并保存完整仿真与控制器状态，逐步核对动作复演。",
+            "model": "gpt-6-astra（请求标识）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "dimos",
+          "versionLabel": "完整抓放与状态复演",
+          "preview": {
+            "poster": "media/dimos-astra_v2_i0_s42_20261022_012155.png",
+            "alt": "让抓取过程，可以完整复演 仿真画面",
+            "video": "media/dimos-astra_v2_i0_s42_20261022_012155.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "dimos-spatial-ten-tasks",
+          "title": "dimOS · 多种空间关系下的抓碗放盘",
+          "engine": "MuJoCo",
+          "model": "gpt-6-astra（请求标识）",
+          "input": "仿真真值 + 规划执行反馈",
+          "task": "抓取与放置",
+          "cardValue": "4 段演示",
+          "shortDescription": "语言模型选择抓取和放置姿态，运动规划器把目标变成机械臂能够执行的关节运动。",
+          "mechanism": "planning",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 4,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-dimos-spatial-ten-tasks",
+          "sourceUrl": "https://github.com/dimensionalOS/dimos",
+          "notes": [
+            "通用语言模型 + 逆运动学（IK）+ 路径规划。IK 计算到达目标姿态所需的关节角，规划器再寻找运动路径。",
+            "使用真值感知；规划碰撞模型有 FR3 网格近似、固定手指等适配。首次成功即结束，不说明松手后的长期稳定性。"
+          ],
+          "projectBrief": {
+            "familyId": "dimos",
+            "familyTitle": "dimOS · 语言决策与运动规划",
+            "summary": "语言模型选择抓取和放置姿态，运动规划器把目标变成机械臂能够执行的关节运动。",
+            "technicalRoute": "通用语言模型 + 逆运动学（IK）+ 路径规划。IK 计算到达目标姿态所需的关节角，规划器再寻找运动路径。",
+            "modelRole": "Astra 在运行时反复决策；底层由 dimOS 规划与机器人控制器执行。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "物体位置、尺寸等仿真真值，以及机械臂状态。"
+              },
+              {
+                "label": "决定什么",
+                "text": "下一步末端位置、朝向、夹爪开合；规划失败时修改目标。"
+              },
+              {
+                "label": "如何执行",
+                "text": "dimOS 的 IK 与路径规划求出关节路径，Panda 控制器在 MuJoCo 中执行。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新的场景状态、执行错误和剩余预算返回模型；由 LIBERO 原生条件判断任务是否完成。"
+              }
+            ],
+            "limitation": "使用真值感知；规划碰撞模型有 FR3 网格近似、固定手指等适配。首次成功即结束，不说明松手后的长期稳定性。",
+            "watchFor": "看规划失败后是否换姿态，以及抓住碗后如何补偿碗与指尖的位置偏差。",
+            "result": "在不同物体空间关系下，完成寻找目标碗、抓取与放到盘子上的操作。",
+            "model": "gpt-6-astra（请求标识）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "dimos",
+          "versionLabel": "不同空间关系下的抓放",
+          "preview": {
+            "poster": "media/dimos-spatial-t02-i0-s42.png",
+            "alt": "dimOS · 多种空间关系下的抓碗放盘 仿真画面",
+            "video": "media/dimos-spatial-t02-i0-s42.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "smolvla",
+      "title": "SmolVLA",
+      "question": "图像、语言任务和机器人状态进入微调策略，直接生成一段连续动作。",
+      "cards": [
+        {
+          "id": "smolvla-libero",
+          "title": "同样抓碗，换十种空间关系",
+          "engine": "MuJoCo",
+          "model": "SmolVLA / LIBERO 微调",
+          "input": "图像 + 机器人状态",
+          "task": "抓取与放置",
+          "cardValue": "17 段演示",
+          "shortDescription": "图像、语言任务和机器人状态进入微调策略，直接生成一段连续动作。",
+          "mechanism": "policies",
+          "source": "vla",
+          "sourceLabel": "本机 VLA 推理",
+          "scope": "embodied",
+          "records": 17,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-smolvla-libero",
+          "sourceUrl": "https://huggingface.co/HuggingFaceVLA/smolvla_libero",
+          "notes": [
+            "视觉语言动作模型（VLA）：用 LIBERO 微调过的 SmolVLA，通过官方 LeRobot 流程推理。",
+            "使用 LIBERO 任务微调权重，不是原生基础权重的零样本成绩；小样本不代表完整基准排名。"
+          ],
+          "projectBrief": {
+            "familyId": "smolvla",
+            "familyTitle": "SmolVLA · 学习得到的动作策略",
+            "summary": "图像、语言任务和机器人状态进入微调策略，直接生成一段连续动作。",
+            "technicalRoute": "视觉语言动作模型（VLA）：用 LIBERO 微调过的 SmolVLA，通过官方 LeRobot 流程推理。",
+            "modelRole": "运行时是预训练并微调好的策略推理，没有 Astra 逐步发指令。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "相机图像、语言任务和机器人本体状态。"
+              },
+              {
+                "label": "决定什么",
+                "text": "SmolVLA 输出一段连续动作序列。"
+              },
+              {
+                "label": "如何执行",
+                "text": "LeRobot 按策略统计量还原动作尺度，再交给 LIBERO 的 Panda 控制接口。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "执行动作后读取新观察，再生成下一段；原生任务条件验证完成。"
+              }
+            ],
+            "limitation": "使用 LIBERO 任务微调权重，不是原生基础权重的零样本成绩；小样本不代表完整基准排名。",
+            "watchFor": "对照不同空间关系下的接近方向、夹爪闭合时机与放置路径。",
+            "result": "LIBERO 微调后的 SmolVLA 根据图像、语言与机器人状态生成动作，完成不同空间关系下的抓碗放盘。",
+            "model": "SmolVLA / LIBERO 微调",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "smolvla",
+          "versionLabel": "同样抓碗，换十种空间关系",
+          "preview": {
+            "poster": "media/smolvla-t00-e0.jpg",
+            "alt": "同样抓碗，换十种空间关系 仿真画面",
+            "video": "media/smolvla-t00-e0.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "maniloop",
+      "title": "ManiLoop 双相机操作",
+      "question": "用外部和腕部相机观察，模型逐步发出移动、夹爪与等待指令。",
+      "cards": [
+        {
+          "id": "maniloop-astra-arx5",
+          "title": "Astra 操作 ARX5：双相机抓放",
+          "engine": "MuJoCo",
+          "model": "gpt-6-astra · 实际 medium",
+          "input": "外部／腕部RGB＋机器人状态＋相机标定与执行反馈",
+          "task": "ARX5 抓取与放置",
+          "cardValue": "1 段演示",
+          "shortDescription": "用外部和腕部相机观察，模型逐步发出移动、夹爪与等待指令。",
+          "mechanism": "vision",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 1,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-maniloop-astra-arx5",
+          "sourceUrl": "https://github.com/Daniel-rmc/ManiLoop/tree/8de9bcb3198cdbdfc5b137da54d49368a98c3e97",
+          "notes": [
+            "多视角视觉语言 Agent + 原生机器人控制与独立任务判定。",
+            "使用双相机、机器人状态与标定；底层为 ARX5 原生 IK 控制接口。"
+          ],
+          "projectBrief": {
+            "familyId": "maniloop",
+            "familyTitle": "ManiLoop · 多视角机械臂 Agent",
+            "summary": "用外部和腕部相机观察，模型逐步发出移动、夹爪与等待指令。",
+            "technicalRoute": "多视角视觉语言 Agent + 原生机器人控制与独立任务判定。",
+            "modelRole": "Astra 在线选择动作，底层由机器人原有接口执行。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "外部与腕部 RGB、机器人状态、相机标定和执行反馈。"
+              },
+              {
+                "label": "决定什么",
+                "text": "下一步末端目标、夹爪、等待或结束。"
+              },
+              {
+                "label": "如何执行",
+                "text": "ARX5 使用原生 IK 控制；Panda 开门任务使用 robosuite OSC_POSE 位姿控制。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新观察返回模型，独立判定器检查目标。"
+              }
+            ],
+            "limitation": "使用双相机、机器人状态与标定；底层为 ARX5 原生 IK 控制接口。",
+            "watchFor": "看腕部相机如何帮助修正接近位置，以及动作反馈是否导致重新计划。",
+            "result": "结合外部与腕部相机观察，模型控制 ARX5 完成抓取操作。",
+            "model": "gpt-6-astra · 实际 medium",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "maniloop",
+          "versionLabel": "Astra 操作 ARX5：双相机抓放",
+          "preview": {
+            "poster": "media/maniloop-astra-arx5-v2-seed2.png",
+            "alt": "Astra 操作 ARX5：双相机抓放 仿真画面",
+            "video": "media/maniloop-astra-arx5-v2-seed2.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "irosa",
+      "title": "IROSA · 技能改写",
+      "question": "通过语言指定速度或途经点约束，改写已有动作技能，探索示范的可编辑性。",
+      "cards": [
+        {
+          "id": "irosa-astra-speed",
+          "title": "IROSA · 只让这一段慢下来",
+          "engine": "PyBullet · DIRECT适配",
+          "model": "gpt-6-astra + 原生 IROSA KMP",
+          "input": "精确坐标与时间 · 原始示范",
+          "task": "示范技能参数修改",
+          "cardValue": "3 段演示",
+          "shortDescription": "不从头生成整条轨迹，让模型按要求改变已有示范的速度、途经点或避障形状。",
+          "mechanism": "skills",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "diagnostic"
+          ],
+          "href": "./#demo-irosa-astra-speed",
+          "sourceUrl": "https://github.com/DLR-RM/IROSA",
+          "notes": [
+            "语言修改指令 + 核化运动原语（KMP）：用少量约束重塑旧轨迹。",
+            "展示的是技能时间参数修改；不将参数变化当作完整抓放任务成绩。"
+          ],
+          "projectBrief": {
+            "familyId": "irosa",
+            "familyTitle": "IROSA · 修改已有动作技能",
+            "summary": "不从头生成整条轨迹，让模型按要求改变已有示范的速度、途经点或避障形状。",
+            "technicalRoute": "语言修改指令 + 核化运动原语（KMP）：用少量约束重塑旧轨迹。",
+            "modelRole": "Astra 决定技能修改参数；原生 IROSA KMP 计算轨迹。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "精确坐标、时间与原始示范。"
+              },
+              {
+                "label": "决定什么",
+                "text": "选择时长、途经位置或避障约束。"
+              },
+              {
+                "label": "如何执行",
+                "text": "KMP 生成修改轨迹，再由机器人跟踪。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "参数、路径和接触诊断分别检查。"
+              }
+            ],
+            "limitation": "展示的是技能时间参数修改；不将参数变化当作完整抓放任务成绩。",
+            "watchFor": "对照原轨迹与修改轨迹，看变化是否只发生在指定约束处。",
+            "result": "模型给出时间约束，IROSA 修改已有技能的局部速度；展示同一路径如何加速或减速。",
+            "model": "gpt-6-astra + 原生 IROSA KMP",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "irosa",
+          "versionLabel": "局部速度改写",
+          "preview": {
+            "poster": "media/irosa-astra-speed-speed-1.png",
+            "alt": "IROSA · 只让这一段慢下来 仿真画面",
+            "video": "media/irosa-astra-speed-speed-1.mp4",
+            "start": 1.5
+          }
+        },
+        {
+          "id": "irosa-astra-viapoints",
+          "title": "IROSA · 让旧动作经过新位置",
+          "engine": "PyBullet · DIRECT适配",
+          "model": "gpt-6-astra + 原生 IROSA KMP",
+          "input": "精确坐标与时间 · 原始示范",
+          "task": "示范技能参数修改",
+          "cardValue": "3 段演示",
+          "shortDescription": "不从头生成整条轨迹，让模型按要求改变已有示范的速度、途经点或避障形状。",
+          "mechanism": "skills",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "diagnostic"
+          ],
+          "href": "./#demo-irosa-astra-viapoints",
+          "sourceUrl": "https://github.com/DLR-RM/IROSA",
+          "notes": [
+            "语言修改指令 + 核化运动原语（KMP）：用少量约束重塑旧轨迹。",
+            "展示的是轨迹目标改写；实际跟踪仍存在偏差，不声称全机械臂无碰撞。"
+          ],
+          "projectBrief": {
+            "familyId": "irosa",
+            "familyTitle": "IROSA · 修改已有动作技能",
+            "summary": "不从头生成整条轨迹，让模型按要求改变已有示范的速度、途经点或避障形状。",
+            "technicalRoute": "语言修改指令 + 核化运动原语（KMP）：用少量约束重塑旧轨迹。",
+            "modelRole": "Astra 决定技能修改参数；原生 IROSA KMP 计算轨迹。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "精确坐标、时间与原始示范。"
+              },
+              {
+                "label": "决定什么",
+                "text": "选择时长、途经位置或避障约束。"
+              },
+              {
+                "label": "如何执行",
+                "text": "KMP 生成修改轨迹，再由机器人跟踪。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "参数、路径和接触诊断分别检查。"
+              }
+            ],
+            "limitation": "展示的是轨迹目标改写；实际跟踪仍存在偏差，不声称全机械臂无碰撞。",
+            "watchFor": "对照原轨迹与修改轨迹，看变化是否只发生在指定约束处。",
+            "result": "模型指定途经位置，IROSA 重塑已有轨迹，展示旧技能如何适应新的路径目标。",
+            "model": "gpt-6-astra + 原生 IROSA KMP",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "irosa",
+          "versionLabel": "途经点与路径改写",
+          "preview": {
+            "poster": "media/irosa-astra-viapoints-via-1.png",
+            "alt": "IROSA · 让旧动作经过新位置 仿真画面",
+            "video": "media/irosa-astra-viapoints-via-1.mp4",
+            "start": 1.5
+          }
+        }
+      ]
+    },
+    {
+      "id": "tdmpc2",
+      "title": "TD-MPC2 潜在动力学",
+      "question": "用学到的潜在动力学预测未来，在候选动作中反复搜索，每次只执行第一步。",
+      "cards": [
+        {
+          "id": "tdmpc2-quadruped-native-three",
+          "title": "TD-MPC2 · 学习动力学后每步滚动规划",
+          "engine": "MuJoCo / DeepMind Control Suite",
+          "model": "官方5M预训练 TD-MPC2 · 无本地训练",
+          "input": "78维原生状态 · 12维动作 · 不使用相机作为策略输入",
+          "task": "Quadruped Run 四足前向奔跑",
+          "cardValue": "3 段演示",
+          "shortDescription": "用学到的潜在动力学预测未来，在候选动作中反复搜索，每次只执行第一步。",
+          "mechanism": "world_models",
+          "source": "published_policy",
+          "sourceLabel": "作者公开策略",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "completed"
+          ],
+          "href": "./#demo-tdmpc2-quadruped-native-three",
+          "sourceUrl": "https://github.com/nicklashansen/tdmpc2",
+          "notes": [
+            "预训练世界模型 + 模型预测控制（MPC）：预测、优化、执行、重规划。",
+            "策略使用状态输入和官方预训练权重，本机没有重新训练或在线更新模型。"
+          ],
+          "projectBrief": {
+            "familyId": "tdmpc2",
+            "familyTitle": "TD-MPC2 · 学习动力学与滚动规划",
+            "summary": "用学到的潜在动力学预测未来，在候选动作中反复搜索，每次只执行第一步。",
+            "technicalRoute": "预训练世界模型 + 模型预测控制（MPC）：预测、优化、执行、重规划。",
+            "modelRole": "官方 5M 参数 TD-MPC2 权重推理，没有语言模型或本机在线学习。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "78 维原生状态。"
+              },
+              {
+                "label": "决定什么",
+                "text": "用潜在动力学与价值预测，搜索 512 个候选、6 轮优化、长度 3 的动作序列。"
+              },
+              {
+                "label": "如何执行",
+                "text": "只执行序列的首个 12 维动作，由四足机器人物理环境推进。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "获取新状态后再次规划，累计原生回报。"
+              }
+            ],
+            "limitation": "策略使用状态输入和官方预训练权重，本机没有重新训练或在线更新模型。",
+            "watchFor": "看运动受扰后是否继续稳定，以及滚动规划如何不断更新动作。",
+            "result": "四足机器人利用预训练潜在动力学预测与滚动规划完成连续运动，每步执行后重新优化动作。",
+            "model": "官方5M预训练 TD-MPC2 · 无本地训练",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "tdmpc2",
+          "versionLabel": "TD-MPC2 · 学习动力学后每步滚动规划",
+          "preview": {
+            "poster": "media/tdmpc2-quadruped-native-three-seed0.jpg",
+            "alt": "TD-MPC2 · 学习动力学后每步滚动规划 仿真画面",
+            "video": "media/tdmpc2-quadruped-native-three-seed0.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "cube",
+      "title": "灵巧手魔方",
+      "question": "脚本负责拿起魔方，学习策略负责转面与重抓，解法来自已知打乱序列。",
+      "cards": [
+        {
+          "id": "dexterous-astra-cube-native",
+          "title": "用灵巧手，把魔方转回原样",
+          "engine": "MuJoCo",
+          "model": "作者 Astra 实验的已发布技能权重；本机0次新Astra调用",
+          "input": "仿真状态与已知打乱序列；无相机输入",
+          "task": "灵巧手解魔方",
+          "cardValue": "2 段演示",
+          "shortDescription": "脚本负责拿起魔方，学习策略负责转面与重抓，解法来自已知打乱序列。",
+          "mechanism": "policies",
+          "source": "published_policy",
+          "sourceLabel": "作者公开策略",
+          "scope": "embodied",
+          "records": 2,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-dexterous-astra-cube-native",
+          "sourceUrl": "https://github.com/jianglongye/dexterous-astra",
+          "notes": [
+            "预训练灵巧操作策略 + 固定取物编排 + 已知打乱的逆序解法。",
+            "不能解释为从图像自主求解未知魔方，辅助物理约束也需纳入结果条件。"
+          ],
+          "projectBrief": {
+            "familyId": "cube",
+            "familyTitle": "双手魔方 · 学习操作与已知解法",
+            "summary": "脚本负责拿起魔方，学习策略负责转面与重抓，解法来自已知打乱序列。",
+            "technicalRoute": "预训练灵巧操作策略 + 固定取物编排 + 已知打乱的逆序解法。",
+            "modelRole": "运行时使用发布权重与脚本，没有新 Astra 调用。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "仿真状态和已知打乱序列，不靠相机识别未知魔方。"
+              },
+              {
+                "label": "决定什么",
+                "text": "预定解法给出转面顺序，学习策略产生转面与重抓动作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "双手机器人在简化接触与辅助约束下执行。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "检查转面和还原状态；另有脚本对照记录。"
+              }
+            ],
+            "limitation": "不能解释为从图像自主求解未知魔方，辅助物理约束也需纳入结果条件。",
+            "watchFor": "区分拿起阶段的脚本动作与转面、重抓阶段的学习策略。",
+            "result": "学习到的转面与重抓技能配合固定取物流程，按已知打乱序列的逆解将魔方转回原样。",
+            "model": "作者 Astra 实验的已发布技能权重；本机0次新Astra调用",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "cube",
+          "versionLabel": "用灵巧手，把魔方转回原样",
+          "preview": {
+            "poster": "media/dexterous-astra-cube-native-learned_seed_5005.png",
+            "alt": "用灵巧手，把魔方转回原样 仿真画面",
+            "video": "media/dexterous-astra-cube-native-learned_seed_5005.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "worldcoder",
+      "title": "WorldCoder · 可执行世界模型",
+      "question": "把观察到的规则写成程序，根据反馈修订，再将冻结规则复用于新地图。",
+      "cards": [
+        {
+          "id": "worldcoder-luna-learning",
+          "title": "WorldCoder · Luna 学规则，再换地图",
+          "engine": "MiniGrid",
+          "model": "gpt-6-luna",
+          "input": "完整结构化状态 · 任务文字",
+          "task": "规则学习与冻结迁移",
+          "cardValue": "4 段演示",
+          "shortDescription": "模型把观察到的规则写成程序，规划器用程序推演，再用真实反馈修正规则。",
+          "mechanism": "world_models",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "reference",
+          "records": 4,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-worldcoder-luna-learning",
+          "sourceUrl": "https://github.com/haotang1995/WorldCoder",
+          "notes": [
+            "代码形式的世界模型 + 蒙特卡洛树搜索（MCTS）+ 反例驱动修订；属于抽象环境方法参考。",
+            "不是机械臂物理操作或视觉感知；学习成功、规则诊断通过和冻结迁移须分开阅读。"
+          ],
+          "projectBrief": {
+            "familyId": "worldcoder",
+            "familyTitle": "WorldCoder · 学习可执行世界模型",
+            "summary": "模型把观察到的规则写成程序，规划器用程序推演，再用真实反馈修正规则。",
+            "technicalRoute": "代码形式的世界模型 + 蒙特卡洛树搜索（MCTS）+ 反例驱动修订；属于抽象环境方法参考。",
+            "modelRole": "学习阶段调用语言模型生成或修改转移、奖励函数；冻结测试只运行规则与规划。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "完整结构化环境状态与任务描述。"
+              },
+              {
+                "label": "决定什么",
+                "text": "语言模型写世界规则；MCTS 在规则内搜索下一步动作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "网格环境执行动作，返回真实下一状态。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "预测与实际不符时形成反例；学习阶段可改代码，冻结阶段只重新规划。"
+              }
+            ],
+            "limitation": "不是机械臂物理操作或视觉感知；学习成功、规则诊断通过和冻结迁移须分开阅读。",
+            "watchFor": "先看规则代码如何修订，再看换地图后是否仍需新模型调用。",
+            "result": "Luna 把环境规则写成程序，根据交互反馈修订，再将冻结的规则用于新地图规划。",
+            "model": "gpt-6-luna",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "worldcoder",
+          "versionLabel": "Luna 学规则与新地图规划",
+          "preview": {
+            "poster": "media/worldcoder-luna-learning-00.png",
+            "alt": "WorldCoder · Luna 学规则，再换地图 仿真画面",
+            "video": "media/worldcoder-luna-learning-00.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "worldcoder-astra-interrupted-a01",
+          "title": "WorldCoder · Astra 生成规则并完成规划",
+          "engine": "MiniGrid",
+          "model": "gpt-6-astra",
+          "input": "完整结构化状态 · 任务文字",
+          "task": "规则学习与冻结迁移",
+          "cardValue": "1 段演示",
+          "shortDescription": "模型把观察到的规则写成程序，规划器用程序推演，再用真实反馈修正规则。",
+          "mechanism": "world_models",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "reference",
+          "records": 1,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-worldcoder-astra-interrupted-a01",
+          "sourceUrl": "https://github.com/haotang1995/WorldCoder",
+          "notes": [
+            "代码形式的世界模型 + 蒙特卡洛树搜索（MCTS）+ 反例驱动修订；属于抽象环境方法参考。",
+            "这里只展示初版规则完成的学习阶段，不声称完整规则学习或后续迁移已经完成。"
+          ],
+          "projectBrief": {
+            "familyId": "worldcoder",
+            "familyTitle": "WorldCoder · 学习可执行世界模型",
+            "summary": "模型把观察到的规则写成程序，规划器用程序推演，再用真实反馈修正规则。",
+            "technicalRoute": "代码形式的世界模型 + 蒙特卡洛树搜索（MCTS）+ 反例驱动修订；属于抽象环境方法参考。",
+            "modelRole": "学习阶段调用语言模型生成或修改转移、奖励函数；冻结测试只运行规则与规划。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "完整结构化环境状态与任务描述。"
+              },
+              {
+                "label": "决定什么",
+                "text": "语言模型写世界规则；MCTS 在规则内搜索下一步动作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "网格环境执行动作，返回真实下一状态。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "预测与实际不符时形成反例；学习阶段可改代码，冻结阶段只重新规划。"
+              }
+            ],
+            "limitation": "这里只展示初版规则完成的学习阶段，不声称完整规则学习或后续迁移已经完成。",
+            "watchFor": "先看规则代码如何修订，再看换地图后是否仍需新模型调用。",
+            "result": "展示 Astra 生成初版移动与奖励规则，并用这些规则完成首个学习阶段任务。该演示只说明这个已完成阶段。",
+            "model": "gpt-6-astra",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "worldcoder",
+          "versionLabel": "Astra 初版规则与规划",
+          "preview": {
+            "poster": "media/worldcoder-astra-interrupted-a01-00.png",
+            "alt": "WorldCoder · Astra 生成规则并完成规划 仿真画面",
+            "video": "media/worldcoder-astra-interrupted-a01-00.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "worldcoder-luna-frozen6x6",
+          "title": "WorldCoder · 冻结规则迁移到更大地图",
+          "engine": "MiniGrid",
+          "model": "Luna 编写的规则 · 本次0调用",
+          "input": "完整结构化状态 · 原生MCTS",
+          "task": "冻结世界模型跨尺寸迁移",
+          "cardValue": "3 段演示",
+          "shortDescription": "模型把观察到的规则写成程序，规划器用程序推演，再用真实反馈修正规则。",
+          "mechanism": "world_models",
+          "source": "authored",
+          "sourceLabel": "模型生成的固定控制器",
+          "scope": "reference",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-worldcoder-luna-frozen6x6",
+          "sourceUrl": "https://github.com/haotang1995/WorldCoder",
+          "notes": [
+            "代码形式的世界模型 + 蒙特卡洛树搜索（MCTS）+ 反例驱动修订；属于抽象环境方法参考。",
+            "不是机械臂物理操作或视觉感知；学习成功、规则诊断通过和冻结迁移须分开阅读。"
+          ],
+          "projectBrief": {
+            "familyId": "worldcoder",
+            "familyTitle": "WorldCoder · 学习可执行世界模型",
+            "summary": "模型把观察到的规则写成程序，规划器用程序推演，再用真实反馈修正规则。",
+            "technicalRoute": "代码形式的世界模型 + 蒙特卡洛树搜索（MCTS）+ 反例驱动修订；属于抽象环境方法参考。",
+            "modelRole": "规则由 Luna 先前生成；本次全部冻结，运行时 0 次语言模型调用。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "完整结构化环境状态与任务描述。"
+              },
+              {
+                "label": "决定什么",
+                "text": "语言模型写世界规则；MCTS 在规则内搜索下一步动作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "网格环境执行动作，返回真实下一状态。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "预测与实际不符时形成反例；学习阶段可改代码，冻结阶段只重新规划。"
+              }
+            ],
+            "limitation": "不是机械臂物理操作或视觉感知；学习成功、规则诊断通过和冻结迁移须分开阅读。",
+            "watchFor": "先看规则代码如何修订，再看换地图后是否仍需新模型调用。",
+            "result": "无需再次调用语言模型，将同一份冻结规则复用于更大的地图，通过读取真实状态重新规划并到达目标。",
+            "model": "Luna 编写的规则 · 本次0调用",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "worldcoder",
+          "versionLabel": "冻结规则复用到大地图",
+          "preview": {
+            "poster": "media/worldcoder-luna-frozen6x6-seed0.png",
+            "alt": "WorldCoder · 冻结规则迁移到更大地图 仿真画面",
+            "video": "media/worldcoder-luna-frozen6x6-seed0.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "quackd",
+      "title": "MicroDuck 小鸭",
+      "question": "模型指挥小型双足机器人找球和球门，已有策略负责行走。",
+      "cards": [
+        {
+          "id": "quackd-astra-microduck",
+          "title": "Astra 小鸭找球与踢球",
+          "engine": "MuJoCo",
+          "model": "gpt-6-astra · 实际 medium",
+          "input": "头部RGB＋原生位姿／色块方位距离／技能反馈",
+          "task": "双足机器人找球与踢球",
+          "cardValue": "2 段演示",
+          "shortDescription": "模型指挥小型双足机器人找球和球门，已有策略负责行走。",
+          "mechanism": "mobility",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 2,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-quackd-astra-microduck",
+          "sourceUrl": "https://github.com/rokbenko/quackd/tree/92224c9f3795e1c770e3c8d5043bb607a11890fb",
+          "notes": [
+            "视觉高层决策 + 预训练 ONNX 步行策略 + 原生任务交互。",
+            "踢球采用脚本冲量，不是学习到的脚部碰撞踢球，不能据此声称端到端足球技能。"
+          ],
+          "projectBrief": {
+            "familyId": "quackd",
+            "familyTitle": "MicroDuck · 高层 Agent 与步行策略",
+            "summary": "模型指挥小型双足机器人找球和球门，已有策略负责行走。",
+            "technicalRoute": "视觉高层决策 + 预训练 ONNX 步行策略 + 原生任务交互。",
+            "modelRole": "Astra 在线选择方向与交互；低层步行由预训练策略承担。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "头部 RGB、原生位姿、色块方位距离与功能反馈。"
+              },
+              {
+                "label": "决定什么",
+                "text": "寻找球与球门，决定行走和踢球时机。"
+              },
+              {
+                "label": "如何执行",
+                "text": "步行策略驱动双足；原生踢球脚本给球施加冲量。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新视角和原生完成判定返回。"
+              }
+            ],
+            "limitation": "踢球采用脚本冲量，不是学习到的脚部碰撞踢球，不能据此声称端到端足球技能。",
+            "watchFor": "区分自主选择接近方向、策略行走与脚本踢球三个环节。",
+            "result": "模型指挥小型双足机器人找球、接近球门并触发原生踢球交互。",
+            "model": "gpt-6-astra · 实际 medium",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "quackd",
+          "versionLabel": "Astra 小鸭找球与踢球",
+          "preview": {
+            "poster": "media/quackd-astra-microduck-seed0.png",
+            "alt": "Astra 小鸭找球与踢球 仿真画面",
+            "video": "media/quackd-astra-microduck-seed0.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "bullet",
+      "title": "PyBullet · 视觉机械臂操作",
+      "question": "从图像反馈到抓取与目标到达，观察模型如何逐步组织机械臂动作。",
+      "cards": [
+        {
+          "id": "bullet-pick-place",
+          "title": "拿起方块，送到目标位置",
+          "engine": "PyBullet",
+          "model": "gpt-6-astra（请求标识）",
+          "input": "图像 + 本体状态",
+          "task": "抓取与放置",
+          "cardValue": "2 段演示",
+          "shortDescription": "模型看图决定下一步动作，执行后再看新画面，逐步接近目标。",
+          "mechanism": "vision",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 2,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-bullet-pick-place",
+          "sourceUrl": "https://github.com/TheShiningVampire/astra-manipulation",
+          "notes": [
+            "视觉语言 Agent + 原任务动作接口：保留感知、动作、反馈的逐步闭环。",
+            "少量任务与初始条件的验证；客户端能正常收尾和机器人能完成任务是两个不同结论。"
+          ],
+          "projectBrief": {
+            "familyId": "bullet",
+            "familyTitle": "视觉 Agent · 抓取与到达",
+            "summary": "模型看图决定下一步动作，执行后再看新画面，逐步接近目标。",
+            "technicalRoute": "视觉语言 Agent + 原任务动作接口：保留感知、动作、反馈的逐步闭环。",
+            "modelRole": "Astra 在运行时选择动作；物理控制由任务原有控制器承担。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "相机图像和机器人自身状态。"
+              },
+              {
+                "label": "决定什么",
+                "text": "接近、抓取、移动、松开等下一步控制目标。"
+              },
+              {
+                "label": "如何执行",
+                "text": "动作工具把模型指令交给 Panda 的任务控制器，在物理仿真中推进。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新图像、机器人状态及任务判定返回模型。"
+              }
+            ],
+            "limitation": "少量任务与初始条件的验证；客户端能正常收尾和机器人能完成任务是两个不同结论。",
+            "watchFor": "观察接近物体的方向、夹爪闭合时机，以及执行后是否根据图像调整。",
+            "result": "根据图像接近方块并将它移入目标位置容差内，展示看图、动作、再观察的控制循环。",
+            "model": "gpt-6-astra（请求标识）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "bullet",
+          "versionLabel": "早期图像抓取",
+          "preview": {
+            "poster": "media/bullet_pick_place-s3.jpg",
+            "alt": "拿起方块，送到目标位置 仿真画面",
+            "video": "media/bullet_pick_place-s3.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "bullet-pick-place-v2",
+          "title": "视觉闭环下的方块抓取",
+          "engine": "PyBullet",
+          "model": "gpt-6-astra（请求标识）",
+          "input": "图像 + 本体状态",
+          "task": "抓取与放置",
+          "cardValue": "3 段演示",
+          "shortDescription": "模型看图决定下一步动作，执行后再看新画面，逐步接近目标。",
+          "mechanism": "vision",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-bullet-pick-place-v2",
+          "sourceUrl": "https://github.com/TheShiningVampire/astra-manipulation",
+          "notes": [
+            "视觉语言 Agent + 原任务动作接口：保留感知、动作、反馈的逐步闭环。",
+            "少量任务与初始条件的验证；客户端能正常收尾和机器人能完成任务是两个不同结论。"
+          ],
+          "projectBrief": {
+            "familyId": "bullet",
+            "familyTitle": "视觉 Agent · 抓取与到达",
+            "summary": "模型看图决定下一步动作，执行后再看新画面，逐步接近目标。",
+            "technicalRoute": "视觉语言 Agent + 原任务动作接口：保留感知、动作、反馈的逐步闭环。",
+            "modelRole": "Astra 在运行时选择动作；物理控制由任务原有控制器承担。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "相机图像和机器人自身状态。"
+              },
+              {
+                "label": "决定什么",
+                "text": "接近、抓取、移动、松开等下一步控制目标。"
+              },
+              {
+                "label": "如何执行",
+                "text": "动作工具把模型指令交给 Panda 的任务控制器，在物理仿真中推进。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新图像、机器人状态及任务判定返回模型。"
+              }
+            ],
+            "limitation": "少量任务与初始条件的验证；客户端能正常收尾和机器人能完成任务是两个不同结论。",
+            "watchFor": "观察接近物体的方向、夹爪闭合时机，以及执行后是否根据图像调整。",
+            "result": "使用视觉反馈完成方块抓取与目标搬运，展示连续动作调用组成完整操作的过程。",
+            "model": "gpt-6-astra（请求标识）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "bullet",
+          "versionLabel": "完整视觉闭环抓取",
+          "preview": {
+            "poster": "media/astra_v2_bullet_pick_place_20261022_011147_s0.png",
+            "alt": "视觉闭环下的方块抓取 仿真画面",
+            "video": "media/astra_v2_bullet_pick_place_20261022_011147_s0.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "bullet-reach",
+          "title": "十个目标，逐次靠近",
+          "engine": "PyBullet",
+          "model": "gpt-6-astra（请求标识）",
+          "input": "图像 + 本体状态",
+          "task": "到达目标",
+          "cardValue": "10 段演示",
+          "shortDescription": "模型看图决定下一步动作，执行后再看新画面，逐步接近目标。",
+          "mechanism": "vision",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 10,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-bullet-reach",
+          "sourceUrl": "https://github.com/TheShiningVampire/astra-manipulation",
+          "notes": [
+            "视觉语言 Agent + 原任务动作接口：保留感知、动作、反馈的逐步闭环。",
+            "少量任务与初始条件的验证；客户端能正常收尾和机器人能完成任务是两个不同结论。"
+          ],
+          "projectBrief": {
+            "familyId": "bullet",
+            "familyTitle": "视觉 Agent · 抓取与到达",
+            "summary": "模型看图决定下一步动作，执行后再看新画面，逐步接近目标。",
+            "technicalRoute": "视觉语言 Agent + 原任务动作接口：保留感知、动作、反馈的逐步闭环。",
+            "modelRole": "Astra 在运行时选择动作；物理控制由任务原有控制器承担。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "相机图像和机器人自身状态。"
+              },
+              {
+                "label": "决定什么",
+                "text": "接近、抓取、移动、松开等下一步控制目标。"
+              },
+              {
+                "label": "如何执行",
+                "text": "动作工具把模型指令交给 Panda 的任务控制器，在物理仿真中推进。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新图像、机器人状态及任务判定返回模型。"
+              }
+            ],
+            "limitation": "少量任务与初始条件的验证；客户端能正常收尾和机器人能完成任务是两个不同结论。",
+            "watchFor": "观察接近物体的方向、夹爪闭合时机，以及执行后是否根据图像调整。",
+            "result": "机械臂从初始姿态出发，接近不同目标并达到任务规定的位置容差。",
+            "model": "gpt-6-astra（请求标识）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "bullet",
+          "versionLabel": "不同目标的到达",
+          "preview": {
+            "poster": "media/bullet_reach-s0.jpg",
+            "alt": "十个目标，逐次靠近 仿真画面",
+            "video": "media/bullet_reach-s0.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "elevator",
+      "title": "Astra · 电梯按钮操作",
+      "question": "看图接近并按下按钮，详情展示直接操作与不同反馈接口的完成过程。",
+      "cards": [
+        {
+          "id": "astra-experience-free-s1",
+          "title": "Astra 看图按电梯",
+          "engine": "MuJoCo",
+          "model": "gpt-6-astra · 实际medium",
+          "input": "原生RGB＋公开关节状态；无判定真值输入",
+          "task": "电梯按钮最终按压",
+          "cardValue": "2 段演示",
+          "shortDescription": "让同一模型通过不同反馈接口按按钮，观察动作闭环与收尾差异。",
+          "mechanism": "vision",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 2,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-astra-experience-free-s1",
+          "sourceUrl": "https://github.com/hesd10/astra-robot-sim2real/tree/e324643f03d05656f49bc4fc575759fd46cb9fe0",
+          "notes": [
+            "视觉 Agent 接触操作，对照直接 API、分步反馈和带局部停止规则的接口。",
+            "接口同时改变了自动化和动作约束，差异不能全部归因于“反馈”一个因素；不是整段乘梯导航。"
+          ],
+          "projectBrief": {
+            "familyId": "elevator",
+            "familyTitle": "电梯按钮 · 反馈接口如何影响操作",
+            "summary": "让同一模型通过不同反馈接口按按钮，观察动作闭环与收尾差异。",
+            "technicalRoute": "视觉 Agent 接触操作，对照直接 API、分步反馈和带局部停止规则的接口。",
+            "modelRole": "Astra 在线决策；不同接口附带的自动化程度不同。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "原生 RGB 与关节状态，不读取按钮真值。"
+              },
+              {
+                "label": "决定什么",
+                "text": "选择接近和按压动作；FREE、STEP、LOOP 允许的工具不同。"
+              },
+              {
+                "label": "如何执行",
+                "text": "FREE 直接使用公开控制 API；STEP 脉冲后停止并检查；LOOP 额外使用固定区域红像素停止规则。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新画面、接触与健康检查反馈；分别记录物理成功和程序正常收尾。"
+              }
+            ],
+            "limitation": "接口同时改变了自动化和动作约束，差异不能全部归因于“反馈”一个因素；不是整段乘梯导航。",
+            "watchFor": "比较接触按钮后是否及时停止，以及物理成功之后流程能否正常结束。",
+            "result": "模型根据原生画面与关节状态接近按钮，通过接触按下按钮并完成流程。",
+            "model": "gpt-6-astra · 实际medium",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "elevator",
+          "versionLabel": "直接看图按按钮",
+          "preview": {
+            "poster": "media/astra-experience-free-s1.png",
+            "alt": "Astra 看图按电梯 仿真画面",
+            "video": "media/astra-experience-free-s1-3x.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "astra-elevator-feedback-comparison",
+          "title": "Astra · 用不同反馈接口按下按钮",
+          "engine": "MuJoCo",
+          "model": "gpt-6-astra · 实际 medium",
+          "input": "原生相机 RGB＋公开关节状态；提供的技能接口对照",
+          "task": "电梯按钮局部接触与视觉确认",
+          "cardValue": "5 段演示",
+          "shortDescription": "让同一模型通过不同反馈接口按按钮，观察动作闭环与收尾差异。",
+          "mechanism": "vision",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 5,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-astra-elevator-feedback-comparison",
+          "sourceUrl": "https://github.com/hesd10/astra-robot-sim2real/tree/e324643f03d05656f49bc4fc575759fd46cb9fe0",
+          "notes": [
+            "视觉 Agent 接触操作，对照直接 API、分步反馈和带局部停止规则的接口。",
+            "接口同时改变了自动化和动作约束，差异不能全部归因于“反馈”一个因素；不是整段乘梯导航。"
+          ],
+          "projectBrief": {
+            "familyId": "elevator",
+            "familyTitle": "电梯按钮 · 反馈接口如何影响操作",
+            "summary": "让同一模型通过不同反馈接口按按钮，观察动作闭环与收尾差异。",
+            "technicalRoute": "视觉 Agent 接触操作，对照直接 API、分步反馈和带局部停止规则的接口。",
+            "modelRole": "Astra 在线决策；不同接口附带的自动化程度不同。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "原生 RGB 与关节状态，不读取按钮真值。"
+              },
+              {
+                "label": "决定什么",
+                "text": "选择接近和按压动作；FREE、STEP、LOOP 允许的工具不同。"
+              },
+              {
+                "label": "如何执行",
+                "text": "FREE 直接使用公开控制 API；STEP 脉冲后停止并检查；LOOP 额外使用固定区域红像素停止规则。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "新画面、接触与健康检查反馈；分别记录物理成功和程序正常收尾。"
+              }
+            ],
+            "limitation": "接口同时改变了自动化和动作约束，差异不能全部归因于“反馈”一个因素；不是整段乘梯导航。",
+            "watchFor": "比较接触按钮后是否及时停止，以及物理成功之后流程能否正常结束。",
+            "result": "展示直接操作、分步反馈与循环反馈接口如何帮助模型接近按钮、执行接触并结束操作。",
+            "model": "gpt-6-astra · 实际 medium",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "elevator",
+          "versionLabel": "多种执行反馈接口",
+          "preview": {
+            "poster": "media/astra-elevator-feedback-comparison/s1-free/b01b400e5b40ef5e/first.png",
+            "alt": "Astra · 用不同反馈接口按下按钮 仿真画面",
+            "video": "media/astra-elevator-feedback-comparison/s1-free/9c4abb8471f48215/preview-3x.mp4",
+            "start": 25.502000000000418
+          }
+        }
+      ]
+    },
+    {
+      "id": "robotvllm",
+      "title": "Robot-vLLM 视觉定位",
+      "question": "模型在带坐标网格的图像里找到目标，控制器再把选择变成移动。",
+      "cards": [
+        {
+          "id": "robot-vllm-astra-sensing",
+          "title": "Astra 看图定位四色目标",
+          "engine": "MuJoCo",
+          "model": "gpt-6-astra · 实际 medium",
+          "input": "仅两阶段原生RGB与公开编号网格；目标真值只供事后原生判定",
+          "task": "四色视觉定位与一维目标到达",
+          "cardValue": "3 段演示",
+          "shortDescription": "模型在带坐标网格的图像里找到目标，控制器再把选择变成移动。",
+          "mechanism": "memory",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-robot-vllm-astra-sensing",
+          "sourceUrl": "https://github.com/nssmd/robot-vllm/tree/58b13f422e8c1b58d606e467152d8d711e1c5b3f",
+          "notes": [
+            "视觉定位 + 一维任务控制，聚焦从图像识别到动作接口的连接。",
+            "简化定位任务不能代表复杂六自由度抓取。"
+          ],
+          "projectBrief": {
+            "familyId": "robotvllm",
+            "familyTitle": "Robot-vLLM · 看图定位的简化操作",
+            "summary": "模型在带坐标网格的图像里找到目标，控制器再把选择变成移动。",
+            "technicalRoute": "视觉定位 + 一维任务控制，聚焦从图像识别到动作接口的连接。",
+            "modelRole": "Astra 在线选择目标颜色所在的列。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "两个阶段的原生 RGB 与公开编号网格。"
+              },
+              {
+                "label": "决定什么",
+                "text": "辨认颜色目标并选择对应列。"
+              },
+              {
+                "label": "如何执行",
+                "text": "作者的一维控制器完成对应动作。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "目标真值仅用于事后原生判定，不作为模型输入。"
+              }
+            ],
+            "limitation": "简化定位任务不能代表复杂六自由度抓取。",
+            "watchFor": "看目标颜色改变时，模型选择的网格列是否相应改变。",
+            "result": "模型在带编号网格的图像中定位颜色目标，再由原任务控制器执行对应移动。",
+            "model": "gpt-6-astra · 实际 medium",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "robotvllm",
+          "versionLabel": "Astra 看图定位四色目标",
+          "preview": {
+            "poster": "media/robot-vllm-astra-sensing-1201.png",
+            "alt": "Astra 看图定位四色目标 仿真画面",
+            "video": "media/robot-vllm-astra-sensing-1201.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "openarm",
+      "title": "OpenArm ACT 绘画",
+      "question": "脚本安排蘸色与画点，训练好的 ACT 策略负责局部关节修正。",
+      "cards": [
+        {
+          "id": "openarm-act-mona-lisa",
+          "title": "用 384 次落笔，画出蒙娜丽莎",
+          "engine": "MuJoCo",
+          "model": "作者发布的LeRobot ACT；Astra参与构建，本机0新调用",
+          "input": "7关节状态 + 6个真值位姿误差；固定画像目标，无相机输入",
+          "task": "机械臂绘画",
+          "cardValue": "3 段演示",
+          "shortDescription": "脚本安排蘸色与画点，训练好的 ACT 策略负责局部关节修正。",
+          "mechanism": "policies",
+          "source": "authored",
+          "sourceLabel": "模型生成的固定控制器",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-openarm-act-mona-lisa",
+          "sourceUrl": "https://arena.himrobotics.com/uploads/source_59ffd3291f3623fc498d",
+          "notes": [
+            "分层混合：固定绘画流程 + 作者发布的 ACT 动作策略。",
+            "不是图像输入的 VLA，也不评价作品审美或自由创作能力；本机未训练新策略。"
+          ],
+          "projectBrief": {
+            "familyId": "openarm",
+            "familyTitle": "OpenArm · 学习策略与绘画编排",
+            "summary": "脚本安排蘸色与画点，训练好的 ACT 策略负责局部关节修正。",
+            "technicalRoute": "分层混合：固定绘画流程 + 作者发布的 ACT 动作策略。",
+            "modelRole": "ACT 权重负责动作推理；高层画面与顺序由脚本给定，无运行时 Astra。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "7 个关节状态与 6 维目标位姿真值误差。"
+              },
+              {
+                "label": "决定什么",
+                "text": "ACT 输出关节修正；脚本决定洗笔、蘸色和 384 个画点。"
+              },
+              {
+                "label": "如何执行",
+                "text": "OpenArm 在物理仿真中接触画布并完成预定笔触。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "记录接触完成情况，复核物理重放状态与文件哈希。"
+              }
+            ],
+            "limitation": "不是图像输入的 VLA，也不评价作品审美或自由创作能力；本机未训练新策略。",
+            "watchFor": "看高层换色流程与低层接近画点的修正如何配合。",
+            "result": "固定绘画编排配合 ACT 局部动作策略，完成蘸色、换色和蒙娜丽莎画像的预定接触画点。",
+            "model": "作者发布的LeRobot ACT；Astra参与构建，本机0新调用",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "openarm",
+          "versionLabel": "用 384 次落笔，画出蒙娜丽莎",
+          "preview": {
+            "poster": "media/openarm-act-mona-lisa-nominal.png",
+            "alt": "用 384 次落笔，画出蒙娜丽莎 仿真画面",
+            "video": "media/openarm-act-mona-lisa-nominal.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "spider",
+      "title": "Robo-Spider · 六足双臂机器人",
+      "question": "高层导航与生成代码搬运：同一机器人通过步态、双臂操作与路径修订完成不同目标。",
+      "cards": [
+        {
+          "id": "robo-spider-live",
+          "title": "前进、转向，停在目标旁",
+          "engine": "MuJoCo",
+          "model": "gpt-6-astra（请求标识）",
+          "input": "自身状态真值 + 目标坐标",
+          "task": "短程导航",
+          "cardValue": "3 段演示",
+          "shortDescription": "将移动或搬运目标拆成高层指令，再交给已有步态与机械臂控制器。",
+          "mechanism": "mobility",
+          "source": "fresh",
+          "sourceLabel": "本机新跑 Agent",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-robo-spider-live",
+          "sourceUrl": "https://github.com/dimentary/llm-robotics-playground/tree/main/experiments/robo-spider",
+          "notes": [
+            "分层控制：上层负责去哪里、何时操作，下层负责步态和执行。",
+            "读取真值状态；固定代码版本运行时不调用语言模型。"
+          ],
+          "projectBrief": {
+            "familyId": "spider",
+            "familyTitle": "Robo-Spider · 高层决策与步态",
+            "summary": "将移动或搬运目标拆成高层指令，再交给已有步态与机械臂控制器。",
+            "technicalRoute": "分层控制：上层负责去哪里、何时操作，下层负责步态和执行。",
+            "modelRole": "Astra 在线决策移动方向与时长，已有步态负责底层运动。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "机器人状态真值和任务目标。"
+              },
+              {
+                "label": "决定什么",
+                "text": "选择移动方向、距离或操作路径。"
+              },
+              {
+                "label": "如何执行",
+                "text": "原有步态和关节控制器在接触与摩擦作用下执行。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "读取新状态并检查到达、搬运与碰撞条件。"
+              }
+            ],
+            "limitation": "读取真值状态；固定代码版本运行时不调用语言模型。",
+            "watchFor": "对比导航时的转向与停止，以及搬运前增加绕行点后碰撞如何变化。",
+            "result": "根据目标位置前进、转向，最后停在目标旁。高层指令与原有步态在闭环中配合。",
+            "model": "gpt-6-astra（请求标识）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "spider",
+          "versionLabel": "在线导航与停稳",
+          "preview": {
+            "poster": "media/spider-live-nav_00_straight.png",
+            "alt": "前进、转向，停在目标旁 仿真画面",
+            "video": "media/spider-live-nav_00_straight.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "robo-spider-astra-clearance",
+          "title": "Astra 修正路径：六足双臂搬运",
+          "engine": "MuJoCo",
+          "model": "Astra生成代码 → 固定控制器",
+          "input": "运行时仿真状态真值；不是图像策略",
+          "task": "双臂跨桌搬运",
+          "cardValue": "1 段演示",
+          "shortDescription": "将移动或搬运目标拆成高层指令，再交给已有步态与机械臂控制器。",
+          "mechanism": "programs",
+          "source": "authored",
+          "sourceLabel": "模型生成的固定控制器",
+          "scope": "embodied",
+          "records": 1,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-robo-spider-astra-clearance",
+          "sourceUrl": "https://github.com/dimentary/llm-robotics-playground/tree/5ffdf5803636efa99f1184bb8481ce7cb85908b6/experiments/robo-spider",
+          "notes": [
+            "分层控制：上层负责去哪里、何时操作，下层负责步态和执行。",
+            "读取真值状态；固定代码版本运行时不调用语言模型。"
+          ],
+          "projectBrief": {
+            "familyId": "spider",
+            "familyTitle": "Robo-Spider · 高层决策与步态",
+            "summary": "将移动或搬运目标拆成高层指令，再交给已有步态与机械臂控制器。",
+            "technicalRoute": "分层控制：上层负责去哪里、何时操作，下层负责步态和执行。",
+            "modelRole": "Astra 离线修改路径代码；运行时为固定控制器。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "机器人状态真值和任务目标。"
+              },
+              {
+                "label": "决定什么",
+                "text": "选择移动方向、距离或操作路径。"
+              },
+              {
+                "label": "如何执行",
+                "text": "原有步态和关节控制器在接触与摩擦作用下执行。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "读取新状态并检查到达、搬运与碰撞条件。"
+              }
+            ],
+            "limitation": "读取真值状态；固定代码版本运行时不调用语言模型。",
+            "watchFor": "对比导航时的转向与停止，以及搬运前增加绕行点后碰撞如何变化。",
+            "result": "加入抓取前的绕行点后，固定控制程序完成双臂搬运，并通过严格路径检查。",
+            "model": "Astra生成代码 → 固定控制器",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "spider",
+          "versionLabel": "生成代码与双臂搬运",
+          "preview": {
+            "poster": "media/robo-spider-astra-clearance.png",
+            "alt": "Astra 修正路径：六足双臂搬运 仿真画面",
+            "video": "media/robo-spider-astra-clearance.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "arena",
+      "title": "ArtifactArena · 机器人设计",
+      "question": "模型生成机器人形态与固定控制程序，再在物理擂台上推动静态方块，探索设计与控制的配合。",
+      "cards": [
+        {
+          "id": "artifactarena-razorwake",
+          "title": "Astra 设计机器人：把对手推出擂台",
+          "engine": "MuJoCo",
+          "model": "官方 GPT-6 Astra 生成作品 → 固定控制器",
+          "input": "控制器读取仿真观测；运行时无模型调用",
+          "task": "机器人擂台资格测试",
+          "cardValue": "3 段演示",
+          "shortDescription": "模型先生成机器人结构和控制代码，再把冻结的设计放进物理竞技场测试。",
+          "mechanism": "programs",
+          "source": "authored",
+          "sourceLabel": "模型生成的固定控制器",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-artifactarena-razorwake",
+          "sourceUrl": "https://artifactarena.ai/bots?left=gpt-6-astra__autoresearch__r01_c003",
+          "notes": [
+            "具身设计生成：机器人形态与控制程序共同构成产物，运行时直接执行产物。",
+            "当前对手是静态方块，不是智能竞争对手；结果不代表对抗强策略的水平。"
+          ],
+          "projectBrief": {
+            "familyId": "arena",
+            "familyTitle": "ArtifactArena · 生成机器人设计与控制",
+            "summary": "模型先生成机器人结构和控制代码，再把冻结的设计放进物理竞技场测试。",
+            "technicalRoute": "具身设计生成：机器人形态与控制程序共同构成产物，运行时直接执行产物。",
+            "modelRole": "Astra 参与此前的设计生成；本机复现没有在线大模型调用。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "固定控制器读取原生观察。"
+              },
+              {
+                "label": "决定什么",
+                "text": "已生成的程序根据观察输出机器人动作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "MuJoCo 中的自定义机器人靠接触把对手推出场地。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "原生比赛判定与轨迹记录胜负。"
+              }
+            ],
+            "limitation": "当前对手是静态方块，不是智能竞争对手；结果不代表对抗强策略的水平。",
+            "watchFor": "看机器人形态、接触位置与控制方式如何共同产生推力。",
+            "result": "模型事先生成的 Razorwake 机器人设计与固定控制程序，通过接触将静态方块推出擂台。",
+            "model": "官方 GPT-6 Astra 生成作品 → 固定控制器",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "arena",
+          "versionLabel": "Razorwake 机器人设计",
+          "preview": {
+            "poster": "media/artifactarena-razorwake-s0.png",
+            "alt": "Astra 设计机器人：把对手推出擂台 仿真画面",
+            "video": "media/artifactarena-razorwake-s0.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "artifactarena-crosscurrent",
+          "title": "Astra Design Lab：Crosscurrent 擂台测试",
+          "engine": "MuJoCo",
+          "model": "官方 GPT-6 Astra 生成作品 → 固定控制器",
+          "input": "控制器读取仿真观测；运行时无模型调用",
+          "task": "机器人擂台资格测试",
+          "cardValue": "3 段演示",
+          "shortDescription": "模型先生成机器人结构和控制代码，再把冻结的设计放进物理竞技场测试。",
+          "mechanism": "programs",
+          "source": "authored",
+          "sourceLabel": "模型生成的固定控制器",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-artifactarena-crosscurrent",
+          "sourceUrl": "https://artifactarena.ai/bots?left=gpt-6-astra__open-ended__r03_c002",
+          "notes": [
+            "具身设计生成：机器人形态与控制程序共同构成产物，运行时直接执行产物。",
+            "当前对手是静态方块，不是智能竞争对手；结果不代表对抗强策略的水平。"
+          ],
+          "projectBrief": {
+            "familyId": "arena",
+            "familyTitle": "ArtifactArena · 生成机器人设计与控制",
+            "summary": "模型先生成机器人结构和控制代码，再把冻结的设计放进物理竞技场测试。",
+            "technicalRoute": "具身设计生成：机器人形态与控制程序共同构成产物，运行时直接执行产物。",
+            "modelRole": "Astra 参与此前的设计生成；本机复现没有在线大模型调用。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "固定控制器读取原生观察。"
+              },
+              {
+                "label": "决定什么",
+                "text": "已生成的程序根据观察输出机器人动作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "MuJoCo 中的自定义机器人靠接触把对手推出场地。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "原生比赛判定与轨迹记录胜负。"
+              }
+            ],
+            "limitation": "当前对手是静态方块，不是智能竞争对手；结果不代表对抗强策略的水平。",
+            "watchFor": "看机器人形态、接触位置与控制方式如何共同产生推力。",
+            "result": "Crosscurrent 的机器人形态与固定控制程序在物理仿真中协作，将静态方块推出场地。",
+            "model": "官方 GPT-6 Astra 生成作品 → 固定控制器",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "arena",
+          "versionLabel": "Crosscurrent 机器人设计",
+          "preview": {
+            "poster": "media/artifactarena-crosscurrent-s0.png",
+            "alt": "Astra Design Lab：Crosscurrent 擂台测试 仿真画面",
+            "video": "media/artifactarena-crosscurrent-s0.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "bigym",
+      "title": "BiGym2 人形搬盘",
+      "question": "使用作者发布的固定控制程序，复现人形机器人搬盘子。",
+      "cards": [
+        {
+          "id": "bigym2-published-astra-move-plate",
+          "title": "G1 人形机器人搬运盘子",
+          "engine": "MuJoCo",
+          "model": "作者标注：GPT-6 Astra生成固定控制器；本机0新调用",
+          "input": "机载84×84 RGB + 本体/骨盆状态；无物体真值",
+          "task": "人形机器人全身操作",
+          "cardValue": "1 段演示",
+          "shortDescription": "使用作者发布的固定控制程序，复现人形机器人搬盘子。",
+          "mechanism": "programs",
+          "source": "authored",
+          "sourceLabel": "模型生成的固定控制器",
+          "scope": "embodied",
+          "records": 1,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-bigym2-published-astra-move-plate",
+          "sourceUrl": "https://bigym2.github.io/",
+          "notes": [
+            "机载视觉与全身控制程序结合，重点检查作者产物能否在本机重复执行。",
+            "运行时执行作者发布的固定代码，没有新模型调用。所选本机演示与作者参考动作存在差异，不能称精确动作复演。"
+          ],
+          "projectBrief": {
+            "familyId": "bigym",
+            "familyTitle": "BiGym2 · 全身操作复现",
+            "summary": "使用作者发布的固定控制程序，复现人形机器人搬盘子。",
+            "technicalRoute": "机载视觉与全身控制程序结合，重点检查作者产物能否在本机重复执行。",
+            "modelRole": "使用作者标注为 Astra 生成的固定代码；本机运行没有新模型调用。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "机载 84×84 RGB、关节与骨盆状态，不读取物体真值。"
+              },
+              {
+                "label": "决定什么",
+                "text": "固定程序选择全身移动与手部操作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "BiGym2 中的 G1 控制器推进全身与物体接触。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "记录原生成功判定，并核对动作文件是否与作者发布版本一致。"
+              }
+            ],
+            "limitation": "运行时执行作者发布的固定代码，没有新模型调用。所选本机演示与作者参考动作存在差异，不能称精确动作复演。",
+            "watchFor": "看走近盘子、保持平衡与双手操作如何协调。",
+            "result": "作者发布的固定控制程序在本机完成了一次 G1 人形搬盘任务，展示全身移动与双手操作的协调。",
+            "model": "作者标注：GPT-6 Astra生成固定控制器；本机0新调用",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "bigym",
+          "versionLabel": "G1 人形机器人搬运盘子",
+          "preview": {
+            "poster": "media/bigym2-published-astra-move-plate-seed620002.png",
+            "alt": "G1 人形机器人搬运盘子 仿真画面",
+            "video": "media/bigym2-published-astra-move-plate-seed620002.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "writing",
+      "title": "Fibonacci 白板书写",
+      "question": "将程序文字拆成笔画，用灵巧手持笔，在物理接触中完成书写。",
+      "cards": [
+        {
+          "id": "fibonacci-writing",
+          "title": "把一段程序，写在白板上",
+          "engine": "MuJoCo",
+          "model": "Astra 编写的固定控制器（作者标注）",
+          "input": "仿真状态与固定笔画路径",
+          "task": "接触书写",
+          "cardValue": "1 段演示",
+          "shortDescription": "将程序文字拆成笔画，用灵巧手持笔，在物理接触中完成书写。",
+          "mechanism": "programs",
+          "source": "authored",
+          "sourceLabel": "模型生成的固定控制器",
+          "scope": "embodied",
+          "records": 1,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-fibonacci-writing",
+          "sourceUrl": "https://github.com/dimentary/llm-robotics-playground/tree/main/experiments/fibonacci-writing",
+          "notes": [
+            "模型事先编写控制程序，运行时按固定笔画目标驱动机械手。",
+            "文字内容和笔画预先给定；不说明在线识字、自由创作或视觉纠错能力。"
+          ],
+          "projectBrief": {
+            "familyId": "writing",
+            "familyTitle": "灵巧手写字 · 固定轨迹与真实接触",
+            "summary": "将程序文字拆成笔画，用灵巧手持笔，在物理接触中完成书写。",
+            "technicalRoute": "模型事先编写控制程序，运行时按固定笔画目标驱动机械手。",
+            "modelRole": "Astra 参与生成控制代码；回放中的执行没有新的模型调用。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "机器人状态与预先确定的笔画路径。"
+              },
+              {
+                "label": "决定什么",
+                "text": "固定控制器计算当前笔尖应该到达的位置。"
+              },
+              {
+                "label": "如何执行",
+                "text": "G1 灵巧手持笔，仿真通过实际笔尖接触产生笔迹。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "检查笔画完成、持笔和接触记录。"
+              }
+            ],
+            "limitation": "文字内容和笔画预先给定；不说明在线识字、自由创作或视觉纠错能力。",
+            "watchFor": "看落笔、抬笔和换行，区分轨迹目标与实际接触留下的笔迹。",
+            "result": "灵巧手持笔完成一段 Fibonacci 程序的全部预定笔画，笔迹来自真实仿真接触。",
+            "model": "Astra 编写的固定控制器（作者标注）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "writing",
+          "versionLabel": "把一段程序，写在白板上",
+          "preview": {
+            "poster": "media/fibonacci-writing.png",
+            "alt": "把一段程序，写在白板上 仿真画面",
+            "video": "media/fibonacci-writing.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "drawing",
+      "title": "灵巧手几何绘图",
+      "question": "把圆、方形和螺旋变成笔尖路径，由持笔控制器真实画出。",
+      "cards": [
+        {
+          "id": "geometric-drawing",
+          "title": "用多指手，画出圆与螺旋",
+          "engine": "MuJoCo",
+          "model": "复用作者生成的固定控制器",
+          "input": "笔尖状态真值 + 预设几何路径",
+          "task": "接触绘画",
+          "cardValue": "3 段演示",
+          "shortDescription": "把圆、方形和螺旋变成笔尖路径，由持笔控制器真实画出。",
+          "mechanism": "programs",
+          "source": "authored",
+          "sourceLabel": "模型生成的固定控制器",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-geometric-drawing",
+          "sourceUrl": "https://github.com/dimentary/llm-robotics-playground/tree/main/experiments/dove-drawing",
+          "notes": [
+            "预定几何轨迹 + 灵巧手持笔控制 + 物理接触留痕。",
+            "路径预先指定，状态来自真值；不是自由绘画或视觉生成。"
+          ],
+          "projectBrief": {
+            "familyId": "drawing",
+            "familyTitle": "灵巧手绘图 · 几何路径控制",
+            "summary": "把圆、方形和螺旋变成笔尖路径，由持笔控制器真实画出。",
+            "technicalRoute": "预定几何轨迹 + 灵巧手持笔控制 + 物理接触留痕。",
+            "modelRole": "运行时是固定控制器；没有在线视觉语言模型创作图形。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "笔尖状态真值与几何路径。"
+              },
+              {
+                "label": "决定什么",
+                "text": "计算笔尖沿曲线的下一目标。"
+              },
+              {
+                "label": "如何执行",
+                "text": "控制灵巧手持笔运动，以真实接触写入画面。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "检查持笔、墨迹和轨迹完成情况。"
+              }
+            ],
+            "limitation": "路径预先指定，状态来自真值；不是自由绘画或视觉生成。",
+            "watchFor": "比较直线转角、闭合圆和连续螺旋的持笔稳定性。",
+            "result": "灵巧手在持续持笔和接触条件下画出圆、方形与双圈螺旋。",
+            "model": "复用作者生成的固定控制器",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "drawing",
+          "versionLabel": "用多指手，画出圆与螺旋",
+          "preview": {
+            "poster": "media/geometric-circle.png",
+            "alt": "用多指手，画出圆与螺旋 仿真画面",
+            "video": "media/geometric-circle.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "so101",
+      "title": "SO101 · 分拣与接触绘画",
+      "question": "从 RGB 几何定位到接触画笔控制，展示 SO101 仿真分拣和绘画两种操作。",
+      "cards": [
+        {
+          "id": "so101-block-sorting",
+          "title": "SO101 从相机画面分拣三色积木",
+          "engine": "MuJoCo",
+          "model": "固定几何视觉控制器 · 0新模型调用",
+          "input": "前视RGB＋关节编码器＋机器人运动学与标定先验",
+          "task": "相机引导的积木分拣",
+          "cardValue": "2 段演示",
+          "shortDescription": "利用相机标定与几何控制，完成仿真 SO101 的分拣或绘画。",
+          "mechanism": "baselines",
+          "source": "baseline",
+          "sourceLabel": "传统控制基线",
+          "scope": "embodied",
+          "records": 2,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-so101-block-sorting",
+          "sourceUrl": "https://huggingface.co/buckets/mishig/so101-block-sorting",
+          "notes": [
+            "固定视觉几何控制：从 RGB 标记或颜色定位，再结合机器人运动学生成动作。",
+            "这里全部是仿真，不是此前实体 SO101 的部署成果；控制依赖标定与任务先验。"
+          ],
+          "projectBrief": {
+            "familyId": "so101",
+            "familyTitle": "SO101 · 视觉几何与接触绘画",
+            "summary": "利用相机标定与几何控制，完成仿真 SO101 的分拣或绘画。",
+            "technicalRoute": "固定视觉几何控制：从 RGB 标记或颜色定位，再结合机器人运动学生成动作。",
+            "modelRole": "运行时是固定控制器，0 次大模型调用。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "RGB、编码器与标定；绘画额外读取模拟颜料与接触状态。"
+              },
+              {
+                "label": "决定什么",
+                "text": "固定算法定位目标、规划几何路径并选择操作阶段。"
+              },
+              {
+                "label": "如何执行",
+                "text": "SO101 仿真控制器执行动作，接触产生抓取或笔迹。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "检查物体分拣或接触绘画是否完成。"
+              }
+            ],
+            "limitation": "这里全部是仿真，不是此前实体 SO101 的部署成果；控制依赖标定与任务先验。",
+            "watchFor": "看图像定位怎样转成机械臂坐标，以及接触后结果是否符合目标。",
+            "result": "从 RGB 图像定位不同颜色积木，结合标定与运动学完成 SO101 仿真分拣。",
+            "model": "固定几何视觉控制器 · 0新模型调用",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "so101",
+          "versionLabel": "RGB 三色积木分拣",
+          "preview": {
+            "poster": "media/so101-block-raw-v3-repeat2.png",
+            "alt": "SO101 从相机画面分拣三色积木 仿真画面",
+            "video": "media/so101-block-raw-v3-repeat2.mp4",
+            "start": 0
+          }
+        },
+        {
+          "id": "so101-painting",
+          "title": "SO101 用接触画笔绘制巴黎",
+          "engine": "MuJoCo",
+          "model": "固定几何绘画控制器 · 0新模型调用",
+          "input": "RGB画布标记＋关节状态/运动学＋模拟颜料负载、颜色和接触计数",
+          "task": "接触画笔与颜料绘画",
+          "cardValue": "2 段演示",
+          "shortDescription": "利用相机标定与几何控制，完成仿真 SO101 的分拣或绘画。",
+          "mechanism": "baselines",
+          "source": "baseline",
+          "sourceLabel": "传统控制基线",
+          "scope": "embodied",
+          "records": 2,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-so101-painting",
+          "sourceUrl": "https://huggingface.co/buckets/mishig/so101-painting",
+          "notes": [
+            "固定视觉几何控制：从 RGB 标记或颜色定位，再结合机器人运动学生成动作。",
+            "这里全部是仿真，不是此前实体 SO101 的部署成果；控制依赖标定与任务先验。"
+          ],
+          "projectBrief": {
+            "familyId": "so101",
+            "familyTitle": "SO101 · 视觉几何与接触绘画",
+            "summary": "利用相机标定与几何控制，完成仿真 SO101 的分拣或绘画。",
+            "technicalRoute": "固定视觉几何控制：从 RGB 标记或颜色定位，再结合机器人运动学生成动作。",
+            "modelRole": "运行时是固定控制器，0 次大模型调用。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "RGB、编码器与标定；绘画额外读取模拟颜料与接触状态。"
+              },
+              {
+                "label": "决定什么",
+                "text": "固定算法定位目标、规划几何路径并选择操作阶段。"
+              },
+              {
+                "label": "如何执行",
+                "text": "SO101 仿真控制器执行动作，接触产生抓取或笔迹。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "检查物体分拣或接触绘画是否完成。"
+              }
+            ],
+            "limitation": "这里全部是仿真，不是此前实体 SO101 的部署成果；控制依赖标定与任务先验。",
+            "watchFor": "看图像定位怎样转成机械臂坐标，以及接触后结果是否符合目标。",
+            "result": "SO101 按几何路径操作接触画笔，在仿真画布上完成巴黎主题绘画。",
+            "model": "固定几何绘画控制器 · 0新模型调用",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "so101",
+          "versionLabel": "接触画笔绘制巴黎",
+          "preview": {
+            "poster": "media/so101-painting-repeat1.png",
+            "alt": "SO101 用接触画笔绘制巴黎 仿真画面",
+            "video": "media/so101-painting-repeat1.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "dexjoco",
+      "title": "DexJoCo 锤击",
+      "question": "在复杂接触任务里，对照人类动作复演与看图决策的模型尝试。",
+      "cards": [
+        {
+          "id": "dexjoco-hammer-human-oracle",
+          "title": "握住锤子，把钉子敲进去",
+          "engine": "MuJoCo",
+          "model": "人类示范动作（固定序列）",
+          "input": "预先记录的动作，无在线感知决策",
+          "task": "锤钉与工具使用",
+          "cardValue": "1 段演示",
+          "shortDescription": "在复杂接触任务里，对照人类动作复演与看图决策的模型尝试。",
+          "mechanism": "skills",
+          "source": "demonstration",
+          "sourceLabel": "人类示范 / 示范迁移",
+          "scope": "embodied",
+          "records": 1,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-dexjoco-hammer-human-oracle",
+          "sourceUrl": "https://github.com/mll-lab-nu/embodied-first-exam/blob/e695c327deacb346fb468564a5cf40b72569cd34/tasks/dexjoco/dexjoco-hammer-nail-i00-privileged/solution/oracle_trajectory.npz",
+          "notes": [
+            "人类示范动作序列 + 灵巧手物理控制：复演握锤、摆动与敲击接触。",
+            "使用同一条人类动作示范与固定初始状态，展示动作复演，不包含在线语言模型决策。"
+          ],
+          "projectBrief": {
+            "familyId": "dexjoco",
+            "familyTitle": "DexJoCo · 灵巧手敲钉",
+            "summary": "在复杂接触任务里，对照人类动作复演与看图决策的模型尝试。",
+            "technicalRoute": "人类示范动作序列 + 灵巧手物理控制：复演握锤、摆动与敲击接触。",
+            "modelRole": "没有在线模型或感知决策：重复执行预先记录的人类动作。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "预先记录的人类动作序列。"
+              },
+              {
+                "label": "决定什么",
+                "text": "按示范顺序推进动作，没有在线模型决策。"
+              },
+              {
+                "label": "如何执行",
+                "text": "原控制器驱动灵巧手握锤和敲击，物理引擎推进接触。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "原生任务条件检查钉子完成状态。"
+              }
+            ],
+            "limitation": "使用同一条人类动作示范与固定初始状态，展示动作复演，不包含在线语言模型决策。",
+            "watchFor": "先看锤子的握持和接触方向，再看敲击是否真正改变钉子状态。",
+            "result": "通过复演人类示范，灵巧手握住锤子并把钉子敲入，展示复杂工具接触动作。",
+            "model": "人类示范动作（固定序列）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "dexjoco",
+          "versionLabel": "握住锤子，把钉子敲进去",
+          "preview": {
+            "poster": "media/dexjoco-hammer-human-oracle.png",
+            "alt": "握住锤子，把钉子敲进去 仿真画面",
+            "video": "media/dexjoco-hammer-human-oracle.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "metaworld",
+      "title": "MetaWorld 基线",
+      "question": "用官方脚本展示机械臂到达、推动和抓取放置的动作结构。",
+      "cards": [
+        {
+          "id": "metaworld-baselines",
+          "title": "官方控制脚本：到达、推动与抓放",
+          "engine": "MuJoCo",
+          "model": null,
+          "input": "仿真状态",
+          "task": "多任务控制",
+          "cardValue": "3 段演示",
+          "shortDescription": "用官方脚本展示机械臂到达、推动和抓取放置的动作结构。",
+          "mechanism": "baselines",
+          "source": "baseline",
+          "sourceLabel": "传统控制基线",
+          "scope": "embodied",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-metaworld-baselines",
+          "sourceUrl": "https://github.com/Farama-Foundation/Metaworld",
+          "notes": [
+            "任务专用脚本 + 机械臂控制器：根据当前状态执行明确的接近、操作与结束步骤。",
+            "演示使用任务专用脚本与状态信息，没有语言模型；这里展示完成的操作流程。"
+          ],
+          "projectBrief": {
+            "familyId": "metaworld",
+            "familyTitle": "MetaWorld · 脚本与随机动作对照",
+            "summary": "用官方脚本展示机械臂到达、推动和抓取放置的动作结构。",
+            "technicalRoute": "任务专用脚本 + 机械臂控制器：根据当前状态执行明确的接近、操作与结束步骤。",
+            "modelRole": "没有语言模型；运行时使用官方任务脚本。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "任务状态。"
+              },
+              {
+                "label": "决定什么",
+                "text": "官方脚本根据任务状态计算预设操作。"
+              },
+              {
+                "label": "如何执行",
+                "text": "MetaWorld 机械臂控制器推进动作与接触。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "官方成功条件记录每次是否完成。"
+              }
+            ],
+            "limitation": "演示使用任务专用脚本与状态信息，没有语言模型；这里展示完成的操作流程。",
+            "watchFor": "观察脚本如何组织接近目标、接触操作与结束动作。",
+            "result": "官方脚本完成到达、推动与抓取放置，为理解机械臂动作结构提供直观参照。",
+            "model": "官方脚本 / 随机",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "metaworld",
+          "versionLabel": "官方控制脚本：到达、推动与抓放",
+          "preview": {
+            "poster": "media/metaworld-reach-v3-scripted.jpg",
+            "alt": "官方控制脚本：到达、推动与抓放 仿真画面",
+            "video": "media/metaworld-reach-v3-scripted.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "lqr",
+      "title": "倒立摆 LQR",
+      "question": "控制器根据杆的偏离持续施力，让倒立摆保持直立。",
+      "cards": [
+        {
+          "id": "pendulum-lqr",
+          "title": "让一根杆，保持直立",
+          "engine": "MuJoCo",
+          "model": null,
+          "input": "动力学模型与状态",
+          "task": "平衡",
+          "cardValue": "1 段演示",
+          "shortDescription": "控制器根据杆的偏离持续施力，让倒立摆保持直立。",
+          "mechanism": "baselines",
+          "source": "baseline",
+          "sourceLabel": "传统控制基线",
+          "scope": "embodied",
+          "records": 1,
+          "signals": [
+            "completed"
+          ],
+          "href": "./#demo-pendulum-lqr",
+          "sourceUrl": "https://mujoco.readthedocs.io/",
+          "notes": [
+            "线性二次调节器（LQR）：根据动力学模型与实时状态计算反馈控制力。",
+            "使用已知动力学与状态反馈；这是经典控制演示，没有语言模型。"
+          ],
+          "projectBrief": {
+            "familyId": "lqr",
+            "familyTitle": "LQR · 用反馈保持平衡",
+            "summary": "控制器根据杆的偏离持续施力，让倒立摆保持直立。",
+            "technicalRoute": "线性二次调节器（LQR）：根据动力学模型与实时状态计算反馈控制力。",
+            "modelRole": "没有语言模型或学习策略；这是经典控制参照。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "倒立摆的位置、速度和动力学模型。"
+              },
+              {
+                "label": "决定什么",
+                "text": "LQR 根据偏离直立状态的误差计算纠正力。"
+              },
+              {
+                "label": "如何执行",
+                "text": "MuJoCo 推进小车与杆的物理运动。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "每个控制步重新测量偏差，持续纠正。"
+              }
+            ],
+            "limitation": "使用已知动力学与状态反馈；这是经典控制演示，没有语言模型。",
+            "watchFor": "看杆倾斜时，小车如何移动来恢复平衡。",
+            "result": "LQR 控制器持续修正倾角，让倒立摆保持直立直到回合时限。",
+            "model": "LQR / 随机",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "lqr",
+          "versionLabel": "让一根杆，保持直立",
+          "preview": {
+            "poster": "media/pendulum-lqr.jpg",
+            "alt": "让一根杆，保持直立 仿真画面",
+            "video": "media/pendulum-lqr.mp4",
+            "start": 0
+          }
+        }
+      ]
+    }
+  ],
+  "pending": [],
+  "learningPath": [
+    {
+      "id": "dimos-astra-v2",
+      "title": "目标与规划",
+      "reason": "先理解高层目标如何交给 IK 与规划器执行。",
+      "href": "./#demo-dimos-astra-v2"
+    },
+    {
+      "id": "smolvla-libero",
+      "title": "学习策略",
+      "reason": "再看 VLA 如何直接输出动作。",
+      "href": "./#demo-smolvla-libero"
+    },
+    {
+      "id": "mems-visual-memory-libero-three",
+      "title": "建立空间记忆",
+      "reason": "观察图像选点如何形成可更新的几何表示。",
+      "href": "./#demo-mems-visual-memory-libero-three"
+    },
+    {
+      "id": "mems-target-shift-libero-three",
+      "title": "扰动与恢复",
+      "reason": "碗被推走后，跟踪重新定位与后续动作的联系。",
+      "href": "./#demo-mems-target-shift-libero-three"
+    },
+    {
+      "id": "see2act-active-view-bin-picking",
+      "title": "主动观察",
+      "reason": "研究机器人为什么需要换一个视角。",
+      "href": "./#demo-see2act-active-view-bin-picking"
+    },
+    {
+      "id": "openrua-astra-skill-reuse-local",
+      "title": "操作经验复用",
+      "reason": "观察执行反馈如何成为后续可用的方法。",
+      "href": "./#demo-openrua-astra-skill-reuse-local"
+    },
+    {
+      "id": "tdmpc2-quadruped-native-three",
+      "title": "预测与重规划",
+      "reason": "最后比较神经动力学预测和语言模型决策。",
+      "href": "./#demo-tdmpc2-quadruped-native-three"
+    }
+  ],
+  "curatedPublic": true,
+  "allProjects": false,
+  "defaultView": "all",
+  "publicationMode": "capability_highlights",
+  "projects": [
+    {
+      "id": "mems",
+      "title": "MemS + Astra · 空间记忆",
+      "summary": "从图像建立可更新的空间记忆，完成抓取，并在目标被推走后重新定位、继续操作。",
+      "representativeId": "mems-target-shift-libero-three",
+      "memberIds": [
+        "mems-visual-memory-libero-three",
+        "mems-target-shift-libero-three"
+      ],
+      "demoCount": 6,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/mems-target-shift-libero-three-t00.jpg",
+        "video": "media/mems-target-shift-libero-three-t00.mp4",
+        "start": 0,
+        "alt": "MemS + Astra · 目标碗被推走后会怎样 仿真画面"
+      }
+    },
+    {
+      "id": "robomme",
+      "title": "RoboMME · 视觉操作记忆",
+      "summary": "记住次数、顺序、遮挡换位和示范路径，再依据历史观察完成操作。",
+      "representativeId": "robomme-pattern-lock",
+      "memberIds": [
+        "robomme-pick-count",
+        "robomme-video-unmask-swap",
+        "robomme-stop-cube",
+        "robomme-pattern-lock",
+        "robomme-video-place-order"
+      ],
+      "demoCount": 12,
+      "scope": "embodied",
+      "previewTrialNumber": 3,
+      "preview": {
+        "poster": "media/robomme-pattern-lock-test3.png",
+        "video": "media/robomme-pattern-lock-test3.mp4",
+        "start": 0,
+        "alt": "看一遍示范，再用小棒复现路径 仿真画面"
+      }
+    },
+    {
+      "id": "openrua",
+      "title": "OpenRUA 操作经验",
+      "summary": "先完成操作并形成方法，再将冻结的方法提供给新上下文尝试复用。",
+      "representativeId": "openrua-astra-skill-reuse-local",
+      "memberIds": [
+        "openrua-astra-skill-reuse-local"
+      ],
+      "demoCount": 3,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/openrua-astra-skill-reuse-local-A.jpg",
+        "video": "media/openrua-astra-skill-reuse-local-A.mp4",
+        "start": 0,
+        "alt": "Astra × OpenRUA：从操作反馈形成可复用方法 仿真画面"
+      }
+    },
+    {
+      "id": "drone",
+      "title": "RoboUse 无人机",
+      "summary": "模型选择飞行目标，原生飞行控制器负责稳定无人机。",
+      "representativeId": "robouse-astra-drone",
+      "memberIds": [
+        "robouse-astra-drone"
+      ],
+      "demoCount": 9,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/robouse-astra-drone-waypoint.png",
+        "video": "media/robouse-astra-drone-waypoint.mp4",
+        "start": 0,
+        "alt": "让 Astra 驾驶无人机完成三个目标 仿真画面"
+      }
+    },
+    {
+      "id": "see2act",
+      "title": "See2Act 主动感知",
+      "summary": "策略主动选择有用视角，再迭代调整抓取与放置姿态。",
+      "representativeId": "see2act-active-view-bin-picking",
+      "memberIds": [
+        "see2act-active-view-bin-picking"
+      ],
+      "demoCount": 3,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/see2act-active-view-bin-picking-200003.png",
+        "video": "media/see2act-active-view-bin-picking-200003.mp4",
+        "start": 10,
+        "alt": "See2Act · 换个视角，找到藏着的方块 仿真画面"
+      }
+    },
+    {
+      "id": "dimos",
+      "title": "dimOS + Astra",
+      "summary": "语言决策结合 IK 与路径规划，完成抓碗放盘；详情收录初版、完整复演与多场景操作。",
+      "representativeId": "dimos-astra-v2",
+      "memberIds": [
+        "dimos-astra",
+        "dimos-astra-v2",
+        "dimos-spatial-ten-tasks"
+      ],
+      "demoCount": 11,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/dimos-astra_v2_i0_s42_20261022_012155.png",
+        "video": "media/dimos-astra_v2_i0_s42_20261022_012155.mp4",
+        "start": 0,
+        "alt": "让抓取过程，可以完整复演 仿真画面"
+      }
+    },
+    {
+      "id": "smolvla",
+      "title": "SmolVLA",
+      "summary": "图像、语言任务和机器人状态进入微调策略，直接生成一段连续动作。",
+      "representativeId": "smolvla-libero",
+      "memberIds": [
+        "smolvla-libero"
+      ],
+      "demoCount": 17,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/smolvla-t00-e0.jpg",
+        "video": "media/smolvla-t00-e0.mp4",
+        "start": 0,
+        "alt": "同样抓碗，换十种空间关系 仿真画面"
+      }
+    },
+    {
+      "id": "maniloop",
+      "title": "ManiLoop 双相机操作",
+      "summary": "用外部和腕部相机观察，模型逐步发出移动、夹爪与等待指令。",
+      "representativeId": "maniloop-astra-arx5",
+      "memberIds": [
+        "maniloop-astra-arx5"
+      ],
+      "demoCount": 1,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/maniloop-astra-arx5-v2-seed2.png",
+        "video": "media/maniloop-astra-arx5-v2-seed2.mp4",
+        "start": 0,
+        "alt": "Astra 操作 ARX5：双相机抓放 仿真画面"
+      }
+    },
+    {
+      "id": "irosa",
+      "title": "IROSA · 技能改写",
+      "summary": "通过语言指定速度或途经点约束，改写已有动作技能，探索示范的可编辑性。",
+      "representativeId": "irosa-astra-viapoints",
+      "memberIds": [
+        "irosa-astra-speed",
+        "irosa-astra-viapoints"
+      ],
+      "demoCount": 6,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/irosa-astra-viapoints-via-1.png",
+        "video": "media/irosa-astra-viapoints-via-1.mp4",
+        "start": 1.5,
+        "alt": "IROSA · 让旧动作经过新位置 仿真画面"
+      }
+    },
+    {
+      "id": "tdmpc2",
+      "title": "TD-MPC2 潜在动力学",
+      "summary": "用学到的潜在动力学预测未来，在候选动作中反复搜索，每次只执行第一步。",
+      "representativeId": "tdmpc2-quadruped-native-three",
+      "memberIds": [
+        "tdmpc2-quadruped-native-three"
+      ],
+      "demoCount": 3,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/tdmpc2-quadruped-native-three-seed0.jpg",
+        "video": "media/tdmpc2-quadruped-native-three-seed0.mp4",
+        "start": 0,
+        "alt": "TD-MPC2 · 学习动力学后每步滚动规划 仿真画面"
+      }
+    },
+    {
+      "id": "cube",
+      "title": "灵巧手魔方",
+      "summary": "脚本负责拿起魔方，学习策略负责转面与重抓，解法来自已知打乱序列。",
+      "representativeId": "dexterous-astra-cube-native",
+      "memberIds": [
+        "dexterous-astra-cube-native"
+      ],
+      "demoCount": 2,
+      "scope": "embodied",
+      "previewTrialNumber": 2,
+      "preview": {
+        "poster": "media/dexterous-astra-cube-native-learned_seed_5005.png",
+        "video": "media/dexterous-astra-cube-native-learned_seed_5005.mp4",
+        "start": 0,
+        "alt": "用灵巧手，把魔方转回原样 仿真画面"
+      }
+    },
+    {
+      "id": "worldcoder",
+      "title": "WorldCoder · 可执行世界模型",
+      "summary": "把观察到的规则写成程序，根据反馈修订，再将冻结规则复用于新地图。",
+      "representativeId": "worldcoder-luna-learning",
+      "memberIds": [
+        "worldcoder-luna-learning",
+        "worldcoder-astra-interrupted-a01",
+        "worldcoder-luna-frozen6x6"
+      ],
+      "demoCount": 8,
+      "scope": "reference",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/worldcoder-luna-learning-00.png",
+        "video": "media/worldcoder-luna-learning-00.mp4",
+        "start": 0,
+        "alt": "WorldCoder · Luna 学规则，再换地图 仿真画面"
+      }
+    },
+    {
+      "id": "quackd",
+      "title": "MicroDuck 小鸭",
+      "summary": "模型指挥小型双足机器人找球和球门，已有策略负责行走。",
+      "representativeId": "quackd-astra-microduck",
+      "memberIds": [
+        "quackd-astra-microduck"
+      ],
+      "demoCount": 2,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/quackd-astra-microduck-seed0.png",
+        "video": "media/quackd-astra-microduck-seed0.mp4",
+        "start": 0,
+        "alt": "Astra 小鸭找球与踢球 仿真画面"
+      }
+    },
+    {
+      "id": "bullet",
+      "title": "PyBullet · 视觉机械臂操作",
+      "summary": "从图像反馈到抓取与目标到达，观察模型如何逐步组织机械臂动作。",
+      "representativeId": "bullet-pick-place-v2",
+      "memberIds": [
+        "bullet-pick-place",
+        "bullet-pick-place-v2",
+        "bullet-reach"
+      ],
+      "demoCount": 15,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/astra_v2_bullet_pick_place_20261022_011147_s0.png",
+        "video": "media/astra_v2_bullet_pick_place_20261022_011147_s0.mp4",
+        "start": 0,
+        "alt": "视觉闭环下的方块抓取 仿真画面"
+      }
+    },
+    {
+      "id": "elevator",
+      "title": "Astra · 电梯按钮操作",
+      "summary": "看图接近并按下按钮，详情展示直接操作与不同反馈接口的完成过程。",
+      "representativeId": "astra-experience-free-s1",
+      "memberIds": [
+        "astra-experience-free-s1",
+        "astra-elevator-feedback-comparison"
+      ],
+      "demoCount": 7,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/astra-experience-free-s1.png",
+        "video": "media/astra-experience-free-s1-3x.mp4",
+        "start": 0,
+        "alt": "Astra 看图按电梯 仿真画面"
+      }
+    },
+    {
+      "id": "robotvllm",
+      "title": "Robot-vLLM 视觉定位",
+      "summary": "模型在带坐标网格的图像里找到目标，控制器再把选择变成移动。",
+      "representativeId": "robot-vllm-astra-sensing",
+      "memberIds": [
+        "robot-vllm-astra-sensing"
+      ],
+      "demoCount": 3,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/robot-vllm-astra-sensing-1201.png",
+        "video": "media/robot-vllm-astra-sensing-1201.mp4",
+        "start": 0,
+        "alt": "Astra 看图定位四色目标 仿真画面"
+      }
+    },
+    {
+      "id": "openarm",
+      "title": "OpenArm ACT 绘画",
+      "summary": "脚本安排蘸色与画点，训练好的 ACT 策略负责局部关节修正。",
+      "representativeId": "openarm-act-mona-lisa",
+      "memberIds": [
+        "openarm-act-mona-lisa"
+      ],
+      "demoCount": 3,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/openarm-act-mona-lisa-nominal.png",
+        "video": "media/openarm-act-mona-lisa-nominal.mp4",
+        "start": 0,
+        "alt": "用 384 次落笔，画出蒙娜丽莎 仿真画面"
+      }
+    },
+    {
+      "id": "spider",
+      "title": "Robo-Spider · 六足双臂机器人",
+      "summary": "高层导航与生成代码搬运：同一机器人通过步态、双臂操作与路径修订完成不同目标。",
+      "representativeId": "robo-spider-astra-clearance",
+      "memberIds": [
+        "robo-spider-live",
+        "robo-spider-astra-clearance"
+      ],
+      "demoCount": 4,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/robo-spider-astra-clearance.png",
+        "video": "media/robo-spider-astra-clearance.mp4",
+        "start": 0,
+        "alt": "Astra 修正路径：六足双臂搬运 仿真画面"
+      }
+    },
+    {
+      "id": "arena",
+      "title": "ArtifactArena · 机器人设计",
+      "summary": "模型生成机器人形态与固定控制程序，再在物理擂台上推动静态方块，探索设计与控制的配合。",
+      "representativeId": "artifactarena-crosscurrent",
+      "memberIds": [
+        "artifactarena-razorwake",
+        "artifactarena-crosscurrent"
+      ],
+      "demoCount": 6,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/artifactarena-crosscurrent-s0.png",
+        "video": "media/artifactarena-crosscurrent-s0.mp4",
+        "start": 0,
+        "alt": "Astra Design Lab：Crosscurrent 擂台测试 仿真画面"
+      }
+    },
+    {
+      "id": "bigym",
+      "title": "BiGym2 人形搬盘",
+      "summary": "使用作者发布的固定控制程序，复现人形机器人搬盘子。",
+      "representativeId": "bigym2-published-astra-move-plate",
+      "memberIds": [
+        "bigym2-published-astra-move-plate"
+      ],
+      "demoCount": 1,
+      "scope": "embodied",
+      "previewTrialNumber": 3,
+      "preview": {
+        "poster": "media/bigym2-published-astra-move-plate-seed620002.png",
+        "video": "media/bigym2-published-astra-move-plate-seed620002.mp4",
+        "start": 0,
+        "alt": "G1 人形机器人搬运盘子 仿真画面"
+      }
+    },
+    {
+      "id": "writing",
+      "title": "Fibonacci 白板书写",
+      "summary": "将程序文字拆成笔画，用灵巧手持笔，在物理接触中完成书写。",
+      "representativeId": "fibonacci-writing",
+      "memberIds": [
+        "fibonacci-writing"
+      ],
+      "demoCount": 1,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/fibonacci-writing.png",
+        "video": "media/fibonacci-writing.mp4",
+        "start": 0,
+        "alt": "把一段程序，写在白板上 仿真画面"
+      }
+    },
+    {
+      "id": "drawing",
+      "title": "灵巧手几何绘图",
+      "summary": "把圆、方形和螺旋变成笔尖路径，由持笔控制器真实画出。",
+      "representativeId": "geometric-drawing",
+      "memberIds": [
+        "geometric-drawing"
+      ],
+      "demoCount": 3,
+      "scope": "embodied",
+      "previewTrialNumber": 3,
+      "preview": {
+        "poster": "media/geometric-spiral.png",
+        "video": "media/geometric-spiral.mp4",
+        "start": 0,
+        "alt": "用多指手，画出圆与螺旋 仿真画面"
+      }
+    },
+    {
+      "id": "so101",
+      "title": "SO101 · 分拣与接触绘画",
+      "summary": "从 RGB 几何定位到接触画笔控制，展示 SO101 仿真分拣和绘画两种操作。",
+      "representativeId": "so101-painting",
+      "memberIds": [
+        "so101-block-sorting",
+        "so101-painting"
+      ],
+      "demoCount": 4,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/so101-painting-repeat1.png",
+        "video": "media/so101-painting-repeat1.mp4",
+        "start": 0,
+        "alt": "SO101 用接触画笔绘制巴黎 仿真画面"
+      }
+    },
+    {
+      "id": "dexjoco",
+      "title": "DexJoCo 锤击",
+      "summary": "在复杂接触任务里，对照人类动作复演与看图决策的模型尝试。",
+      "representativeId": "dexjoco-hammer-human-oracle",
+      "memberIds": [
+        "dexjoco-hammer-human-oracle"
+      ],
+      "demoCount": 1,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/dexjoco-hammer-human-oracle.png",
+        "video": "media/dexjoco-hammer-human-oracle.mp4",
+        "start": 0,
+        "alt": "握住锤子，把钉子敲进去 仿真画面"
+      }
+    },
+    {
+      "id": "metaworld",
+      "title": "MetaWorld 基线",
+      "summary": "用官方脚本展示机械臂到达、推动和抓取放置的动作结构。",
+      "representativeId": "metaworld-baselines",
+      "memberIds": [
+        "metaworld-baselines"
+      ],
+      "demoCount": 3,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/metaworld-reach-v3-scripted.jpg",
+        "video": "media/metaworld-reach-v3-scripted.mp4",
+        "start": 0,
+        "alt": "官方控制脚本：到达、推动与抓放 仿真画面"
+      }
+    },
+    {
+      "id": "lqr",
+      "title": "倒立摆 LQR",
+      "summary": "控制器根据杆的偏离持续施力，让倒立摆保持直立。",
+      "representativeId": "pendulum-lqr",
+      "memberIds": [
+        "pendulum-lqr"
+      ],
+      "demoCount": 1,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/pendulum-lqr.jpg",
+        "video": "media/pendulum-lqr.mp4",
+        "start": 0,
+        "alt": "让一根杆，保持直立 仿真画面"
+      }
+    }
+  ]
+}

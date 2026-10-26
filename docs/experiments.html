@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101713">
+  <title>成果总览 · Agent Fieldnotes</title>
+  <link rel="stylesheet" href="styles.css?v=agent-actions-1">
+  <link rel="stylesheet" href="experiments.css?v=1">
+  <link rel="stylesheet" href="project-explainers.css?v=project-guide-1">
+  <link rel="stylesheet" href="catalog-previews.css?v=preview-cards-1">
+  <link rel="stylesheet" href="hover-previews.css?v=hover-1">
+  <link rel="stylesheet" href="project-versions.css?v=projects-1">
+  <script src="hover-previews.js?v=hover-1" defer></script>
+  <script src="experiments.js?v=projects-1" defer></script>
+</head>
+<body class="catalog-page">
+  <a class="skip-link" href="#catalog-results">跳到实验目录</a>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="回到 Agent Fieldnotes 展厅"><span class="brand-mark" aria-hidden="true">a<span>f</span></span><span>AGENT<br>FIELDNOTES</span></a>
+    <nav aria-label="主导航"><a href="./#gallery">实验展厅 ↗</a><a href="experiments.html" aria-current="page">实验总览</a></nav>
+    <span class="edition">CAPABILITY SHOWCASE / 精选成果</span>
+  </header>
+  <main class="catalog-main">
+    <section class="catalog-intro" aria-labelledby="catalog-title">
+      <div><p class="eyebrow muted">FROM MOTION TO UNDERSTANDING</p><h1 id="catalog-title">先看动作，<br><span>再读懂方法。</span></h1><p>精选已经做出成果的机器人演示。鼠标悬停看动作，点进项目读懂模型、工具与控制器如何配合。</p></div>
+      <dl id="catalog-stats" class="catalog-stats"><div><dt>正在读取已有实验</dt><dd>…</dd></div></dl>
+    </section>
+    <details class="study-path"><summary><span id="study-title">第一次来？从七条技术路线开始</span><span>展开阅读顺序 ↗</span></summary><p>从高层规划、动作策略，到空间记忆与技能复用，探索不同的具身智能实现方法。</p><ol id="study-links"></ol></details>
+    <section class="research-index" aria-labelledby="index-title">
+      <div class="catalog-section-title"><div><p class="eyebrow muted">THE RESEARCH MAP</p><h2 id="index-title">项目与版本</h2></div><p id="catalog-date"></p></div>
+      <div class="catalog-tabs" role="group" aria-label="目录范围">
+        <button data-view="all" aria-pressed="true">全部成果</button><button data-view="embodied" aria-pressed="false">具身演示</button><button data-view="reference" aria-pressed="false">方法参考</button>
+      </div>
+      <div class="catalog-controls">
+        <label class="catalog-search">搜索项目、机制或成果<input id="catalog-search" type="search" autocomplete="off" placeholder="例如：空间记忆、MuJoCo、SmolVLA"></label>
+        <label class="published-filter">技术机制<select id="mechanism-filter"><option value="all">全部机制</option></select></label>
+        <label class="published-filter">记录来源<select id="catalog-source"><option value="all">全部来源</option></select></label>
+        <label class="published-filter">演示类型<select id="catalog-status"><option value="all">全部类型</option><option value="success">任务操作</option><option value="diagnostic">技能改写</option><option value="completed">连续控制</option></select></label>
+      </div>
+      <div class="catalog-result-line"><p id="catalog-result-count" role="status" aria-live="polite">正在载入目录…</p><div><div id="catalog-layout" class="catalog-layout" role="group" aria-label="展示方式"><button data-layout="cards" aria-pressed="true">▦ 卡片预览</button><button data-layout="details" aria-pressed="false">☷ 详细对照</button></div><button id="catalog-reset">重置筛选</button><button id="expand-projects">展开全部</button><button id="collapse-projects">收起全部</button></div></div>
+      <p class="catalog-reading-note catalog-guide">每个项目一张代表卡片。点击预览图，在详情里切换该项目的其他版本与成功演示。</p>
+      <div id="catalog-results"></div>
+      <p id="catalog-empty" class="catalog-empty" hidden>没有匹配的成果，试试清空筛选。</p>
+    </section>
+  </main>
+  <footer><a class="footer-brand" href="./">AGENT FIELDNOTES<span>每一项机制，都落到真实执行。</span></a><div><p>具身智能能力探索 · 精选成果演示。</p><a href="data/showcase-review.json">关于这些演示 ↗</a></div><a href="#" class="back-top" aria-label="回到顶部">↑</a><a href="attributions.html">来源与许可 ↗</a></footer>
+</body>
+</html>

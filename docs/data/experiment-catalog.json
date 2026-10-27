@@ -3,16 +3,16 @@
   "updatedAt": "2026-10-24T11:57:00+08:00",
   "sourceIndexSha256": "f8d60a8e11685454dc9966bd98bcec5a6b905b2cc7bd54c67f378ce4be1dbcd9",
   "counts": {
-    "cards": 45,
-    "projects": 29,
-    "records": 147,
+    "cards": 46,
+    "projects": 30,
+    "records": 150,
     "pending": 0,
     "byScope": {
-      "embodied": 42,
+      "embodied": 43,
       "reference": 3
     },
     "projectsByScope": {
-      "embodied": 28,
+      "embodied": 29,
       "reference": 1
     }
   },
@@ -1756,6 +1756,76 @@
       ]
     },
     {
+      "id": "gensim",
+      "title": "GenSim · 生成可执行的机器人任务",
+      "question": "把“搭出彩色台阶”写成物体、目标和 Python 任务程序，再由机器人专家在物理仿真中完成。",
+      "cards": [
+        {
+          "id": "gensim-astra-task-generation-20261027",
+          "title": "GenSim · 模型写出任务，机器人搭出台阶",
+          "task": "模型生成桌面任务与目标，脚本专家执行抓放",
+          "engine": "PyBullet / CLIPort",
+          "source": "fresh",
+          "model": "gpt-6-astra medium（任务程序生成）",
+          "input": "GenSim 任务描述、资产列表、API 提示和参考程序；oracle 使用仿真真值",
+          "sourceUrl": "https://github.com/liruiw/GenSim",
+          "mechanism": "programs",
+          "scope": "embodied",
+          "sourceLabel": "本机模型任务生成与官方 oracle 物理执行",
+          "records": 3,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-gensim-astra-task-generation-20261027",
+          "notes": [
+            "语言模型生成场景与任务代码 → 官方任务 API 验证 → CLIPort 脚本专家执行 → 核对物理结果。",
+            "这是模型生成任务的实验，不是模型在线操控或策略泛化成绩。动作依赖脚本专家、真值状态与吸盘约束；SDK 接口、依赖兼容和显式种子作了适配，物理为 240Hz。依次达成的目标存在毫米级后续漂移，不声称所有方块在最后一帧仍精确满足最紧容差。"
+          ],
+          "cardValue": "3 段演示",
+          "shortDescription": "把“搭出彩色台阶”写成物体、目标和 Python 任务程序，再由机器人专家在物理仿真中完成。",
+          "projectBrief": {
+            "familyId": "gensim",
+            "familyTitle": "GenSim · 生成可执行的机器人任务",
+            "summary": "把“搭出彩色台阶”写成物体、目标和 Python 任务程序，再由机器人专家在物理仿真中完成。",
+            "technicalRoute": "语言模型生成场景与任务代码 → 官方任务 API 验证 → CLIPort 脚本专家执行 → 核对物理结果。",
+            "modelRole": "Astra 负责设计任务和编写程序；机器人动作由官方 oracle 决定。本演示没有策略训练。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "生成阶段读取任务要求、资产清单、API 说明与参考代码；执行阶段由 oracle 读取真值物体状态和目标。"
+              },
+              {
+                "label": "决定什么",
+                "text": "先定义六个方块的颜色、尺寸、随机初始布局和六个放置目标，再写出创建场景与登记目标的任务类。"
+              },
+              {
+                "label": "如何执行",
+                "text": "模型完成程序后停止决策。CLIPort oracle 选择抓放位姿，UR5 吸盘原语通过 PyBullet 物理推进运动与放置。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "官方逐目标奖励检查是否完成，另核对最终方块坐标、层高和完整录像；不同随机布局复用同一份生成程序。"
+              }
+            ],
+            "limitation": "这是模型生成任务的实验，不是模型在线操控或策略泛化成绩。动作依赖脚本专家、真值状态与吸盘约束；SDK 接口、依赖兼容和显式种子作了适配，物理为 240Hz。依次达成的目标存在毫米级后续漂移，不声称所有方块在最后一帧仍精确满足最紧容差。",
+            "watchFor": "先看六个散落方块如何搭成红色一层、绿色两层、蓝色三层；切换布局，看同一份生成任务如何再次执行。",
+            "result": "模型把台阶要求写成场景与目标程序；官方 oracle 在不同随机布局中完成抓放，搭出一、二、三层彩色台阶。",
+            "model": "gpt-6-astra medium（任务程序生成）",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "gensim",
+          "versionLabel": "GenSim · 模型写出任务，机器人搭出台阶",
+          "preview": {
+            "poster": "media/gensim-staircase-20261027-a01-seed33.jpg",
+            "alt": "GenSim · 模型写出任务，机器人搭出台阶 仿真画面",
+            "video": "media/gensim-staircase-20261027-a01-seed33.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
       "id": "quackd",
       "title": "MicroDuck 小鸭",
       "question": "模型指挥小型双足机器人找球和球门，已有策略负责行走。",
@@ -3442,6 +3512,24 @@
         "video": "media/worldcoder-luna-learning-00.mp4",
         "start": 0,
         "alt": "WorldCoder · Luna 学规则，再换地图 仿真画面"
+      }
+    },
+    {
+      "id": "gensim",
+      "title": "GenSim · 生成可执行的机器人任务",
+      "summary": "把“搭出彩色台阶”写成物体、目标和 Python 任务程序，再由机器人专家在物理仿真中完成。",
+      "representativeId": "gensim-astra-task-generation-20261027",
+      "memberIds": [
+        "gensim-astra-task-generation-20261027"
+      ],
+      "demoCount": 3,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/gensim-staircase-20261027-a01-seed33.jpg",
+        "video": "media/gensim-staircase-20261027-a01-seed33.mp4",
+        "start": 0,
+        "alt": "GenSim · 模型写出任务，机器人搭出台阶 仿真画面"
       }
     },
     {

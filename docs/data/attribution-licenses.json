@@ -351,5 +351,15 @@
     "demonstrationSource": "LIBERO-derived official RV-ICL v0.1 video store; reference assets are not redistributed here.",
     "implementation": "官方分层示范工具与任务补丁；本地采用 CPU SAM3、低内存权重加载和逐步落盘记录。示范索引附带原示范的物体/区域语义、末端与夹爪状态，不是纯 RGB 输入。当前场景的位置由 RGB-D 测量获得。",
     "distribution": "仅分发本机运行录像和说明，不分发上游示范库、权重、机器人资产或原始数据集。"
+  },
+  "gensim": {
+    "project": "GenSim: Generating Robotic Simulation Tasks via Large Language Models",
+    "authors": "Lirui Wang and GenSim contributors; CLIPort / Ravens environment and expert oracle",
+    "source": "https://github.com/liruiw/GenSim",
+    "sourceCommit": "1a203b7259ac8af840e8db8f17a69ec8a1cd255c",
+    "license": "data/licenses/gensim-MIT.txt",
+    "robotAssetLicense": "data/licenses/gensim-ur5-license.txt",
+    "implementation": "保留官方 Agent/Critic/Memory/task_creation 与 CLIPort 任务、oracle 和 PyBullet。采用 Astra SDK 文本接口、隔离执行、Python 3.11 容器兼容、显式种子；240Hz 物理配置替代原 sim_runner 的 480Hz。未训练策略，也没有让模型逐步操控机械臂。",
+    "distribution": "仅分发本机录像、说明与许可文本；不分发上游资产、模型权重、用户凭据或原始模型请求。"
   }
 }

@@ -5,7 +5,7 @@
   "counts": {
     "cards": 47,
     "projects": 31,
-    "records": 152,
+    "records": 153,
     "pending": 0,
     "byScope": {
       "embodied": 44,
@@ -1093,7 +1093,7 @@
           "mechanism": "programs",
           "scope": "embodied",
           "sourceLabel": "本机官方代码单元闭环与物理执行",
-          "records": 2,
+          "records": 3,
           "signals": [
             "success"
           ],
@@ -1102,7 +1102,7 @@
             "Astra 在线编写 Python 单元 → 官方沙箱与 robo API → π₀.₅ 技能、几何原语与 MuJoCo 物理 → 图像和原生判定反馈。",
             "这里运行 LIBERO-PRO MuJoCo 适配，没有复现 RoboDojo 排名，也未使用 Coder 4B。采用 Pi0.5 LIBERO 微调权重、SAM3 CPU 与低峰值加载；每集 30 工具轮次、1200 秒、3000 控制步。首次原生成功即终止，抓放任务可能仍夹持物体；具体末态在演示标签说明。录像为逐控制步的 20fps 回放，不等于模型实时速度，也不声称逐物理步完整状态重演。"
           ],
-          "cardValue": "2 段演示",
+          "cardValue": "3 段演示",
           "shortDescription": "模型把观察、测量、动作和检查写成 Python 单元；单元执行后返回新画面，再决定下一段代码。",
           "projectBrief": {
             "familyId": "pyrualean",
@@ -3463,7 +3463,7 @@
       "memberIds": [
         "pyrualean-astra-cells-20261028"
       ],
-      "demoCount": 2,
+      "demoCount": 3,
       "scope": "embodied",
       "previewTrialNumber": 1,
       "preview": {

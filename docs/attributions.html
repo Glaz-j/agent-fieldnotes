@@ -344,5 +344,6 @@
   &quot;rpentLicense&quot;: &quot;data/licenses/pyrualean-rpent-Apache-2.0.txt&quot;,
   &quot;policyCheckpoint&quot;: &quot;RLinf/RLinf-Pi05-LIBERO-130-fullshot-SFT; original model values, no local training&quot;,
   &quot;implementation&quot;: &quot;保留官方 play_episode、cells、Python 沙箱、robo API、原生任务与终止条件。Astra 在线写代码，Pi0.5 生成短段动作，SAM3 用于按需分割。采用低峰值加载、SAM3 CPU FP32 兼容与独立模型服务；可选 skimage 掩码后处理缺失的上游警告保留。Codex 0.163 经 WSL 路径适配；每集最多 30 工具轮次、1200 秒和 3000 控制步，单次尝试。这里是 LIBERO-PRO 本地演示，没有复现 RoboDojo 排名，也未使用 PyRUA-Lean Coder 4B。&quot;,
+  &quot;runtimeCompatibility&quot;: &quot;部分案例采用逐集独立模型服务、WSL 私网 MCP 连接预检及提示词输入管道适配；不改变任务、控制原语、模型值或原生判定。&quot;,
   &quot;distribution&quot;: &quot;仅分发逐控制步完整原生录像、说明与许可文本；不分发模型权重、上游资产、凭据或原始请求日志。&quot;
 }</pre></details><p><a href="data/attribution-licenses.json">下载署名与许可索引</a></p></main></body></html>

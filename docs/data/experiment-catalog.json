@@ -3,16 +3,16 @@
   "updatedAt": "2026-10-24T11:57:00+08:00",
   "sourceIndexSha256": "f8d60a8e11685454dc9966bd98bcec5a6b905b2cc7bd54c67f378ce4be1dbcd9",
   "counts": {
-    "cards": 46,
-    "projects": 30,
-    "records": 150,
+    "cards": 47,
+    "projects": 31,
+    "records": 152,
     "pending": 0,
     "byScope": {
-      "embodied": 43,
+      "embodied": 44,
       "reference": 3
     },
     "projectsByScope": {
-      "embodied": 29,
+      "embodied": 30,
       "reference": 1
     }
   },
@@ -1071,6 +1071,76 @@
             "poster": "media/rpent-object_swap2_seed3_a01.jpg",
             "alt": "RPent · 大模型指挥 VLA 抓取与几何搬运 仿真画面",
             "video": "media/rpent-object_swap2_seed3_a01.mp4",
+            "start": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "pyrualean",
+      "title": "PyRUA-Lean · 代码单元中的机器人闭环",
+      "question": "模型把观察、测量、动作和检查写成 Python 单元；单元执行后返回新画面，再决定下一段代码。",
+      "cards": [
+        {
+          "id": "pyrualean-astra-cells-20261028",
+          "title": "PyRUA-Lean · 用代码组织机器人动作",
+          "task": "编写 Python 单元，观察反馈并完成桌面操作",
+          "engine": "MuJoCo / LIBERO-PRO",
+          "source": "fresh",
+          "model": "gpt-6-astra medium + π₀.₅ LIBERO SFT",
+          "input": "双相机 RGB-D、标定、机器人自身状态；SAM3 分割与工具返回值",
+          "sourceUrl": "https://github.com/DAGroup-PKU/PyRUA-Lean",
+          "mechanism": "programs",
+          "scope": "embodied",
+          "sourceLabel": "本机官方代码单元闭环与物理执行",
+          "records": 2,
+          "signals": [
+            "success"
+          ],
+          "href": "./#demo-pyrualean-astra-cells-20261028",
+          "notes": [
+            "Astra 在线编写 Python 单元 → 官方沙箱与 robo API → π₀.₅ 技能、几何原语与 MuJoCo 物理 → 图像和原生判定反馈。",
+            "这里运行 LIBERO-PRO MuJoCo 适配，没有复现 RoboDojo 排名，也未使用 Coder 4B。采用 Pi0.5 LIBERO 微调权重、SAM3 CPU 与低峰值加载；每集 30 工具轮次、1200 秒、3000 控制步。首次原生成功即终止，抓放任务可能仍夹持物体；具体末态在演示标签说明。录像为逐控制步的 20fps 回放，不等于模型实时速度，也不声称逐物理步完整状态重演。"
+          ],
+          "cardValue": "2 段演示",
+          "shortDescription": "模型把观察、测量、动作和检查写成 Python 单元；单元执行后返回新画面，再决定下一段代码。",
+          "projectBrief": {
+            "familyId": "pyrualean",
+            "familyTitle": "PyRUA-Lean · 在代码单元中操作机器人",
+            "summary": "模型把观察、测量、动作和检查写成 Python 单元；单元执行后返回新画面，再决定下一段代码。",
+            "technicalRoute": "Astra 在线编写 Python 单元 → 官方沙箱与 robo API → π₀.₅ 技能、几何原语与 MuJoCo 物理 → 图像和原生判定反馈。",
+            "modelRole": "Astra 组织代码和局部检查；π₀.₅ LIBERO SFT 生成短段动作，SAM3 按需要分割目标。全部模型权重冻结，没有本机策略训练。",
+            "controlLoop": [
+              {
+                "label": "看到什么",
+                "text": "外部与腕部 RGB-D 图像、相机标定、末端和夹爪状态，以及显式工具查询结果。"
+              },
+              {
+                "label": "决定什么",
+                "text": "在一个单元里组合分割、深度投影、技能提示、搬运与条件检查；根据新反馈修改下一段程序。"
+              },
+              {
+                "label": "如何执行",
+                "text": "官方 cells 沙箱执行模型写出的代码；pi0_pick 调用 VLA，move_to、move_pose 与夹爪原语经原生 OSC 控制器推进 Panda 仿真。"
+              },
+              {
+                "label": "如何反馈",
+                "text": "代码输出、工具执行结果与新图像回到模型；最终核对 LIBERO-PRO 原生终止条件和完整录像。"
+              }
+            ],
+            "limitation": "这里运行 LIBERO-PRO MuJoCo 适配，没有复现 RoboDojo 排名，也未使用 Coder 4B。采用 Pi0.5 LIBERO 微调权重、SAM3 CPU 与低峰值加载；每集 30 工具轮次、1200 秒、3000 控制步。首次原生成功即终止，抓放任务可能仍夹持物体；具体末态在演示标签说明。录像为逐控制步的 20fps 回放，不等于模型实时速度，也不声称逐物理步完整状态重演。",
+            "watchFor": "看一个 Python 单元如何组合多次动作，再看模型是否根据抓取、位置或接触反馈修改下一段代码；留意末帧夹爪与目标的关系。",
+            "result": "模型在线编写 Python 单元，组合感知、短段技能和几何控制，完成所选桌面操作的原生判定；完整录像保留单元间的动作与修正。",
+            "model": "gpt-6-astra medium + π₀.₅ LIBERO SFT",
+            "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+            "schema": "project-explanation/1"
+          },
+          "projectId": "pyrualean",
+          "versionLabel": "PyRUA-Lean · 用代码组织机器人动作",
+          "preview": {
+            "poster": "media/pyrualean-object2-seed4-20261028-a01.jpg",
+            "alt": "PyRUA-Lean · 用代码组织机器人动作 仿真画面",
+            "video": "media/pyrualean-object2-seed4-20261028-a01.mp4",
             "start": 0
           }
         }
@@ -3383,6 +3453,24 @@
         "video": "media/rpent-object_swap2_seed3_a01.mp4",
         "start": 0,
         "alt": "RPent · 大模型指挥 VLA 抓取与几何搬运 仿真画面"
+      }
+    },
+    {
+      "id": "pyrualean",
+      "title": "PyRUA-Lean · 代码单元中的机器人闭环",
+      "summary": "模型把观察、测量、动作和检查写成 Python 单元；单元执行后返回新画面，再决定下一段代码。",
+      "representativeId": "pyrualean-astra-cells-20261028",
+      "memberIds": [
+        "pyrualean-astra-cells-20261028"
+      ],
+      "demoCount": 2,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/pyrualean-object2-seed4-20261028-a01.jpg",
+        "video": "media/pyrualean-object2-seed4-20261028-a01.mp4",
+        "start": 0,
+        "alt": "PyRUA-Lean · 用代码组织机器人动作 仿真画面"
       }
     },
     {

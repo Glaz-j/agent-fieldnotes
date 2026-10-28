@@ -361,5 +361,19 @@
     "robotAssetLicense": "data/licenses/gensim-ur5-license.txt",
     "implementation": "保留官方 Agent/Critic/Memory/task_creation 与 CLIPort 任务、oracle 和 PyBullet。采用 Astra SDK 文本接口、隔离执行、Python 3.11 容器兼容、显式种子；240Hz 物理配置替代原 sim_runner 的 480Hz。未训练策略，也没有让模型逐步操控机械臂。",
     "distribution": "仅分发本机录像、说明与许可文本；不分发上游资产、模型权重、用户凭据或原始模型请求。"
+  },
+  "pyrualean": {
+    "project": "PyRUA-Lean: Python for Lean Robot-Use Agents",
+    "authors": "DAGroup-PKU / PyRUA-Lean and RPent contributors",
+    "source": "https://github.com/DAGroup-PKU/PyRUA-Lean",
+    "sourceCommit": "fdf6e870654254e2c0c891ee407313fa48bdd0f9",
+    "rpentSource": "https://github.com/RLinf/RPent",
+    "rpentCommit": "886b3b274d3dd30bbc15615ea512d65ae90bc8b3",
+    "license": "data/licenses/pyrualean-Apache-2.0.txt",
+    "notice": "data/licenses/pyrualean-NOTICE.txt",
+    "rpentLicense": "data/licenses/pyrualean-rpent-Apache-2.0.txt",
+    "policyCheckpoint": "RLinf/RLinf-Pi05-LIBERO-130-fullshot-SFT; original model values, no local training",
+    "implementation": "保留官方 play_episode、cells、Python 沙箱、robo API、原生任务与终止条件。Astra 在线写代码，Pi0.5 生成短段动作，SAM3 用于按需分割。采用低峰值加载、SAM3 CPU FP32 兼容与独立模型服务；可选 skimage 掩码后处理缺失的上游警告保留。Codex 0.163 经 WSL 路径适配；每集最多 30 工具轮次、1200 秒和 3000 控制步，单次尝试。这里是 LIBERO-PRO 本地演示，没有复现 RoboDojo 排名，也未使用 PyRUA-Lean Coder 4B。",
+    "distribution": "仅分发逐控制步完整原生录像、说明与许可文本；不分发模型权重、上游资产、凭据或原始请求日志。"
   }
 }

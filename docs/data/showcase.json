@@ -5678,7 +5678,7 @@
       "poster": "media/pyrualean-object2-seed4-20261028-a01.jpg",
       "sourceUrl": "https://github.com/DAGroup-PKU/PyRUA-Lean",
       "sourceLabel": "PyRUA-Lean 官方项目",
-      "originalTrialMax": 3,
+      "originalTrialMax": 4,
       "trials": [
         {
           "seed": 4,
@@ -5721,6 +5721,20 @@
           "label": "拉开中层抽屉 · 技能未成后改用几何抓拉",
           "originalTrialNumber": 3,
           "statusLabel": "任务完成"
+        },
+        {
+          "seed": 4,
+          "taskId": 7,
+          "steps": 70,
+          "stepLabel": "个原生控制步",
+          "wallSeconds": 35.88,
+          "video": "media/pyrualean-goal7-seed4-20261028-a02.mp4",
+          "poster": "media/pyrualean-goal7-seed4-20261028-a02.jpg",
+          "success": true,
+          "outcome": "success",
+          "label": "打开炉灶 · 模型选择接触技能",
+          "originalTrialNumber": 4,
+          "statusLabel": "任务完成"
         }
       ],
       "projectBrief": {
@@ -5740,7 +5754,7 @@
           },
           {
             "label": "如何执行",
-            "text": "官方 cells 沙箱执行模型写出的代码；pi0_pick 调用 VLA，move_to、move_pose 与夹爪原语经原生 OSC 控制器推进 Panda 仿真。"
+            "text": "官方 cells 沙箱执行模型写出的代码；pi0_pick / pi0_doubled 调用 VLA，move_to、move_pose 与夹爪原语经原生 OSC 控制器推进 Panda 仿真。"
           },
           {
             "label": "如何反馈",
@@ -5749,14 +5763,14 @@
         ],
         "limitation": "这里运行 LIBERO-PRO MuJoCo 适配，没有复现 RoboDojo 排名，也未使用 Coder 4B。采用 Pi0.5 LIBERO 微调权重、SAM3 CPU 与低峰值加载；每集 30 工具轮次、1200 秒、3000 控制步。首次原生成功即终止，抓放任务可能仍夹持物体；具体末态在演示标签说明。录像为逐控制步的 20fps 回放，不等于模型实时速度，也不声称逐物理步完整状态重演。",
         "watchFor": "看一个 Python 单元如何组合多次动作，再看模型是否根据抓取、位置或接触反馈修改下一段代码；留意末帧夹爪与目标的关系。",
-        "result": "模型在线编写 Python 单元，组合感知、短段技能和几何控制，完成所选桌面操作的原生判定；完整录像保留单元间的动作与修正。",
+        "result": "模型在线编写 Python 单元，完成抓瓶入篮、抓碗放盘、拉开中层抽屉和打开炉灶；完整录像保留技能尝试、几何抓拉与动作修正，末态限制在标签中说明。",
         "model": "gpt-6-astra medium + π₀.₅ LIBERO SFT",
         "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
         "schema": "project-explanation/1"
       },
       "shortDescription": "模型把观察、测量、动作和检查写成 Python 单元；单元执行后返回新画面，再决定下一段代码。",
       "description": "模型把观察、测量、动作和检查写成 Python 单元；单元执行后返回新画面，再决定下一段代码。",
-      "cardValue": "3 段演示",
+      "cardValue": "4 段演示",
       "cardLabel": "精选成果回放",
       "metrics": [
         {
@@ -5942,7 +5956,7 @@
       "memberIds": [
         "pyrualean-astra-cells-20261028"
       ],
-      "demoCount": 3,
+      "demoCount": 4,
       "scope": "embodied",
       "previewTrialNumber": 1,
       "preview": {

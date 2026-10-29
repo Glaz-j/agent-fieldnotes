@@ -1,9 +1,9 @@
 {
   "schema": "capability-highlights/1",
-  "updatedAt": "2026-10-28T09:58:52+08:00",
-  "projectCards": 31,
-  "versions": 47,
-  "demonstrations": 154,
+  "updatedAt": "2026-10-29T23:42:13+08:00",
+  "projectCards": 32,
+  "versions": 48,
+  "demonstrations": 155,
   "description": "精选成果展，探索有趣的技术路线。",
   "rules": [
     "公开页只收录已完成的成果演示。",

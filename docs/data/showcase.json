@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-10-28",
+  "updated": "2026-10-29",
   "featured": "mems-target-shift-libero-three",
   "feature": {
     "label": "ASTRA × MemS",
@@ -5794,6 +5794,92 @@
       "relatedDemos": [],
       "projectId": "pyrualean",
       "versionLabel": "PyRUA-Lean · 用代码组织机器人动作"
+    },
+    {
+      "id": "roboicl-panda-memory-lift-20261029",
+      "title": "RoboICL · Panda 视觉记忆抓取",
+      "task": "看图接近、夹住红色方块并保持抬升",
+      "engine": "MuJoCo / robosuite",
+      "route": "vision",
+      "source": "fresh",
+      "model": "gpt-6-astra medium（在线动作决策）",
+      "input": "三路 RGB、机器人状态、相机标定、真实历史图像与动作回执",
+      "poster": "media/roboicl-panda-lift-dev211-20261029.jpg",
+      "sourceUrl": "https://github.com/Mosi-AI/RoboICL",
+      "sourceLabel": "RoboICL 官方记忆组件的本地 Panda 适配",
+      "originalTrialMax": 1,
+      "trials": [
+        {
+          "seed": 211,
+          "steps": 131,
+          "stepLabel": "个控制步",
+          "calls": 16,
+          "video": "media/roboicl-panda-lift-dev211-20261029.mp4",
+          "poster": "media/roboicl-panda-lift-dev211-20261029.jpg",
+          "success": true,
+          "outcome": "success",
+          "label": "抓起红色方块并持续夹持 · 零示范开发场景",
+          "originalTrialNumber": 1,
+          "statusLabel": "任务完成"
+        }
+      ],
+      "projectBrief": {
+        "familyId": "roboicl",
+        "familyTitle": "RoboICL · 视觉历史与动作记忆",
+        "summary": "把真实历史画面和已执行动作留在上下文中，让模型连续接近、抓取并保持红色方块。",
+        "technicalRoute": "当前图像与机器人状态 + 官方 LiveTrajectoryMemory 历史 → 冻结语言模型生成短动作序列 → 原生 OSC 控制器 → 新图像与执行回执。",
+        "modelRole": "Astra 在线决定归一化位移、转动和夹爪动作；没有预训练 VLA 或脚本专家代替模型求解任务。",
+        "controlLoop": [
+          {
+            "label": "看到什么",
+            "text": "外部、前方和腕部三路 RGB、相机标定、末端与夹爪状态；历史中保留真实图像、动作与执行区间，并标明省略的片段。"
+          },
+          {
+            "label": "决定什么",
+            "text": "根据画面分段靠近方块、闭合夹爪、向上抬升，再用后续观察确认并持续保持。"
+          },
+          {
+            "label": "如何执行",
+            "text": "本地单 Panda 对话端口核对待执行动作，逐步送入 robosuite 原生 OSC 控制器；每步保存实际执行记录与仿真状态。"
+          },
+          {
+            "label": "如何反馈",
+            "text": "新图像和执行回执返回模型；原生任务判定仅用于离线验收，未进入模型请求。记录中第 43 步达到抬升条件，并持续到末步。"
+          }
+        ],
+        "limitation": "这是单 Panda 的零示范 DEVELOPMENT 场景，复用原版 LiveTrajectoryMemory，其他对话与传输接口做了本地移植。未实例化原版双臂 Model，尚未加入 TRAIN 示范或验证未见 TEST 迁移。16 次模型调用后按预算正常收尾，共 131 个控制步；132 帧完整录像按 20fps 回放，不含等待模型的墙钟时间。日志覆盖模型输入、最终回答与实际动作，不含 SDK 内部事件。",
+        "watchFor": "先看接近过程中的位置修正，再看手指闭合、方块离桌以及最后持续夹持；不要把短片播放速度当作模型实时控制速度。",
+        "result": "模型结合当前三路画面与真实动作历史，逐步接近、夹住并抬升红色方块；末步仍保持夹持，完整录像保留全部控制过程。",
+        "model": "gpt-6-astra medium（在线动作决策）",
+        "displayNote": "本页精选已完成的成果演示，用于探索技术路线与模型能力。",
+        "schema": "project-explanation/1"
+      },
+      "shortDescription": "把真实历史画面和已执行动作留在上下文中，让模型连续接近、抓取并保持红色方块。",
+      "description": "把真实历史画面和已执行动作留在上下文中，让模型连续接近、抓取并保持红色方块。",
+      "cardValue": "1 段演示",
+      "cardLabel": "精选成果回放",
+      "metrics": [
+        {
+          "label": "展示内容",
+          "value": "看图接近、夹住红色方块并保持抬升"
+        },
+        {
+          "label": "运行方式",
+          "value": "Astra 在线决定归一化位移、转动和夹爪动作；没有预训练 VLA 或脚本专家代替模型求解任务。"
+        },
+        {
+          "label": "输入信息",
+          "value": "三路 RGB、机器人状态、相机标定、真实历史图像与动作回执"
+        }
+      ],
+      "notes": [
+        "当前图像与机器人状态 + 官方 LiveTrajectoryMemory 历史 → 冻结语言模型生成短动作序列 → 原生 OSC 控制器 → 新图像与执行回执。",
+        "这是单 Panda 的零示范 DEVELOPMENT 场景，复用原版 LiveTrajectoryMemory，其他对话与传输接口做了本地移植。未实例化原版双臂 Model，尚未加入 TRAIN 示范或验证未见 TEST 迁移。16 次模型调用后按预算正常收尾，共 131 个控制步；132 帧完整录像按 20fps 回放，不含等待模型的墙钟时间。日志覆盖模型输入、最终回答与实际动作，不含 SDK 内部事件。"
+      ],
+      "playbackNote": "精选成果录像；播放时间可能省略模型等待，实际输入与执行方式见项目解读。",
+      "relatedDemos": [],
+      "projectId": "roboicl",
+      "versionLabel": "Panda 零示范视觉记忆抓取"
     }
   ],
   "projects": [
@@ -5928,6 +6014,24 @@
         "video": "media/rvicl-10_swap4_seed2_a01.mp4",
         "start": 0,
         "alt": "RV-ICL · 边看示范，边调整机器人操作 仿真画面"
+      }
+    },
+    {
+      "id": "roboicl",
+      "title": "RoboICL · 视觉历史与动作记忆",
+      "summary": "复用官方历史记忆组件，在单 Panda 上看图生成短动作序列，完成抓取与持续抬升；当前展示零示范开发版本。",
+      "representativeId": "roboicl-panda-memory-lift-20261029",
+      "memberIds": [
+        "roboicl-panda-memory-lift-20261029"
+      ],
+      "demoCount": 1,
+      "scope": "embodied",
+      "previewTrialNumber": 1,
+      "preview": {
+        "poster": "media/roboicl-panda-lift-dev211-20261029.jpg",
+        "video": "media/roboicl-panda-lift-dev211-20261029.mp4",
+        "start": 0,
+        "alt": "RoboICL · Panda 视觉记忆抓取 仿真画面"
       }
     },
     {

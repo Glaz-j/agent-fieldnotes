@@ -1,2 +1,14 @@
 .DS_Store
 Thumbs.db
+.course-venv/
+.venv/
+__pycache__/
+*.pyc
+lab/runs/
+.env
+.env.*
+!.env.example
+
+runs/
+.proof/
+.preview/

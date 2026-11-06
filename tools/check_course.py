@@ -32,7 +32,7 @@ class Page(HTMLParser):
             self.buttons.append(attrs)
 
 
-pages = {p: Page(p) for p in [DOCS / "index.html", *sorted((DOCS / "learn").glob("*.html"))]}
+pages = {p: Page(p) for p in [DOCS / "index.html", DOCS / "start.html", *sorted((DOCS / "learn").glob("*.html"))]}
 gallery_ids = {"demo-" + d["id"] for d in json.loads((DOCS / "data/showcase.json").read_text())["demos"]}
 links = videos = 0
 for path, page in pages.items():
@@ -70,5 +70,5 @@ with zipfile.ZipFile(DOCS / "downloads/agent-fieldnotes-lab.zip") as archive:
     for name in archive.namelist():
         assert archive.read(name) == (ROOT / name).read_bytes(), name
     source_count = len(archive.namelist())
-assert len(pages) == 17
+assert len(pages) == 18
 print(f"{len(pages)} course pages; {links} local links/assets/anchors; {videos} accessible videos; {source_count} matching lab files: OK")

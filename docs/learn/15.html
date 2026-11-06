@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="匹配条件、做消融，用完整记录解释结果"><meta name="theme-color" content="#f3f4ee"><title>设计可比较的机器人实验 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=beginner-demos"><script defer src="../course.js?v=beginner-demos"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html" aria-current="page">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 15 章 / 整合与评测</div><h1>设计可比较的机器人实验</h1><p>匹配条件、做消融，用完整记录解释结果</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="匹配条件、做消融，用完整记录解释结果"><meta name="theme-color" content="#f3f4ee"><title>设计可比较的机器人实验 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=novice-onramp"><script defer src="../course.js?v=novice-onramp"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><a href="../start.html">开始之前 · 终端与 Python</a><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html" aria-current="page">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 15 章 / 整合与评测</div><h1>设计可比较的机器人实验</h1><p>匹配条件、做消融，用完整记录解释结果</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
 <ul>
 <li><a href="#_1">本章目标</a></li>
 <li><a href="#_2">第一步：先看一个小对照</a></li>
@@ -20,6 +20,7 @@
 <p>完成 60 回合的四策略对照，验证初始条件匹配，从原始事件解释失败，并报告样本量限制。最终交付全部回合、分组表和两个机制归因，不只挑选成功案例。</p>
 <h2 id="_2">第一步：先看一个小对照</h2>
 <p>假设第一次抓取失败。有重试的控制器再次抓取，没有重试的控制器立即停止。如果两者场景相同，这个差异就比较容易解释。先运行一个种子的缩小版实验：</p>
+<p>运行前，在笔记中各写一项预测：哪个策略更可能完成任务，哪个策略的调用数可能更少？这两个答案可以指向不同策略。运行后再用成功字段与调用数分别核对。</p>
 <pre><code class="language-sh">python lab/advanced.py benchmark --seeds 1 --out runs/ch15-mini
 python -m json.tool runs/ch15-mini/summary.json
 </code></pre>
@@ -168,6 +169,34 @@ for condition in conditions:
 <p>记录中还应区分接口错误、技能失败、目标关系不满足与预算耗尽。对一个回合可以保留多个证据，但不要把每条失败工具事件都算成一次独立任务失败，否则失败率的分母会混乱。</p>
 <h2 id="_8">先定义分母，再计算指标</h2>
 <p>任务成功率的分母是指定条件下的回合数；工具错误比例的分母是工具事件数；重试恢复比例的分母则应是实际遭遇目标故障的回合。三者回答不同问题，不能互相替换。本实验的 <code>mean_tool_calls</code> 使用该分组全部回合，包括提前停止与用满预算的失败。</p>
+<p>用三条假想记录练习计算，先不要套用上面的实跑表：</p>
+<table>
+<thead>
+<tr>
+<th>回合</th>
+<th>任务成功</th>
+<th>工具调用数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>是</td>
+<td>8</td>
+</tr>
+<tr>
+<td>B</td>
+<td>否</td>
+<td>3</td>
+</tr>
+<tr>
+<td>C</td>
+<td>是</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+<p>成功率为 <code>2/3</code>；全部回合平均调用数为 <code>(8+3+7)/3=6</code>；只看成功回合则为 <code>(8+7)/2=7.5</code>。三个数都算对了，但回答的问题不同。现在假设 B 提前失败后多做一次无效动作：成功率不变，全部回合平均调用数会上升，成功回合均值仍为 7.5。先写出这个变化，再去理解真实日志中的开销指标。</p>
 <p>如果只统计成功回合的调用开销，也可以得到有用信息，但必须标明筛选条件，同时报告被排除的失败数量。一个只完成最容易任务的策略，成功回合可能非常短，这不表示它整体更高效。</p>
 <p>分析结果后可以提出新假设，但不要在同一批种子上反复改规则，直到全部通过，再将它们称为未见测试集。保留用于开发的种子，另定一批最终评估种子；如新增故障类型，也先规定注入时机和强度。第 14 章的训练与测试分离，在这里对应的是方案调整与最终比较之间的分离。</p>
 <h2 id="5-5">为什么 5 / 5 不能叫“稳定百分之百”</h2>
@@ -177,5 +206,6 @@ for condition in conditions:
 <h2 id="_9">本章验收与继续实验</h2>
 <p>提交完整的三份记录、配对检查输出、成功数表与失败事件分析。报告同时写清观察来自仿真状态、没有模型调用、抓取为附着近似，以及三种故障条件的定义。</p>
 <p>基础题：为“去除重试仍在目标移动下成功”给出机制解释。进阶题：先冻结一个新实验方案，再运行 <code>--seeds 20</code>；比较样本增加后哪些结论变化，不能仅追加恰好有利的种子。若更改脚本检查程序，同时更新预期回合数和种子范围。</p>
+<p>基础题应指出：目标移动本身没有让技能返回失败；该策略仍会读取当前目标，因此无需重试也能到达新位置。进阶实验的完整命令为 <code>python lab/advanced.py benchmark --seeds 20 --out runs/ch15-benchmark20</code>。检查程序需要同时改为新目录、<code>len(rows) == len(index) == 240</code>，并把两处 <code>range(5)</code> 改成 <code>range(20)</code>。种子 0–19 包含原来的 0–4，因此它是扩大后的集合，不是完全独立的一批新测试；如需新的留出种子，须先扩展当前命令的种子选择方式。</p>
 <p>阅读 <a href="../gallery.html#demo-astra-elevator-feedback-comparison">Astra：不同反馈接口对照</a>，列出要做公平比较还需要知道哪些条件。展厅材料用于练习审视证据；不要把本章结果与不同机器人、不同输入的案例直接排成同一排行榜。</p>
-<p>下一章将控制、任务记忆和逐对象验收组合成双物体任务。你可以沿用本章方法，先看一个回合发生了什么，再比较不同扰动和种子。</p></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/15-evaluation.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/ADVANCED_GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="15">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="14.html">← 上一章</a><a rel="next" href="16.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>
+<p>下一章将控制、任务记忆和逐对象验收组合成双物体任务。你可以沿用本章方法，先看一个回合发生了什么，再比较不同扰动和种子。</p></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/15-evaluation.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/ADVANCED_GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="15">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="14.html">← 上一章</a><a rel="next" href="16.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/LICENSE">课程许可</a> · <a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

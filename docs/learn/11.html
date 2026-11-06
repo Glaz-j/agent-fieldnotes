@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="给位置加上时间与来源，及时修正过期信息"><meta name="theme-color" content="#f3f4ee"><title>会更新的空间记忆 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=beginner-demos"><script defer src="../course.js?v=beginner-demos"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html" aria-current="page">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 11 章 / 记忆与观察</div><h1>会更新的空间记忆</h1><p>给位置加上时间与来源，及时修正过期信息</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="给位置加上时间与来源，及时修正过期信息"><meta name="theme-color" content="#f3f4ee"><title>会更新的空间记忆 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=novice-onramp"><script defer src="../course.js?v=novice-onramp"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><a href="../start.html">开始之前 · 终端与 Python</a><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html" aria-current="page">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 11 章 / 记忆与观察</div><h1>会更新的空间记忆</h1><p>给位置加上时间与来源，及时修正过期信息</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
 <ul>
 <li><a href="#_1">本章目标</a></li>
 <li><a href="#_2">坐标为什么会过期</a></li>
@@ -78,6 +78,34 @@
 <li>新旧位置相差超过 1 厘米时，新记录写入 <code>update_reason: position_changed</code>，表示这次观察发现了位置变化。</li>
 </ol>
 <p>因此，“旧记录为什么失效”和“新观察发现什么”由两个字段分别说明。两秒是本实验选择的复核间隔，不是物体实际保持静止的保证。程序也不是先从图像发现了移动，才决定让缓存失效。</p>
+<p>用便签做一次纸面推演：记录时间是 1.0 秒，允许保存 2.0 秒。分别在三个时刻查询，先自行算“年龄”，再核对下表。三行假设分别从这条有效记录开始查询。</p>
+<table>
+<thead>
+<tr>
+<th>查询时刻</th>
+<th>记录年龄</th>
+<th>本实验的查询结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.5 秒</td>
+<td>1.5 秒</td>
+<td>返回有效记录</td>
+</tr>
+<tr>
+<td>3.0 秒</td>
+<td>2.0 秒</td>
+<td>仍返回记录，因为代码判断“超过”两秒</td>
+</tr>
+<tr>
+<td>3.1 秒</td>
+<td>2.1 秒</td>
+<td>返回 <code>None</code>，旧记录标为 <code>expired</code></td>
+</tr>
+</tbody>
+</table>
+<p>再检查一个区别：若目标在 1.2 秒已经移动，到 2.5 秒时这张便签仍可能通过年龄检查，但坐标已经不适用。时间限制只能提醒何时重查；更早得到的新观测，也应及时更新记录。</p>
 <p>用于图像时，还要先确认新旧观察指向同一个物体，这一步叫对象关联。新的检测也可能认错对象或受到遮挡影响，所以更新时间之外，还需要检查坐标系和测量质量。</p>
 <p>MemS 的原始设计将可复用物体几何与可更新的放置状态结合，并通过图像测量和标定几何修正场景。本章只实现较小的时效性对照，不包含完整三维重建、图像对应点选择或上游规划器。<a href="https://github.com/darthjaja6/MemS">MemS 原始说明</a></p>
 <h2 id="_5">第一步：运行旧缓存与更新记忆对照</h2>
@@ -186,10 +214,11 @@ for mode, records in history.items():
 <p>验收需要两种模式的结果、至少一条带时间和来源的空间记录，以及“观察改变 → 记忆更新 → 动作改变”的完整说明。旧缓存的失败也是必须保留的结果。</p>
 <p>若目标更新后仍走旧位置，检查执行器是否缓存了局部变量而没有再次查询。若最新记录反而更差，检查是否认错对象、使用错误坐标系或混用了物体中心与表面点。若所有记录都被标为有效，明确“有效”是否表示历史存在，还是允许当前使用；这两个含义不能共用一个模糊标签。</p>
 <p>基础题：画出两个对象分别移动时的记忆表，保证它们不会覆盖彼此。进阶题：设计一个重新观察策略，比较按固定时间刷新与按动作事件刷新各自的开销和遗漏风险；先定义比较指标，再做实验。</p>
+<p><strong>基础题自查：</strong>至少为两个对象各留一条带身份的当前记录；A 移动后应更新 A 的位置和时间，B 的记录不能因此被当成 A 的旧值。当前 <code>SpatialMemory</code> 只维护一个蓝色目标，这道题先在纸上设计多对象结构。若只把两个对象依次传给同一实例，后者会替代前者，不能得到你画出的两对象记忆表。</p>
 <p>本章通过重新读取状态获得了新位置。下一章回到图像，研究当目标看不清时，机器人能否先做一个有助于观察的动作。</p>
 <h2 id="_10">一手参考</h2>
 <ul>
 <li><a href="https://github.com/darthjaja6/MemS">MemS 场景维护与几何估计</a></li>
 <li><a href="https://mujoco.readthedocs.io/en/3.3.7/programming/simulation.html#state-and-control">MuJoCo 3.3.7 状态与仿真时间</a></li>
 <li><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/advanced.py">课程进阶实验源码</a></li>
-</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/11-spatial-memory.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/ADVANCED_GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="11">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="10.html">← 上一章</a><a rel="next" href="12.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/11-spatial-memory.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/ADVANCED_GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="11">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="10.html">← 上一章</a><a rel="next" href="12.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/LICENSE">课程许可</a> · <a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

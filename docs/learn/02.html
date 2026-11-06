@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="安装 MuJoCo，让机械臂完成一次任务"><meta name="theme-color" content="#f3f4ee"><title>运行第一个仿真环境 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=beginner-demos"><script defer src="../course.js?v=beginner-demos"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html" aria-current="page">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 02 章 / 机器人基础</div><h1>运行第一个仿真环境</h1><p>安装 MuJoCo，让机械臂完成一次任务</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="安装 MuJoCo，让机械臂完成一次任务"><meta name="theme-color" content="#f3f4ee"><title>运行第一个仿真环境 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=novice-onramp"><script defer src="../course.js?v=novice-onramp"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><a href="../start.html">开始之前 · 终端与 Python</a><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html" aria-current="page">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 02 章 / 机器人基础</div><h1>运行第一个仿真环境</h1><p>安装 MuJoCo，让机械臂完成一次任务</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
 <ul>
 <li><a href="#_1">本章目标</a></li>
 <li><a href="#_2">我们实际使用什么机器人</a></li>
@@ -13,7 +13,8 @@
 <li><a href="#_10">练习与参考</a></li>
 </ul>
 </div>
-</details><article><p>上一章把系统拆成几个环节。这一章先建立一个能重复启动、读取状态、执行动作并留下记录的环境。后续所有 Agent 改进都建立在同一套实验上；环境不稳定，换提示词也无法解释结果。</p>
+</details><article><p>第一次使用终端或 Python？先完成 <a href="../start.html">新手准备页</a> 的小程序，再回来继续本章。</p>
+<p>上一章把系统拆成几个环节。这一章先建立一个能重复启动、读取状态、执行动作并留下记录的环境。后续所有 Agent 改进都建立在同一套实验上；环境不稳定，换提示词也无法解释结果。</p>
 <p>这里的网页负责教学与案例浏览，机器人实验在你自己的计算机上运行。你需要一个可用的 Python 和终端：macOS 可打开“终端”，Windows 可打开 PowerShell。下面的命令逐行输入，按回车执行；代码框里的说明文字与边框不需要输入。</p>
 <h2 id="_1">本章目标</h2>
 <p>你将安装课程实验包，运行环境自检，读取初始观察，并执行一次固定脚本基线。验收产物是运行命令、环境信息和一次真实生成的运行记录。</p>
@@ -53,12 +54,19 @@ python -m pip install -r lab/requirements.txt
 <p>安装成功后，后面的 <code>python</code> 就表示这个环境里的解释器。新开终端时，需要重新进入实验根目录并执行激活那一行；不用每次重新创建环境或安装依赖。</p>
 <p>若 PowerShell 不允许执行激活脚本，可以把后续命令开头的 <code>python</code> 换成 <code>.\lab\.venv\Scripts\python.exe</code>，安装依赖时也同样替换。macOS / Linux 对应路径是 <code>lab/.venv/bin/python</code>。这会直接选择环境，不需要修改全局策略。</p>
 <h2 id="_4">第二步：先做环境自检</h2>
+<p>先确认两个容易混淆的位置：终端当前所在的文件夹，以及实际运行的 Python。下面两行只读信息，不会移动文件：</p>
+<pre><code class="language-sh">python -c &quot;from pathlib import Path; print(Path.cwd()); print(Path('lab/run.py').is_file())&quot;
+python -c &quot;import sys; print(sys.executable)&quot;
+</code></pre>
+<p>第一行先打印当前目录，再打印 <code>True</code> 或 <code>False</code>。这里应是 <code>True</code>，表示从当前位置确实能找到 <code>lab/run.py</code>；若是 <code>False</code>，先用 <code>cd</code> 回到包含 <code>lab/</code> 的那层。第二行的路径应指向本实验的 <code>lab/.venv</code> 内部。<code>python -c</code> 的意思是“执行引号里的这一小段 Python”，不必为这两个检查另外保存文件。</p>
+<p>两个位置确认后，再检查机器人环境：</p>
 <pre><code class="language-sh">python lab/run.py doctor
 </code></pre>
 <p>自检的意义是确认程序正在使用预期解释器，MuJoCo 能被导入，教学场景能够建立。先读完整输出，再决定下一步。不要在依赖导入失败时继续尝试模型接口：这两个问题发生在完全不同的层。</p>
 <p>输出是一组带名称的值，其中 <code>physics: "ok"</code> 表示物理场景可用，<code>render: "ok"</code> 表示还能生成图像。<code>render</code> 若是 <code>unavailable: ...</code>，先保存错误信息；本章的状态与基线实验仍可继续，第 8 章图像实验则需要先解决渲染问题。</p>
 <p>把 Python 与 MuJoCo 版本、操作系统以及自检结果保存到学习笔记。使用相同版本不意味着所有计算机都完全一致，但这些信息能显著缩小排查范围。</p>
 <h2 id="_5">第三步：读取一次观察</h2>
+<p><strong>先预测：</strong> 刚启动、还没有任何搬运动作时，“正在持物”和“任务完成”各应该是什么？在笔记中先写下两个答案，再执行命令。</p>
 <pre><code class="language-sh">python lab/run.py observe
 </code></pre>
 <p>输出采用 JSON 格式：用名称对应一个值，例如 <code>"holding": false</code> 表示当前没有持物，<code>"tool_xyz": [...]</code> 保存末端位置。<code>true</code> 是“是”，<code>false</code> 是“否”。初始场景的 <code>task</code> 中应看到 <code>"success": false</code>，因为方块还没搬到目标。</p>
@@ -82,6 +90,7 @@ python lab/run.py baseline --seed 8 --out runs/baseline-seed8
 <p>先比较两次种子 7 的动作顺序、每步反馈与最终验收结果。若同一种子下结果不同，记录差异出现在哪一步。</p>
 <p>再比较种子 8：随机初始化变化后，哪些坐标变化，哪些机器人结构保持不变？这个比较能帮助你区分场景参数、初始化状态和控制逻辑。每次命令都从新场景开始，不会沿用上一条命令留下的位置。</p>
 <p>先分别保存结果再比较，避免把两次输出写进同一目录后失去来源。</p>
+<p><strong>检查点：</strong> 完成基线后，再运行 <code>python lab/run.py observe --seed 7</code>，预期仍是 <code>holding: false</code>、<code>task.success: false</code>，方块回到初始位置。这不是上一回合的成功记录丢失了，而是新命令创建了新场景。上一回合的证据仍在 <code>runs/baseline/</code>。不同种子会改变初始方块位置；连杆长度和蓝区位置在这项实验里保持不变。若只想比较初始位置，应分别运行两个种子的 <code>observe</code>，不要把搬运后的终点误当起点。</p>
 <h2 id="_8">本章验收</h2>
 <p>你应该能够从一个新终端进入仓库、激活环境、运行自检并执行基线。提交一份简短记录，包含实际命令、版本、种子、结果目录以及你对结果的判断。发生失败时，也保留完整报告并解释它属于安装、场景加载、技能执行还是任务验收问题。</p>
 <p>能稳定运行这条离线基线，就是后续学习的起点。下一章会把现在看到的 JSON 拆开，弄清每个字段从哪里来、能够支持什么判断。</p>
@@ -95,4 +104,4 @@ python lab/run.py baseline --seed 8 --out runs/baseline-seed8
 <li><a href="https://mujoco.readthedocs.io/en/stable/python.html">MuJoCo Python 安装与使用</a></li>
 <li><a href="https://docs.python.org/3/library/venv.html">Python 虚拟环境官方文档</a></li>
 <li><a href="https://github.com/Glaz-j/agent-fieldnotes/tree/main/lab">课程实验包</a></li>
-</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/02-first-simulation.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="2">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="01.html">← 上一章</a><a rel="next" href="03.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/02-first-simulation.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="2">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="01.html">← 上一章</a><a rel="next" href="03.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/LICENSE">课程许可</a> · <a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

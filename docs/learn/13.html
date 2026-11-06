@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="组合技能、条件和预算，执行可检查的计划"><meta name="theme-color" content="#f3f4ee"><title>用程序表达机器人计划 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=beginner-demos"><script defer src="../course.js?v=beginner-demos"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html" aria-current="page">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 13 章 / 整合与评测</div><h1>用程序表达机器人计划</h1><p>组合技能、条件和预算，执行可检查的计划</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="组合技能、条件和预算，执行可检查的计划"><meta name="theme-color" content="#f3f4ee"><title>用程序表达机器人计划 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=novice-onramp"><script defer src="../course.js?v=novice-onramp"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><a href="../start.html">开始之前 · 终端与 Python</a><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html" aria-current="page">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 13 章 / 整合与评测</div><h1>用程序表达机器人计划</h1><p>组合技能、条件和预算，执行可检查的计划</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
 <ul>
 <li><a href="#_1">本章目标</a></li>
 <li><a href="#_2">为什么把计划写成一门小语言</a></li>
@@ -126,6 +126,59 @@
 </tr>
 </tbody>
 </table>
+<p>13 个节点怎样数出来？先只看无扰动计划，把工具动作和流程控制分开：</p>
+<table>
+<thead>
+<tr>
+<th>执行部分</th>
+<th>节点访问数</th>
+<th>工具调用数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>接近、下降</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>进入一次 <code>repeat</code></td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>三次检查 <code>not_holding</code></td>
+<td>3</td>
+<td>0</td>
+</tr>
+<tr>
+<td>第一次条件为真，执行抓取</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>检查 <code>holding</code></td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>抬升、运输、下降、释放</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>最后观察</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>13</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+<p>现在遮住上面的结果表，预测抓空一次会改变哪一行：三次条件检查仍然发生，只是其中两次会进入抓取分支，因此“执行抓取”变成 2 个节点、2 次调用，总量变为 14 和 9。若你数出三次抓取，请重新检查每轮开始时的 <code>holding</code>。</p>
 <h3 id="_7">看一段更丰富的程序式控制</h3>
 <p>观看下面的 PyRUA-Lean 案例时，找出“一段代码对应多个机器人动作”的位置，再留意执行结果之后何时产生下一段代码。</p>
 <figure class="lesson-demo" id="demo-pyrualean-astra-cells-20261028"><div class="demo-label">展厅阅读案例 · 与本课实验设置不同</div><video controls playsinline preload="none" poster="../media/pyrualean-object2-seed4-20261028-a01.jpg" aria-label="一个代码单元，可以组织多个机器人动作"><source src="../media/pyrualean-object2-seed4-20261028-a01.mp4" type="video/mp4"><p>当前浏览器无法播放，请<a href="../media/pyrualean-object2-seed4-20261028-a01.mp4">打开录像文件</a>。</p></video><figcaption><strong>一个代码单元，可以组织多个机器人动作</strong><p>看一个 Python 单元如何组合多次动作，再看模型是否根据抓取、位置或接触反馈修改下一段代码；留意末帧夹爪与目标的关系。</p><p class="demo-scope">输入：双相机 RGB-D、标定、机器人自身状态；SAM3 分割与工具返回值。这里运行 LIBERO-PRO MuJoCo 适配，没有复现 RoboDojo 排名，也未使用 Coder 4B。采用 Pi0.5 LIBERO 微调权重、SAM3 CPU 与低峰值加载；每集 30 工具轮次、1200 秒、3000 控制步。首次原生成功即终止，抓放任务可能仍夹持物体；具体末态在演示标签说明。录像为逐控制步的 20fps 回放，不等于模型实时速度，也不声称逐物理步完整状态重演。</p><p class="demo-source"><a href="../gallery.html#demo-pyrualean-astra-cells-20261028">完整案例、条件与来源</a> · <a href="https://github.com/DAGroup-PKU/PyRUA-Lean">原项目</a></p></figcaption></figure>
@@ -133,7 +186,7 @@
 <p>一次模型输出可以安排接近、测量、移动和检查，因此代码单元数与动作次数并不相同。本章的 JSON 计划同样组织多个技能，但表达范围更小、计划由我们编写。看完后，用“谁产生程序、谁执行技能、谁提供反馈”三句话说明两者关系。</p>
 <h2 id="_8">第五步：理解结构上限与运行预算</h2>
 <p><strong>节点预算</strong>是一份“最多还允许访问多少个框”的计数。解释器每访问一个调用、条件或重复节点，就花掉一个单位；条件为假也需要先检查，所以仍然计数。这样既能限制动作数量，也能限制没有动作的计算。</p>
-<pre><code class="language-sh">python lab/advanced.py program --program lab/example-program.json --budget 1 --seed 7 --out runs/ch13-budget
+<pre><code class="language-sh">python lab/advanced.py program --program lab/example-program.json --budget 1 --seed 7 --perturb none --out runs/ch13-budget
 </code></pre>
 <p>这次预期得到 <code>error: program_budget_exhausted</code>、<code>executed_nodes: 1</code>、<code>tool_calls: 1</code> 和 <code>success: false</code>。第一条移动已经执行，第二个节点之前预算用尽。预算限制工作量，不会把物理场景回滚到开始。命令退出码 2 是本练习预期结果，继续阅读日志即可。</p>
 <p>节点预算也不是仿真步数或耗时。一次 <code>move</code> 内部推进许多物理步，一次条件判断却不移动机器人。报告开销时分别记录节点访问与实际工具事件，不要把二者混成同一个“步”。</p>
@@ -144,7 +197,7 @@
 <p>用编辑器将下列内容保存为 <code>invalid-program.json</code>，不要加入 JSON 注释：</p>
 <pre><code class="language-json">{&quot;version&quot;: 1, &quot;steps&quot;: [{&quot;call&quot;: &quot;teleport&quot;}]}
 </code></pre>
-<pre><code class="language-sh">python lab/advanced.py program --program invalid-program.json --budget 64 --seed 7 --out runs/ch13-invalid
+<pre><code class="language-sh">python lab/advanced.py program --program invalid-program.json --budget 64 --seed 7 --perturb none --out runs/ch13-invalid
 </code></pre>
 <p><code>teleport</code> 不在允许列表中，应得到 <code>unknown call or node fields</code>，并且事件文件为空：计划尚未执行。将错误工具藏在一个当前不会进入的分支，仍会被发现，因为校验会遍历整份计划。</p>
 <p>接着复制示例计划，尝试用 <code>last_ok</code> 限制失败动作后的继续执行。设计时明确哪个工具的结果正在被检查：插入一个 <code>observe</code> 会更新“上一个结果”，不应再把它误当成此前移动的结果。</p>
@@ -153,9 +206,10 @@
 <p>如果 JSON 读取失败，先检查引号和逗号；如果语法通过却任务失败，检查条件是否放错位置、引用是否对应正确实体，以及动作返回。把任何失败都归给“计划不好”，会掩盖具体错误。</p>
 <p>本章命令在已激活环境的 macOS、Linux 与 PowerShell 中均可直接运行。JSON 文件使用编辑器保存为 UTF-8；自行写多行 Python 检查程序时，将其保存为 <code>.py</code> 文件再运行。</p>
 <h2 id="_11">案例、练习与参考</h2>
-<p>基础题：删掉抓取条件后，预测三次调用的返回并验证。进阶题：设计“移动失败则结束，抓空允许重试”的计划，说明每个条件检查的证据以及最大节点消耗。</p>
+<p>基础题：复制示例文件，把 <code>repeat</code> 内部的 <code>steps</code> 改为 <code>[{"call":"grasp"}]</code>，保留重复三次，使用 <code>--perturb none</code> 运行到新目录。先预测三次调用的返回，再核对事件。进阶题：设计“移动失败则结束，抓空允许重试”的计划，说明每个条件检查的证据以及最大节点消耗。</p>
+<p><strong>基础题自查：</strong>第一次抓取成功，后两次返回 <code>already_holding</code>。解释器不会因工具返回 <code>ok: false</code> 自动停止，后面的 <code>holding</code> 条件仍为真，因此原计划的搬运部分仍会执行。这个例子提醒你分别检查“工具报错了什么”和“当前状态允许做什么”。进阶题需要用条件包住后续动作；本语言没有 <code>break</code> 或 <code>return</code> 节点，不能直接从 Python 搬来这些写法。</p>
 <p>本章改变的是“技能怎样被组织”。下一章换一个角度：保持到达目标这个小需求，学习技能内部的数值映射。</p>
 <ul>
 <li><a href="https://dagroup-pku.github.io/PyRUA-Lean/docs/getting-started/how-it-works/">PyRUA-Lean 执行机制</a></li>
 <li><a href="https://docs.python.org/3/library/json.html">Python JSON 官方文档</a></li>
-</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/13-program-planning.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/ADVANCED_GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="13">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="12.html">← 上一章</a><a rel="next" href="14.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/13-program-planning.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/ADVANCED_GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="13">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="12.html">← 上一章</a><a rel="next" href="14.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/LICENSE">课程许可</a> · <a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

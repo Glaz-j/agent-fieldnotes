@@ -63,7 +63,9 @@ python lab/run.py baseline --seed 7 --out runs/observation-study
 
 打开 `runs/observation-study/events.jsonl`。JSONL 的每一行是一个独立 JSON 事件，所以一行可能很长。每条事件都先记录调用什么工具和参数，再把动作后的观察放在 `result.observation` 中。它与 `observe` 的内容相似，只是外面多了一层执行记录。
 
-为了先看懂变化，把下面代码保存成根目录中的 `inspect_observations.py`。保存为纯文本 `.py` 文件后运行，macOS、Linux 和 PowerShell 都适用。
+为了先看懂变化，把下面代码保存成根目录中的 `inspect_observations.py`。首次保存 Python 程序时，可以在代码编辑器中新建文件、粘贴完整代码，再选择“另存为”。文件名以 `.py` 结尾，不要保存成 `.py.txt`；使用 UTF-8 纯文本，并保留每行开头的空格。终端运行的是保存好的文件，不需要把整个代码框逐行输入终端。macOS、Linux 和 PowerShell 都适用。
+
+**先预测：** 在笔记里填三个时刻的“持物 / 任务完成”：下降接近方块后、抓取后、释放到目标后。然后让下面的程序替你从真实日志中找答案。
 
 ```python
 import json
@@ -83,7 +85,13 @@ for line in path.read_text().splitlines():
 python inspect_observations.py
 ```
 
+第一次读这段代码，可以只追踪一行日志怎样经过四步：`read_text().splitlines()` 把文件分成各行；`for line in ...` 让每一行依次接受相同处理；`json.loads(line)` 把这一行文字变成能按名称取值的数据；`print(...)` 将选中的字段显示出来。`obs = event["result"]["observation"]` 相当于先打开 `result`，再打开其中的 `observation`。变量 `obs` 只是给这一层数据起个短名字。
+
+缩进在 Python 中有含义：这里缩进去的几行会为每条事件重复执行。暂时不必从零写同样的程序，先试着指出“输入文件在哪一行”“显示的字段在哪几行”，再修改它。
+
 你会看到七行，编号从 0 到 6。正常基线中，编号 1 的下降后仍未持物；编号 2 的 `grasp` 后开始持物，但任务仍未完成；编号 6 的 `release` 后持物为假、任务完成为真。再打开 `summary.json`，把汇总与这些逐步证据对照。若自己的结果不同，先保留实际输出并找到首次不同的行。
+
+**对照答案：** 三个时刻依次为 `False / False`、`True / False`、`False / True`。Python 打印的 `True/False` 与 JSON 的小写 `true/false` 含义相同。再做一个小改动：在 `print` 的最后加上 `"时间：", event["sim_time_s"]`，保存并重新运行。应仍有七行，只是每行多了时间；这次只是在读已有文件，不会重新搬运机器人。
 
 为三个时刻各写一句话，句子必须包含证据。例如，“附着状态由假变真”只支持教学抓取状态发生变化；要说明物体真的被带走，还需要比较后续方块位置。不要把自己的预期写成实际输出。
 

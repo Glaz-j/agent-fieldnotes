@@ -110,6 +110,21 @@ python lab/advanced.py program --program lab/example-program.json --budget 64 --
 | 第一次抓空 | 14 | 9 | 是 |
 | 目标移动 | 13 | 8 | 是 |
 
+13 个节点怎样数出来？先只看无扰动计划，把工具动作和流程控制分开：
+
+| 执行部分 | 节点访问数 | 工具调用数 |
+| --- | --- | --- |
+| 接近、下降 | 2 | 2 |
+| 进入一次 `repeat` | 1 | 0 |
+| 三次检查 `not_holding` | 3 | 0 |
+| 第一次条件为真，执行抓取 | 1 | 1 |
+| 检查 `holding` | 1 | 0 |
+| 抬升、运输、下降、释放 | 4 | 4 |
+| 最后观察 | 1 | 1 |
+| 合计 | 13 | 8 |
+
+现在遮住上面的结果表，预测抓空一次会改变哪一行：三次条件检查仍然发生，只是其中两次会进入抓取分支，因此“执行抓取”变成 2 个节点、2 次调用，总量变为 14 和 9。若你数出三次抓取，请重新检查每轮开始时的 `holding`。
+
 ### 看一段更丰富的程序式控制
 
 观看下面的 PyRUA-Lean 案例时，找出“一段代码对应多个机器人动作”的位置，再留意执行结果之后何时产生下一段代码。
@@ -123,7 +138,7 @@ python lab/advanced.py program --program lab/example-program.json --budget 64 --
 **节点预算**是一份“最多还允许访问多少个框”的计数。解释器每访问一个调用、条件或重复节点，就花掉一个单位；条件为假也需要先检查，所以仍然计数。这样既能限制动作数量，也能限制没有动作的计算。
 
 ```sh
-python lab/advanced.py program --program lab/example-program.json --budget 1 --seed 7 --out runs/ch13-budget
+python lab/advanced.py program --program lab/example-program.json --budget 1 --seed 7 --perturb none --out runs/ch13-budget
 ```
 
 这次预期得到 `error: program_budget_exhausted`、`executed_nodes: 1`、`tool_calls: 1` 和 `success: false`。第一条移动已经执行，第二个节点之前预算用尽。预算限制工作量，不会把物理场景回滚到开始。命令退出码 2 是本练习预期结果，继续阅读日志即可。
@@ -145,7 +160,7 @@ python lab/advanced.py program --program lab/example-program.json --budget 1 --s
 ```
 
 ```sh
-python lab/advanced.py program --program invalid-program.json --budget 64 --seed 7 --out runs/ch13-invalid
+python lab/advanced.py program --program invalid-program.json --budget 64 --seed 7 --perturb none --out runs/ch13-invalid
 ```
 
 `teleport` 不在允许列表中，应得到 `unknown call or node fields`，并且事件文件为空：计划尚未执行。将错误工具藏在一个当前不会进入的分支，仍会被发现，因为校验会遍历整份计划。
@@ -162,7 +177,9 @@ python lab/advanced.py program --program invalid-program.json --budget 64 --seed
 
 ## 案例、练习与参考
 
-基础题：删掉抓取条件后，预测三次调用的返回并验证。进阶题：设计“移动失败则结束，抓空允许重试”的计划，说明每个条件检查的证据以及最大节点消耗。
+基础题：复制示例文件，把 `repeat` 内部的 `steps` 改为 `[{"call":"grasp"}]`，保留重复三次，使用 `--perturb none` 运行到新目录。先预测三次调用的返回，再核对事件。进阶题：设计“移动失败则结束，抓空允许重试”的计划，说明每个条件检查的证据以及最大节点消耗。
+
+**基础题自查：**第一次抓取成功，后两次返回 `already_holding`。解释器不会因工具返回 `ok: false` 自动停止，后面的 `holding` 条件仍为真，因此原计划的搬运部分仍会执行。这个例子提醒你分别检查“工具报错了什么”和“当前状态允许做什么”。进阶题需要用条件包住后续动作；本语言没有 `break` 或 `return` 节点，不能直接从 Python 搬来这些写法。
 
 本章改变的是“技能怎样被组织”。下一章换一个角度：保持到达目标这个小需求，学习技能内部的数值映射。
 

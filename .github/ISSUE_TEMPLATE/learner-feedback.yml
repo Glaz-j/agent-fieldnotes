@@ -1,0 +1,62 @@
+name: 学习卡点反馈
+description: 看不懂、不会安装、步骤跳跃或输出对不上，都可以在这里反馈。
+title: "[学习反馈] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        不需要先判断是不是程序 bug。不会填写的技术信息可写“不知道”，还没运行可直接说明。
+        Issue 是公开的：请勿粘贴 API 密钥、Authorization 头、Cookie 或完整环境变量；截图请先遮住个人信息。
+  - type: input
+    id: chapter
+    attributes:
+      label: 哪一章或哪个页面？
+      placeholder: 第 2 章；也可以粘贴页面链接。
+    validations:
+      required: true
+  - type: textarea
+    id: step
+    attributes:
+      label: 卡在哪一步？
+      description: 写出小节名称、你做过的操作或输入的命令。尚未打开终端也可以反馈。
+      placeholder: 第一步创建虚拟环境；我输入了……，然后……
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 你使用什么环境？
+      description: 能写多少写多少；不会查版本不影响提交。
+      placeholder: |
+        系统：Windows / macOS / Linux / 其他
+        Python：未安装 / 不知道 / 版本号
+        终端或浏览器：
+        学习方式：只看网页 / 轻量实验包 / 完整仓库
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际看到了什么？
+      description: 粘贴最相关的输出、错误文字或打码截图。概念卡点可引用没理解的那句话。
+      placeholder: 终端显示…… / 页面说……但我不明白…… / 还没运行，因为……
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 你原本期待看到什么？
+      description: 可以引用教材的预期输出；如果不知道下一步应是什么，也请直接说明。
+      placeholder: 教材说会生成……，但我没有找到；或“我不知道这一步完成后应看到什么”。
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 下载日期或代码版本（可选）
+      placeholder: 轻量包下载日期；或已知的 commit / 分支。
+  - type: textarea
+    id: attempts
+    attributes:
+      label: 已尝试的办法或希望补充的说明（可选）
+      placeholder: 我试过……；如果这里有一个……例子，可能更容易继续。

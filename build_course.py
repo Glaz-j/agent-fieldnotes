@@ -92,20 +92,20 @@ def topbar(prefix=''):
     return f'''<a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="{prefix}index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="{prefix}index.html#curriculum">学习路线</a><a href="{prefix}gallery.html">实验案例</a><a class="repo" href="{REPO}">GitHub ↗</a></nav></header>'''
 
 def footer(prefix=''):
-    return f'''<footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="{prefix}attributions.html">案例来源与许可</a> · <a href="{REPO}/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer>'''
+    return f'''<footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="{REPO}/blob/main/LICENSE">课程许可</a> · <a href="{prefix}attributions.html">案例来源与许可</a> · <a href="{REPO}/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer>'''
 
 def page(title, body, prefix='', description='通过十六章循序渐进的教程和可运行的 MuJoCo 实验，学习机器人 Agent 的感知、记忆、技能、决策与评测。'):
     return f'''<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="{html.escape(description, quote=True)}"><meta name="theme-color" content="#f3f4ee"><title>{html.escape(title)} · Agent Fieldnotes</title><link rel="stylesheet" href="{prefix}course.css?v=beginner-demos"><script defer src="{prefix}course.js?v=beginner-demos"></script></head><body data-lesson-count="{CHAPTER_COUNT}">{topbar(prefix)}{body}{footer(prefix)}</body></html>\n'''
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="{html.escape(description, quote=True)}"><meta name="theme-color" content="#f3f4ee"><title>{html.escape(title)} · Agent Fieldnotes</title><link rel="stylesheet" href="{prefix}course.css?v=novice-onramp"><script defer src="{prefix}course.js?v=novice-onramp"></script></head><body data-lesson-count="{CHAPTER_COUNT}">{topbar(prefix)}{body}{footer(prefix)}</body></html>\n'''
 
 def chapter_links(start, end):
     return ''.join(f'<a class="chapter-row" data-chapter="{i}" href="learn/{i:02}.html"><span class="chapter-num">{i:02}</span><span class="chapter-name">{html.escape(CHAPTERS[i-1][0])}<small>{html.escape(CHAPTERS[i-1][1])}</small></span><span class="arrow" aria-hidden="true">↗</span></a>' for i in range(start, end+1))
 
 def build_home():
     body = f'''<main id="main" class="wrap">
-<section class="hero"><div><span class="label">一条从 Python 到机器人决策的学习路线</span><h1>动手构建<br>机器人 Agent</h1><p class="intro">从一次抓取开始，学会让机器人理解任务、调用技能、检查结果，并在失败后继续行动。</p><div class="actions"><a class="primary" href="learn/01.html">开始第 1 章 →</a><a class="secondary" href="downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a></div><p class="small">16 章循序渐进 · 本地仿真实验 · 无需实体机器人</p></div>
+<section class="hero"><div><span class="label">一条从 Python 到机器人决策的学习路线</span><h1>动手构建<br>机器人 Agent</h1><p class="intro">从一次抓取开始，学会让机器人理解任务、调用技能、检查结果，并在失败后继续行动。</p><div class="actions"><a class="primary" href="start.html">第一次学习，从这里开始 →</a><a class="secondary" href="learn/01.html">直接读第 1 章 →</a><a class="secondary" href="downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a></div><p class="small">16 章循序渐进 · 本地仿真实验 · 无需实体机器人</p></div>
 <figure><video controls playsinline preload="metadata" poster="media/mems-target-shift-libero-three-t00.jpg" aria-label="已有展厅案例：目标碗移动后的机器人任务轨迹"><source src="media/mems-target-shift-libero-three-t00.mp4" type="video/mp4"></video><figcaption><strong>如果目标突然移动，机器人该怎么办？</strong>先带着这个问题学习，再回到 MemS 案例看它如何处理变化。视频来自原展厅；教学实验从更小的任务起步。<br><a href="gallery.html#demo-mems-target-shift-libero-three">查看完整案例与来源 ↗</a></figcaption></figure></section>
-<div class="course-band"><div><strong>你需要会什么</strong><p>基础 Python、终端操作、简单向量运算。</p></div><div><strong>你将亲手完成什么</strong><p>运行机械臂，构建技能接口与可恢复的任务循环。</p></div><div><strong>实验从哪里开始</strong><p>独立的简化 MuJoCo 环境；先理解，再接入模型。</p></div></div>
+<div class="course-band"><div><strong>你需要会什么</strong><p>基础 Python 即可；<a href="start.html">新手准备页</a>补终端、文件与语法，坐标知识随课学习。</p></div><div><strong>你将亲手完成什么</strong><p>运行机械臂，构建技能接口与可恢复的任务循环。</p></div><div><strong>实验从哪里开始</strong><p>独立的简化 MuJoCo 环境；先理解，再接入模型。</p></div></div>
 <section class="section" id="curriculum"><span class="label">LEARNING PATH / 学习路线</span><div class="section-lead"><h2>每一章，解决一个具体问题</h2><p>按顺序完成前置知识，再把观察、技能与决策连起来。每章都有动手步骤、验收标准、故障排查和延伸阅读。</p></div><p class="progress-note"><span id="progress-count">0 / {CHAPTER_COUNT} 章已完成</span> · 进度保存在当前浏览器，可随时取消勾选。</p><div class="roadmap">{roadmap()}</div><div class="lab-note"><strong>两条动手入口</strong><br>第一次接触机器人，从第 1 章开始；已经跑通基础实验，从 <a href="learn/10.html">第 10 章的任务记忆</a> 继续。默认离线主线无需模型密钥。第 8、12 章是视觉支线，第 13、14 章分别探索程序计划与学习技能；<a href="learn/16.html">第 16 章</a>说明毕业任务实际组合了哪些模块。正文演示可以就地播放，再用实验日志验证。</div></section>
 <section class="section" id="cases"><span class="label">FIELD NOTES / 从真实轨迹提问</span><h2>原来的展厅，成为课堂里的案例库</h2><p class="section-lead">不要只看机器人是否做完。尝试找出：它知道什么、何时决策、哪里出错，以及什么证据说明任务完成。案例与教学实验分开标注，保留各自的实现条件。</p><div class="cases">
 <article class="case"><a href="gallery.html#demo-mems-target-shift-libero-three"><img src="media/mems-target-shift-libero-three-t00.jpg" alt="MemS 仿真机械臂与桌面上的容器" loading="lazy"></a><h3>目标移动后，旧计划还有效吗？</h3><p>从空间记忆案例，理解观察的时效性，以及为什么执行之后还要检查。</p><div class="case-links"><a href="learn/11.html">先学第 11 章 →</a><a href="gallery.html#demo-mems-target-shift-libero-three">打开案例 ↗</a></div></article>
@@ -114,8 +114,8 @@ def build_home():
 </div><div class="actions"><a class="secondary" href="gallery.html">浏览全部实验案例 →</a><a class="secondary" href="experiments.html">查看原始实验档案 →</a></div></section>
 <section class="section"><div class="starter"><div><span class="label">HANDS ON / 从一个最小实验开始</span><h3>让第一次运行保持简单</h3><p>下载并解压实验包，在解压目录创建 Python 环境。第 2 章包含完整安装、环境检查与排错说明。</p><p>机械臂采用简化 SCARA 结构，抓取使用显式附着约束。它用来讲清任务逻辑，不代表真实夹爪的摩擦抓取能力。</p><a class="secondary" href="learn/02.html">查看安装与第一轮实验 →</a></div><pre><code>python -m pip install -r lab/requirements.txt
 python lab/run.py doctor
-python lab/run.py baseline
-python lab/run.py agent --mode scripted</code></pre></div></section>
+python lab/run.py baseline --out runs/baseline
+python lab/run.py agent --mode scripted --out runs/agent</code></pre></div></section>
 </main>'''
     (DOCS/'index.html').write_text(page('动手构建机器人 Agent',body),encoding='utf-8')
 
@@ -133,7 +133,7 @@ def build_lessons():
         md = markdown.Markdown(extensions=['fenced_code','tables','toc'], extension_configs={'toc':{'toc_depth':'2-3'}})
         article = md.convert(text)
         article = re.sub(r'<!--\s*course-demo:\s*([a-z0-9-]+)\s*-->', render_demo, article)
-        nav = ''
+        nav = '<a href="../start.html">开始之前 · 终端与 Python</a>'
         for i,(name,_,_) in enumerate(CHAPTERS,1):
             if i in {g[0] for g in GROUPS}: nav += '<div class="nav-group">'+chapter_group(i)+'</div>'
             nav += f'<a href="{i:02}.html"'+(' aria-current="page"' if i==number else '')+f'>{i:02} · {name}</a>'
@@ -142,10 +142,19 @@ def build_lessons():
         body = f'''<main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · {CHAPTER_COUNT} 章</summary><nav>{nav}<div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 {number:02} 章 / {chapter_group(number)}</div><h1>{title}</h1><p>{subtitle}</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary>{md.toc}</details><article>{article}</article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="{REPO}/blob/main/{source.relative_to(ROOT).as_posix()}">查看本章源文件</a> · <a href="{REPO}/blob/main/lab/{'GUIDE.md' if number<=9 else 'ADVANCED_GUIDE.md'}">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="{number}">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页">{prev}{nxt}</nav></div></div></main>'''
         (output/f'{number:02}.html').write_text(page(title,body,'../',subtitle),encoding='utf-8')
 
+def build_start():
+    source = ROOT/'course/start-here.md'
+    text = re.sub(r'^# [^\n]+\n', '', source.read_text(encoding='utf-8'), count=1)
+    md = markdown.Markdown(extensions=['fenced_code','tables','toc'])
+    article = md.convert(text)
+    body = f'''<main id="main" class="lesson-layout"><aside class="course-nav" aria-label="入门导航"><nav><a href="start.html" aria-current="page">开始之前 · 终端与 Python</a><a href="learn/01.html">第 1 章 · 理解机器人 Agent</a><a href="learn/02.html">第 2 章 · 安装与第一轮实验</a><a href="index.html#curriculum">查看完整 16 章</a></nav></aside><div class="reading"><header><div class="label">START HERE / 新手准备</div><h1>第一次用终端和 Python</h1><p>从一个能亲手核对的小程序开始，为机器人实验做好准备。</p></header><details class="toc-box"><summary>本页内容</summary>{md.toc}</details><article>{article}</article><nav class="pager" aria-label="继续学习"><a href="index.html">← 学习路线</a><a href="learn/01.html">进入第 1 章 →</a></nav></div></main>'''
+    (DOCS/'start.html').write_text(page('开始之前：终端与 Python', body), encoding='utf-8')
+
+
 def build_download():
     output = DOCS/'downloads'
     output.mkdir(exist_ok=True)
-    files = [p for p in (ROOT/'lab').iterdir() if p.is_file() and (p.suffix in {'.py','.xml','.txt','.md'} or p.name == 'example-program.json')]
+    files = [p for p in (ROOT/'lab').iterdir() if p.is_file() and (p.suffix in {'.py','.xml','.txt','.md'} or p.name in {'example-program.json', 'LICENSE'})]
     if not {'run.py','scene.xml','requirements.txt','GUIDE.md','advanced.py','ADVANCED_GUIDE.md','capstone.xml','example-program.json'} <= {p.name for p in files}:
         raise ValueError('Teaching lab source is incomplete')
     # Fixed timestamps make the download reproducible.
@@ -156,6 +165,7 @@ def build_download():
             archive.writestr(entry,path.read_bytes())
 
 if __name__ == '__main__':
+    build_start()
     build_lessons()
     build_download()
     build_home()

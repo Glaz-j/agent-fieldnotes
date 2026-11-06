@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="用受控颜色定位理解像素、坐标与感知误差"><meta name="theme-color" content="#f3f4ee"><title>从 RGB 图像估计位置 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=beginner-demos"><script defer src="../course.js?v=beginner-demos"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html" aria-current="page">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 08 章 / Agent 闭环</div><h1>从 RGB 图像估计位置</h1><p>用受控颜色定位理解像素、坐标与感知误差</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="用受控颜色定位理解像素、坐标与感知误差"><meta name="theme-color" content="#f3f4ee"><title>从 RGB 图像估计位置 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=novice-onramp"><script defer src="../course.js?v=novice-onramp"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><a href="../start.html">开始之前 · 终端与 Python</a><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html" aria-current="page">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 08 章 / Agent 闭环</div><h1>从 RGB 图像估计位置</h1><p>用受控颜色定位理解像素、坐标与感知误差</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
 <ul>
 <li><a href="#_1">本章目标：分清输入、预测与评价标签</a></li>
 <li><a href="#_2">第一步：生成并查看原始图像</a></li>
@@ -66,7 +66,8 @@
 <h2 id="_4">第三步：用颜色得到一个候选位置</h2>
 <p>对红色，代码要求 <code>R &gt; 80</code> 且 <code>R &gt; 1.8G</code>、<code>R &gt; 1.8B</code>。例如 <code>(200,20,15)</code> 符合，而灰色 <code>(150,150,150)</code> 不符合。蓝色使用相应的蓝通道条件。</p>
 <p>把符合条件的位置记为真，其余记为假，就得到<strong>掩码</strong>：一张只回答“这个像素是否入选”的表。程序找到全部入选像素，再分别取横坐标、纵坐标的中位数。中位数就是排序后位于中间的数，用它得到一个代表位置。</p>
-<p>如果少于 20 个候选像素，返回 <code>color_not_visible</code>。超过 20 个时的 <code>ok: true</code> 只说明有足够像素形成候选，不是“有 99% 把握找对中心”。遮挡会让剩余像素偏向一边；两个红物体还可能让代表位置落到两者之间。</p>
+<p><strong>手算三个像素。</strong> 对 <code>(90,10,10)</code>、<code>(120,80,10)</code>、<code>(70,0,0)</code>，先预测哪些会进入红色掩码。对照答案是只有第一个：第二个虽然红通道最大，但 <code>120</code> 没有大于 <code>1.8×80=144</code>；第三个不满足 <code>R&gt;80</code>。筛选依据是明确的不等式，不是人看起来“有点红”。接着对横坐标 <code>[10,11,12,13,50]</code> 找中位数，答案是 12；它也不是把五个数相加除以 5 得到的平均数。</p>
+<p>如果少于 20 个候选像素，返回 <code>color_not_visible</code>。达到 20 个时的 <code>ok: true</code> 只说明有足够像素形成候选，不是“有 99% 把握找对中心”。遮挡会让剩余像素偏向一边；两个红物体还可能让代表位置落到两者之间。</p>
 <h2 id="_5">第四步：像素如何换成世界坐标</h2>
 <p>一个像素对应从相机射出的一条视线。沿这条线放近处的小物体或远处的大物体，都可能投在同一个像素上，因此单个像素通常不能唯一确定三维位置。</p>
 <p>本实验额外知道：相机固定在世界坐标 <code>(0,0,1.4)</code> 米，朝下看；红块顶面高度约为 <code>0.044 m</code>，蓝区顶面为 <code>0.014 m</code>。视线与这些水平面相交，就能确定一个位置。这种额外已知条件叫<strong>先验</strong>，不是程序从当前图片里猜出的信息。</p>
@@ -80,6 +81,18 @@ z = h
 </code></pre>
 <p>其中 48° 是相机垂直视场角，也就是画面上下边界在相机处张开的角度。<code>u-319.5</code> 与 <code>v-239.5</code> 先把原点移到图像中心；乘以 <code>d/f</code> 后，像素偏移变成米制距离。<code>y</code> 前的负号来自方向差异：图片向下为正，而当前相机下世界 <code>y</code> 向上为正。</p>
 <p>以红块候选 <code>(298,191)</code> 为例：它在中心左侧，所以预测 <code>x&lt;0</code>；在中心上方，所以预测 <code>y&gt;0</code>。本机输出约为 <code>[-0.05408,0.12200,0.044]</code> 米。这一步把“图片左上方”变成了机械臂能理解的位置表示。</p>
+<p>不必只相信公式，把下面代码保存为 <code>pixel_to_world.py</code>，在根目录执行 <code>python pixel_to_world.py</code>，亲手核对这个例子：</p>
+<pre><code class="language-python">import math
+
+u, v = 298, 191
+height_m = 0.044
+focal_px = 480 / (2 * math.tan(math.radians(48 / 2)))
+metres_per_pixel = (1.4 - height_m) / focal_px
+x = (u - 319.5) * metres_per_pixel
+y = -(v - 239.5) * metres_per_pixel
+print(&quot;世界坐标（米）:&quot;, round(x, 5), round(y, 5), height_m)
+</code></pre>
+<p>预期输出约为 <code>-0.05408 0.122 0.044</code>。<code>math.radians</code> 先把角度换成弧度，<code>metres_per_pixel</code> 则是这个已知平面上一像素对应的米数。<strong>再预测一次：</strong> 只把 u 改为 308，x 应增加还是减小，y 是否变化？保存后重跑，x 应约增加 <code>0.02515 m</code>，y 不变。这是一次计算练习，没有移动相机或机器人；它检验你是否理解了像素方向和单位转换。</p>
 <p>这套简式只适用于当前相机方向、分辨率、视场角与已知平面。改变相机或物体高度后，不能不加检查就继续套用。</p>
 <h2 id="_6">第五步：独立计算误差</h2>
 <p>把下面完整代码保存为仓库根目录的 <code>inspect_ch08.py</code>。它读取刚才保存的预测，然后重新建立相同种子的初始场景，仅取真值做评价。这里重建场景成立，是因为预测来自尚未执行动作的初态；对于行动后的图片，不能用一个重置世界的初态来当答案。</p>
@@ -108,6 +121,7 @@ for kind in (&quot;block&quot;, &quot;goal&quot;):
 </code></pre>
 <p><code>[:2]</code> 表示只取坐标的前两项 <code>x,y</code>，<code>math.dist</code> 计算这两个平面点之间的直线距离。这里只比较平面位置：视觉的 <code>z</code> 指物体顶面，仿真 <code>block</code> 的 <code>z</code> 指方块中心，直接相减会混入定义差异。</p>
 <p>种子 7 的本机参考结果为：</p>
+<p>读表之前，先根据原图猜测：被机械臂遮住一部分的红块，与完整可见的蓝区，哪一个位置误差可能更大？将这个预测与实际结果比较；遮挡是本场景的解释线索，最后仍以测得误差为准。</p>
 <table>
 <thead>
 <tr>
@@ -133,6 +147,7 @@ for kind in (&quot;block&quot;, &quot;goal&quot;):
 </tbody>
 </table>
 <p>红块没有通过定位标准是本章保留的真实结果，不能因为 <code>ok: true</code> 就改判。1 cm 是我们在评价前设定的练习标准；代码也没有承诺总能达到它。</p>
+<p><strong>检查点：</strong> 红块的“检测到候选”和“通过 1 cm 定位标准”应分别填写什么？答案是 <code>True</code> 与 <code>False</code>。前者检查入选像素数量，后者检查预测位置与真值的距离，二者回答不同问题。进入下一章前，试着把它与第 5 章的“抓取工具成功 / 整个搬运成功”放在一起解释：每一项结果，都应对应自己的检查条件。</p>
 <h2 id="_7">这些坐标何时才能用于行动</h2>
 <p>控制器使用位置之前，还需要确认对象身份、坐标系、可见性与误差是否满足任务要求。没有检测到时，重新观察或停止是合理选择；悄悄换回仿真真值再执行，却仍称为纯视觉，便混淆了输入来源。</p>
 <p>本章只完成“图像→候选→米制位置→误差评价”。第 12 章会实际移动机械臂解除遮挡，再比较图像与误差；它仍不是通用视点规划，更不意味着自动接通了视觉抓放闭环。</p>
@@ -151,4 +166,4 @@ for kind in (&quot;block&quot;, &quot;goal&quot;):
 <li><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/run.py">本课程颜色定位实现</a></li>
 <li><a href="https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html">OpenCV 相机投影与几何说明</a></li>
 <li><a href="https://mujoco.readthedocs.io/en/3.3.7/python.html">MuJoCo Python 渲染接口</a></li>
-</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/08-controlled-vision.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="8">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="07.html">← 上一章</a><a rel="next" href="09.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/08-controlled-vision.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="8">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="07.html">← 上一章</a><a rel="next" href="09.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/LICENSE">课程许可</a> · <a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

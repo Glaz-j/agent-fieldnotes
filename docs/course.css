@@ -15,3 +15,5 @@
 .demo-steps button:hover,.demo-steps button[aria-current=true]{background:#dfe8d5}
 .demo-steps button span{font-variant-numeric:tabular-nums;color:var(--green);margin-right:8px}
 @media(max-width:680px){.lesson-demo figcaption{padding:14px}.demo-steps{padding:12px 14px}.lesson-demo figcaption>strong{font-size:16px}}
+
+.answer{margin:22px 0;padding:14px 20px;border-left:3px solid #7d9b64;background:#e9eee3;border-radius:4px}.answer summary{cursor:pointer;font-weight:600;font-size:14px}.answer p:last-child{margin-bottom:0}

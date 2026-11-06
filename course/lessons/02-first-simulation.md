@@ -1,5 +1,7 @@
 # 第 2 章：搭建第一个机器人实验环境
 
+第一次使用终端或 Python？先完成 [新手准备页](../start.html) 的小程序，再回来继续本章。
+
 上一章把系统拆成几个环节。这一章先建立一个能重复启动、读取状态、执行动作并留下记录的环境。后续所有 Agent 改进都建立在同一套实验上；环境不稳定，换提示词也无法解释结果。
 
 这里的网页负责教学与案例浏览，机器人实验在你自己的计算机上运行。你需要一个可用的 Python 和终端：macOS 可打开“终端”，Windows 可打开 PowerShell。下面的命令逐行输入，按回车执行；代码框里的说明文字与边框不需要输入。
@@ -69,6 +71,17 @@ python -m pip install -r lab/requirements.txt
 
 ## 第二步：先做环境自检
 
+先确认两个容易混淆的位置：终端当前所在的文件夹，以及实际运行的 Python。下面两行只读信息，不会移动文件：
+
+```sh
+python -c "from pathlib import Path; print(Path.cwd()); print(Path('lab/run.py').is_file())"
+python -c "import sys; print(sys.executable)"
+```
+
+第一行先打印当前目录，再打印 `True` 或 `False`。这里应是 `True`，表示从当前位置确实能找到 `lab/run.py`；若是 `False`，先用 `cd` 回到包含 `lab/` 的那层。第二行的路径应指向本实验的 `lab/.venv` 内部。`python -c` 的意思是“执行引号里的这一小段 Python”，不必为这两个检查另外保存文件。
+
+两个位置确认后，再检查机器人环境：
+
 ```sh
 python lab/run.py doctor
 ```
@@ -80,6 +93,8 @@ python lab/run.py doctor
 把 Python 与 MuJoCo 版本、操作系统以及自检结果保存到学习笔记。使用相同版本不意味着所有计算机都完全一致，但这些信息能显著缩小排查范围。
 
 ## 第三步：读取一次观察
+
+**先预测：** 刚启动、还没有任何搬运动作时，“正在持物”和“任务完成”各应该是什么？在笔记中先写下两个答案，再执行命令。
 
 ```sh
 python lab/run.py observe
@@ -125,6 +140,8 @@ python lab/run.py baseline --seed 8 --out runs/baseline-seed8
 再比较种子 8：随机初始化变化后，哪些坐标变化，哪些机器人结构保持不变？这个比较能帮助你区分场景参数、初始化状态和控制逻辑。每次命令都从新场景开始，不会沿用上一条命令留下的位置。
 
 先分别保存结果再比较，避免把两次输出写进同一目录后失去来源。
+
+**检查点：** 完成基线后，再运行 `python lab/run.py observe --seed 7`，预期仍是 `holding: false`、`task.success: false`，方块回到初始位置。这不是上一回合的成功记录丢失了，而是新命令创建了新场景。上一回合的证据仍在 `runs/baseline/`。不同种子会改变初始方块位置；连杆长度和蓝区位置在这项实验里保持不变。若只想比较初始位置，应分别运行两个种子的 `observe`，不要把搬运后的终点误当起点。
 
 ## 本章验收
 

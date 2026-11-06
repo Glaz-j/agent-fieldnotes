@@ -210,10 +210,22 @@ function openDemo(id,opener,options={}){
   $('#detail-route').textContent=d.projectBrief?.familyTitle||routeNames[d.route]||d.route;$('#dialog-title').textContent=d.title;$('#dialog-description').textContent=d.projectBrief?.summary||d.description;
   renderProjectExplainer(d);$('#detail-evidence').open=false;
   renderProjectVersions(d);
-  const lessons = {spatial_memory:[9,'执行验证与失败恢复'], coding:[6,'第一个机器人 Agent 循环'], vision:[8,'从 RGB 图像估计位置'], planner:[5,'把动作封装成技能'], control:[4,'从坐标到机械臂运动']};
-  const lesson = lessons[d.route] || [1,'拆解一次机器人任务'];
+  const routeLessons = {
+    spatial_memory: [[9,'执行验证与失败恢复'],[11,'会更新的空间记忆']],
+    coding: [[6,'第一个机器人 Agent 循环'],[13,'用程序表达机器人计划']],
+    vision: [[8,'从 RGB 图像估计位置']],
+    active_perception: [[12,'主动观察：为行动获取信息']],
+    planner: [[5,'把动作封装成技能']],
+    control: [[4,'从坐标到机械臂运动']],
+    vla: [[14,'把学习技能接入 Agent']],
+    learned: [[14,'把学习技能接入 Agent']],
+    skill_adaptation: [[14,'把学习技能接入 Agent']],
+    skill_reuse: [[10,'让任务历史成为可用的记忆']],
+    world_model: [[13,'用程序表达机器人计划']]
+  };
+  const lessons = d.id.startsWith('robomme-') ? [[10,'让任务历史成为可用的记忆'],[15,'设计可比较的机器人实验']] : d.id.startsWith('rpent-') ? [[14,'把学习技能接入 Agent']] : routeLessons[d.route] || [[1,'拆解一个机器人 Agent']];
   const relatedCourse = document.querySelector('#course-related');
-  if (relatedCourse) relatedCourse.innerHTML = `<p style="padding:14px;background:#e1ead8;border-radius:5px;font-size:13px;line-height:1.8"><strong>带着问题看案例</strong><br><a href="learn/${String(lesson[0]).padStart(2,'0')}.html">第 ${lesson[0]} 章 · ${lesson[1]} →</a><br>此处为已有实验阅读案例；课程实验包使用独立的简化教学环境。</p>`;
+  if (relatedCourse) relatedCourse.innerHTML = `<p style="padding:14px;background:#e1ead8;border-radius:5px;font-size:13px;line-height:1.8"><strong>带着问题看案例</strong><br>${lessons.map(([n,title])=>`<a href="learn/${String(n).padStart(2,'0')}.html">第 ${n} 章 · ${title} →</a>`).join('<br>')}<br>此处为已有实验阅读案例；课程实验包使用独立的简化教学环境。</p>`;
 
   $('#detail-original-description').textContent=d.description;
   $('#detail-badges').innerHTML=badge(sourceNames[d.source]||d.source,d.source)+badge(d.model||d.controller)+badge(d.input);

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="组合技能、条件和预算，执行可检查的计划"><meta name="theme-color" content="#f3f4ee"><title>用程序表达机器人计划 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=course16"><script defer src="../course.js?v=course16"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html" aria-current="page">13 · 用程序表达机器人计划</a><a href="14.html">14 · 把学习技能接入 Agent</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 13 章 / 整合与评测</div><h1>用程序表达机器人计划</h1><p>组合技能、条件和预算，执行可检查的计划</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<ul>
+<li><a href="#_1">本章目标</a></li>
+<li><a href="#_2">为什么把计划写成一门小语言</a></li>
+<li><a href="#_3">第一步：认识三个节点</a></li>
+<li><a href="#_4">第二步：逐行解释一个完整计划</a></li>
+<li><a href="#_5">第三步：执行同一个计划</a></li>
+<li><a href="#_6">第四步：理解结构上限与运行预算</a></li>
+<li><a href="#_7">第五步：自己写一个可检查的计划</a></li>
+<li><a href="#_8">本章验收与排查</a></li>
+<li><a href="#_9">案例、练习与参考</a></li>
+</ul>
+</div>
+</details><article><p>逐步选择动作容易理解，但“尝试抓取，确认抓住后再搬运”本身就包含重复和条件。把这些关系写成程序，可以让一次计划包含多个技能，并把局部检查留在执行过程中。本章用一个小型 JSON 语言完成这件事。</p>
+<p>前置要求是熟悉第 5 章技能、第 9 章恢复，以及任务记忆与空间信息的时效性。你需要会读列表和字典，不需要编译器知识。实验仍采用单方块 SCARA、仿真状态观察与教学附着抓取，没有调用语言模型。</p>
+<h2 id="_1">本章目标</h2>
+<p>读懂并运行一段带分支和重复的搬运计划，解释执行时的坐标引用，检查节点预算，并让一个不合法计划在执行前被拒绝。你要交付计划文件、运行记录和一次预算不足的分析。</p>
+<h2 id="_2">为什么把计划写成一门小语言</h2>
+<p>普通动作列表只能表达先后顺序。加入条件以后，程序可以表达“已经抓住才运输”；加入有限重复，可以表达“最多尝试三次”。这两项能力已经足够展示程序化策略的重要思想：行动由状态与控制结构共同决定。</p>
+<p>课程解释器只认识预先定义的语法，不执行 Python 字符串。JSON 在这里负责保存结构，解释器负责赋予结构含义。一个 JSON 能成功读取，并不意味着它是合法计划；合法计划也不保证任务成功。这三层需要分别检查。</p>
+<p>Code as Policies 研究了模型生成程序、组合感知与控制接口的路线。本章把重点放在可审阅的执行机制，计划由人编写，不把示例文件称为模型生成结果。<a href="https://code-as-policies.github.io/">原始项目与论文</a></p>
+<h2 id="_3">第一步：认识三个节点</h2>
+<p>顶层使用 <code>version</code> 和 <code>steps</code>。<code>steps</code> 中的节点只有三类：</p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>写法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>技能调用</td>
+<td><code>{"call":"grasp"}</code></td>
+<td>调用一个允许的工具</td>
+</tr>
+<tr>
+<td>条件分支</td>
+<td><code>{"if":"holding","then":[...]}</code></td>
+<td>条件成立才执行分支，可附加 <code>else</code></td>
+</tr>
+<tr>
+<td>有限重复</td>
+<td><code>{"repeat":3,"steps":[...]}</code></td>
+<td>重复执行指定节点列表</td>
+</tr>
+</tbody>
+</table>
+<p>允许的工具是 <code>observe</code>、<code>move</code>、<code>grasp</code>、<code>release</code>。条件包括 <code>holding</code>、<code>not_holding</code>、<code>success</code>、<code>not_success</code>、<code>last_ok</code>。前四项查询当前状态，<code>last_ok</code> 查看上一个工具返回结果。条件名称是解释器定义的枚举，不是任意 Python 表达式。</p>
+<p><code>move</code> 的参数可以是数值，也可以是 <code>block.x</code>、<code>block.y</code>、<code>goal.x</code>、<code>goal.y</code>、<code>tool.x</code>、<code>tool.y</code> 这样的引用。引用在执行该动作时解析，因此 <code>goal.x</code> 表示此刻目标位置，而非生成计划时缓存的坐标。它仍然读取仿真真值，不是从文字推测位置。</p>
+<h2 id="_4">第二步：逐行解释一个完整计划</h2>
+<p>在已激活环境、包含 <code>lab/</code> 的目录运行：</p>
+<pre><code class="language-sh">python -m json.tool lab/example-program.json
+</code></pre>
+<p>示例先移动到方块上方，再下降。抓取部分是下面的结构：</p>
+<pre><code class="language-json">{
+  &quot;repeat&quot;: 3,
+  &quot;steps&quot;: [
+    {&quot;if&quot;: &quot;not_holding&quot;, &quot;then&quot;: [{&quot;call&quot;: &quot;grasp&quot;}]}
+  ]
+}
+</code></pre>
+<p>注意，重复三次并不意味着总会调用三次 <code>grasp</code>。第一次成功后，后续两次条件为假，不再抓取。这是程序结构执行次数与机器人动作次数不同的一个具体例子。</p>
+<p>搬运部分放在 <code>holding</code> 分支中：先用当前工具的水平坐标抬升，再移动到当前目标上方，下降并释放。这样，三次都抓不到时，不会继续执行“空手搬运”。最后的观察用于检查状态，不能替代任务验收函数。</p>
+<p>画一条分支路径：第一次抓取失败、第二次成功时，哪些节点被访问，哪些动作真正执行？先写预测，再阅读运行记录。</p>
+<h2 id="_5">第三步：执行同一个计划</h2>
+<pre><code class="language-sh">python lab/advanced.py program --program lab/example-program.json --budget 64 --seed 7 --perturb none --out runs/ch13-program
+</code></pre>
+<p>程序会先检查整份计划，再执行节点。<code>program.json</code> 保存实际计划，<code>events.jsonl</code> 保存工具事件，<code>summary.json</code> 提供 <code>executed_nodes</code>、<code>tool_calls</code>、<code>budget</code>、<code>error</code> 和 <code>success</code>。发布前 seed 7 的无扰动实跑访问 13 个节点、执行 8 次工具调用并完成任务。先将记录与预测对应起来，再故意让第一次抓取失败：</p>
+<pre><code class="language-sh">python lab/advanced.py program --program lab/example-program.json --budget 64 --seed 7 --perturb miss-grasp --out runs/ch13-retry
+</code></pre>
+<p>本次需要通过 <code>not_holding</code> 分支再次抓取。恢复由你写入的重复与条件产生，不是解释器自动理解了任务。如果计划只写一次 <code>grasp</code>，解释器不会擅自补上重试。</p>
+<p>再运行目标移动条件：</p>
+<pre><code class="language-sh">python lab/advanced.py program --program lab/example-program.json --budget 64 --seed 7 --perturb shift-goal --out runs/ch13-current-goal
+</code></pre>
+<p>对照抓取后的目标变化与后续 <code>move</code> 参数，检查动态引用是否采用新坐标。这个对照说明：程序可以预先写好，而其中的动作参数仍然在执行时根据新状态确定。</p>
+<h2 id="_6">第四步：理解结构上限与运行预算</h2>
+<p>解释器限制最大嵌套深度、节点总数和单个重复次数，当前分别为 6、128 和 16。运行时另设节点预算；调用、条件和重复节点都会消耗预算，防止“没有机器人动作的循环”绕过限制。</p>
+<pre><code class="language-sh">python lab/advanced.py program --program lab/example-program.json --budget 1 --seed 7 --out runs/ch13-budget
+</code></pre>
+<p>这次预算不足是预期实验。逐条运行命令，保留失败结果，不要求整批命令都以零退出码结束。注意预算耗尽可能发生在部分动作已经执行以后：它限制工作量，不会把物理场景回滚到开始。</p>
+<p>节点预算也不是仿真步数或耗时。一次 <code>move</code> 内部推进许多物理步，一次条件判断却不移动机器人。报告开销时分别记录节点访问与实际工具事件，不要把二者混成同一个“步”。</p>
+<p>可以手算一个例子：外层重复 4 次，内部再重复 4 次，每次只调用一次 <code>observe</code>。语法树只有外层重复、内层重复和观察三个节点，但运行时会访问外层 1 次、内层 4 次、观察 16 次，共消耗 21 个节点单位。静态节点数限制文件复杂度，动态预算限制实际执行量，两者解决不同问题。</p>
+<p>条件也不会自动停止整份计划。某个 <code>then</code> 分支执行完后，解释器继续处理它后面的节点。如果希望抓取失败后不搬运，就要把整段搬运放进 <code>holding</code> 分支，而不是只给第一条移动加条件。画出语法树，比仅凭缩进感觉理解执行顺序更可靠。</p>
+<h2 id="_7">第五步：自己写一个可检查的计划</h2>
+<p>用编辑器将下列内容保存为 <code>invalid-program.json</code>，不要加入 JSON 注释：</p>
+<pre><code class="language-json">{&quot;version&quot;: 1, &quot;steps&quot;: [{&quot;call&quot;: &quot;teleport&quot;}]}
+</code></pre>
+<pre><code class="language-sh">python lab/advanced.py program --program invalid-program.json --budget 64 --seed 7 --out runs/ch13-invalid
+</code></pre>
+<p><code>teleport</code> 不在允许列表中，应在计划执行前被拒绝。将错误工具藏在一个当前不会进入的分支，仍应被发现，因为校验覆盖整棵语法树。这里检验的是语法与接口边界，不能推导出合法动作一定可达。</p>
+<p>接着复制示例计划，尝试用 <code>last_ok</code> 限制失败动作后的继续执行。设计时明确哪个工具的结果正在被检查：插入一个 <code>observe</code> 会更新“上一个结果”，不应再把它误当成此前移动的结果。</p>
+<h2 id="_8">本章验收与排查</h2>
+<p>解释默认运行、抓空恢复、目标移动、预算不足和非法工具五种结果。成功运行要指出抓取与释放证据，失败运行要说明属于校验、预算还是技能执行。不要只提交最后一个布尔值。</p>
+<p>如果 JSON 读取失败，先检查引号和逗号；如果语法通过却任务失败，检查条件是否放错位置、引用是否对应正确实体，以及动作返回。把任何失败都归给“计划不好”，会掩盖具体错误。</p>
+<p>本章命令没有依赖 shell 的 heredoc，macOS、Linux 与 PowerShell 均可按普通命令运行；JSON 文件使用编辑器保存为 UTF-8。若自行写多行 Python 检查程序，在 PowerShell 中将其保存为 <code>.py</code> 文件后运行。</p>
+<h2 id="_9">案例、练习与参考</h2>
+<p>阅读 <a href="../gallery.html#demo-pyrualean-astra-cells-20261028">PyRUA-Lean：用代码组织动作</a>，比较一个代码单元与本章 JSON 计划的表达能力。前者支持更丰富的程序，本章只实现有限语法，不是原系统的复现。</p>
+<p>基础题：删掉抓取条件后，预测三次调用的返回并验证。进阶题：设计“移动失败则结束，抓空允许重试”的计划，说明每个条件检查的证据以及最大节点消耗。</p>
+<ul>
+<li><a href="https://dagroup-pku.github.io/PyRUA-Lean/docs/getting-started/how-it-works/">PyRUA-Lean 执行机制</a></li>
+<li><a href="https://docs.python.org/3/library/json.html">Python JSON 官方文档</a></li>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。展厅链接为阅读案例，不表示实验包复现了该案例的机器人、模型或论文结果。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/13-program-planning.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/ADVANCED_GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="13">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="12.html">← 上一章</a><a rel="next" href="14.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

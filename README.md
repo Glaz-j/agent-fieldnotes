@@ -1,6 +1,6 @@
 # Agent Fieldnotes · 动手构建机器人 Agent
 
-从 Python 和一次桌面搬运任务开始，学习机器人 Agent 的观察、技能、决策、任务验收与失败恢复。首期包含九章中文教程、独立的 MuJoCo 教学实验包，以及原有机器人探索展厅的案例材料。
+从 Python 和一次桌面搬运任务开始，学习机器人 Agent 的观察、技能、决策、任务验收与失败恢复。现已提供十六章基础与进阶中文教程、独立的 MuJoCo 教学实验包，以及原有机器人探索展厅的案例材料。
 
 - [开始学习](https://glaz-j.github.io/agent-fieldnotes/)
 - [下载轻量教学实验包](https://glaz-j.github.io/agent-fieldnotes/downloads/agent-fieldnotes-lab.zip)
@@ -18,7 +18,15 @@
 8. 从 RGB 图像估计位置
 9. 执行验证与失败恢复
 
-第 10—16 章为后续规划，尚未开放正文。每章包括概念解释、实验步骤、验收、排错、练习与原始参考资料。进度保存在读者浏览器中。
+10. 让任务历史成为可用的记忆
+11. 会更新的空间记忆
+12. 主动观察：为行动获取信息
+13. 用程序表达机器人计划
+14. 把学习技能接入 Agent
+15. 设计可比较的机器人实验
+16. 毕业项目：桌面搬运助手
+
+每章包括概念解释、实验步骤、验收、排错、练习与原始参考资料。进度保存在读者浏览器中。
 
 ## 运行教学实验
 
@@ -37,13 +45,25 @@ Windows、视觉渲染、扰动实验、在线模型配置与结果解释见 [�
 
 实验使用简化 SCARA 机械臂和显式抓取附着约束。`scripted` 是确定性状态反馈控制器，模型调用次数为零；`llm` 才调用用户配置的模型工具接口。RGB 颜色定位是独立视觉练习，尚未构成纯视觉动作闭环。这些边界在教材和日志中均明确标注。
 
-初始发布在 macOS ARM、Python 3.12、MuJoCo 3.3.7 上验证离线物理、渲染和扰动实验。在线模型模式没有真实服务实测结果，不提供在线成功率。详细检查记录见 [实验说明](lab/GUIDE.md)。
+第 10—16 章的进阶实验在同一 Python 环境运行，详见 [进阶实验说明](lab/ADVANCED_GUIDE.md)：
+
+```sh
+python lab/advanced.py memory --seed 7 --out runs/memory
+python lab/advanced.py active-view --seed 7 --out runs/active-view
+python lab/advanced.py learned-skill --seed 7 --out runs/learned-skill
+python lab/advanced.py benchmark --seeds 5 --out runs/benchmark
+python lab/advanced.py capstone --seed 7 --perturb miss-grasp --out runs/capstone
+```
+
+进阶内容分别研究任务记忆、空间缓存更新、主动解除遮挡、受限技能程序、局部逆运动学学习和匹配条件的消融。第 14 章实际训练的是一个轻量局部运动映射，不是 VLA。毕业项目在同一 MuJoCo 场景搬运两个物体，使用状态反馈、规则和技能恢复；独立的视觉与学习实验未被描述为已经整合的通用机器人系统。
+
+初始发布在 macOS ARM、Python 3.12、MuJoCo 3.3.7 上验证离线物理、渲染和扰动实验。在线模型模式没有真实服务实测结果，不提供在线成功率。第二期另外运行了 60 回合匹配条件评测、80 次学习技能与解析对照的物理执行，以及双物体任务回归；合计 15 项测试通过。详细记录见 [基础实验说明](lab/GUIDE.md) 与 [进阶实验说明](lab/ADVANCED_GUIDE.md)。
 
 ## 维护课程与网页
 
 | 路径 | 用途 |
 | --- | --- |
-| `course/lessons/` | 九章 Markdown 教材源文件 |
+| `course/lessons/` | 十六章 Markdown 教材源文件 |
 | `lab/` | 教学仿真代码、场景、依赖与测试 |
 | `build_course.py` | 生成课程网页与可下载实验包 |
 | `docs/learn/` | 生成的课程阅读页 |

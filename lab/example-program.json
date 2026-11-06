@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "steps": [
+    {"call": "move", "args": {"x": "block.x", "y": "block.y", "z": 0.18}},
+    {"call": "move", "args": {"x": "block.x", "y": "block.y", "z": 0.06}},
+    {"repeat": 3, "steps": [{"if": "not_holding", "then": [{"call": "grasp"}]}]},
+    {"if": "holding", "then": [
+      {"call": "move", "args": {"x": "tool.x", "y": "tool.y", "z": 0.18}},
+      {"call": "move", "args": {"x": "goal.x", "y": "goal.y", "z": 0.18}},
+      {"call": "move", "args": {"x": "goal.x", "y": "goal.y", "z": 0.065}},
+      {"call": "release"}
+    ]},
+    {"call": "observe"}
+  ]
+}

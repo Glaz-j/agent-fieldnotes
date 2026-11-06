@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="在同一场景中搬运两个物体，并应对执行中的变化"><meta name="theme-color" content="#f3f4ee"><title>毕业项目：桌面搬运助手 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=course16"><script defer src="../course.js?v=course16"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 把学习技能接入 Agent</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html" aria-current="page">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 16 章 / 整合与评测</div><h1>毕业项目：桌面搬运助手</h1><p>在同一场景中搬运两个物体，并应对执行中的变化</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<ul>
+<li><a href="#_1">本章目标与交付物</a></li>
+<li><a href="#_2">第一步：先写可验收的任务规格</a></li>
+<li><a href="#_3">第二步：理解系统如何衔接</a></li>
+<li><a href="#_4">第三步：运行无扰动的完整任务</a></li>
+<li><a href="#_5">第四步：加入一次真实执行中的故障</a></li>
+<li><a href="#_6">第五步：用独立计算复核两个对象</a></li>
+<li><a href="#_7">第六步：用图像帮助解释，而不是替代验收</a></li>
+<li><a href="#_8">失败时怎样定位到具体层</a></li>
+<li><a href="#_9">毕业报告与下一次改进</a></li>
+<li><a href="#_10">一手参考</a></li>
+</ul>
+</div>
+</details><article><p>现在把前面的几个部件接成一个完整任务：同一台机械臂把红色方块送到蓝色区域，再把绿色方块送到黄色区域；过程中能够应对一次抓空或目标移动，并正确处理重复任务。</p>
+<p>这里的“完整”指这一明确任务的闭环。实验实际使用同一个 MuJoCo 世界里的两个自由物体和两个目标，不是把单物体实验分别运行两次再拼接结果。决策由确定性规则驱动，观察来自仿真状态，抓取仍采用显式附着约束。</p>
+<h2 id="_1">本章目标与交付物</h2>
+<p>完成三个条件下的双物体整理：无扰动、一次抓空、一次目标移动。你需要提交任务定义、事件日志、完成记忆与最终验收；具备渲染环境时，再保存前后图。程序产生的数据比一张好看的截图更重要。</p>
+<p>前置要求是理解任务记忆、技能结果与任务结果的区别，以及第 15 章的对照方法。第 13 章程序解释器和第 14 章学习技能为独立实验，本毕业项目没有调用它们，也没有接入 VLA、在线语言模型或视觉动作闭环。</p>
+<h2 id="_2">第一步：先写可验收的任务规格</h2>
+<table>
+<thead>
+<tr>
+<th>任务标识</th>
+<th>操作对象</th>
+<th>目标区域</th>
+<th>最终要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>red_to_blue</code></td>
+<td>红色方块</td>
+<td>蓝色区域</td>
+<td>已释放，并满足位置、高度与速度条件</td>
+</tr>
+<tr>
+<td><code>green_to_yellow</code></td>
+<td>绿色方块</td>
+<td>黄色区域</td>
+<td>已释放，并满足位置、高度与速度条件</td>
+</tr>
+</tbody>
+</table>
+<p>调度队列实际是“红、绿、红”。最后一个红色任务用于检查重复请求处理，不代表场景里还有第三个方块。第一次完成红色任务时保存证据；再次收到它时，先复核红块现在是否仍满足条件，成立才跳过。</p>
+<p>一个对象的成功不能代替整个任务成功。最终必须同时满足两个对象的验收。只检查当前活动对象，会出现“最后操作的那个做好了，因此宣布全部完成”的错误。</p>
+<h2 id="_3">第二步：理解系统如何衔接</h2>
+<p>本项目由四层协作。调度器按队列选择活动对象；反馈控制器根据其当前状态选择接近、抓取、运输或释放；基础技能实际推进物理仿真；任务记忆只在验收通过后记录完成证据。</p>
+<p>切换活动对象改变的是工具接口查询哪一个对象，并没有重新创建场景。搬运绿色方块时，已经放好的红块仍然存在。若当前任务没有完成，调度器会停止，避免仍持有一个物体时直接开始操作另一个。</p>
+<p>记忆也不会代替当前状态。<code>memory.json</code> 中的完成记录表示某个时刻的事实；<code>revalidate_completion</code> 事件说明重复请求到来时又进行了一次检查。如果对象后来离开目标，旧记录应失效，不能继续用“以前成功过”作为理由跳过。</p>
+<h2 id="_4">第三步：运行无扰动的完整任务</h2>
+<p>在已激活环境、包含 <code>lab/</code> 的目录执行：</p>
+<pre><code class="language-sh">python lab/advanced.py capstone --seed 7 --perturb none --out runs/ch16-clean
+python -m json.tool runs/ch16-clean/summary.json
+python -m json.tool runs/ch16-clean/memory.json
+</code></pre>
+<p>检查 <code>completed_ids</code> 是否包含两项任务，以及 <code>skipped_duplicates</code> 是否为 1。然后阅读事件日志：确认先搬运红块，再搬运绿块，重复红色请求没有产生一整段重复搬运。</p>
+<p><code>final_observation.objects.red</code> 与 <code>.green</code> 分别记录两物体的状态。<code>active_object</code> 只是当前查询对象；兼容前面章节的 <code>scene.block_xyz</code> 也只指向当前对象。要判断全部完成，请查看 <code>task.all_success</code> 和摘要的 <code>success</code>，不要只读取 <code>task.success</code>。</p>
+<h2 id="_5">第四步：加入一次真实执行中的故障</h2>
+<pre><code class="language-sh">python lab/advanced.py capstone --seed 7 --perturb miss-grasp --out runs/ch16-miss
+python lab/advanced.py capstone --seed 7 --perturb shift-goal --out runs/ch16-shift
+</code></pre>
+<p>抓空条件在第一次满足抓取前置条件时注入失败，反馈控制器重新观察后再次尝试。目标移动条件在首次抓取成功后，将当前目标移到新位置；后续运输需要使用新位置。这两种扰动分别运行，不表示同一回合同时出现全部故障。</p>
+<p>发布前 seed 7 的抓空实跑完成了两项任务，执行 16 次工具调用，重复请求跳过 1 次。你需要在自己的日志中找到第一次失败、第二次抓取成功、两个任务完成与重复任务复核的证据，不能仅照抄这个数字。</p>
+<p>目标移动时，既要检查被移动目标对应的物体，又要确认另一个物体最终没有被破坏。这个要求比单物体任务多了一层：某个子任务刚完成，不保证其他已完成条件永远保持成立。</p>
+<h2 id="_6">第五步：用独立计算复核两个对象</h2>
+<p>把下面的程序保存为 <code>check_capstone.py</code>，再运行 <code>python check_capstone.py</code>。同样适用于 PowerShell，不需要 heredoc。它以抓空目录为例，检查其他回合时修改 <code>folder</code>。</p>
+<pre><code class="language-python">import json
+import math
+from pathlib import Path
+
+folder = Path(&quot;runs/ch16-miss&quot;)
+summary = json.loads((folder / &quot;summary.json&quot;).read_text())
+memory = json.loads((folder / &quot;memory.json&quot;).read_text())
+checks = []
+for name in (&quot;red&quot;, &quot;green&quot;):
+    state = summary[&quot;final_observation&quot;][&quot;objects&quot;][name]
+    distance = math.dist(state[&quot;block_xyz&quot;][:2], state[&quot;goal_xyz&quot;][:2])
+    valid = (
+        not state[&quot;holding&quot;]
+        and distance &lt; 0.045
+        and 0.015 &lt; state[&quot;block_xyz&quot;][2] &lt; 0.065
+        and state[&quot;linear_speed_m_s&quot;] &lt; 0.05
+    )
+    print(name, &quot;水平距离：&quot;, distance, &quot;复算成功：&quot;, valid)
+    assert valid == state[&quot;success&quot;]
+    checks.append(valid)
+assert summary[&quot;success&quot;] == all(checks)
+assert all(checks), &quot;至少一个对象未完成&quot;
+assert set(memory[&quot;completed&quot;]) == {&quot;red_to_blue&quot;, &quot;green_to_yellow&quot;}
+assert summary[&quot;skipped_duplicates&quot;] == 1
+assert summary[&quot;model_calls&quot;] == 0
+print(&quot;两个对象均通过当前状态验收，完成记忆与重复任务处理一致。&quot;)
+</code></pre>
+<p>这段计算独立于控制器的完成宣告，但输入仍是同一个仿真器提供的状态；它不是外部真实传感器验证。位置、释放与速度条件共同构成当前教学规格，换成新的形状或实际夹爪时需要重新定义。</p>
+<h2 id="_7">第六步：用图像帮助解释，而不是替代验收</h2>
+<p>若第 2 章 <code>doctor</code> 的渲染检查正常，可在新目录运行：</p>
+<pre><code class="language-sh">python lab/advanced.py capstone --seed 7 --perturb miss-grasp --render --out runs/ch16-render
+</code></pre>
+<p>这会额外保存 <code>capstone-before.png</code> 与 <code>capstone-after.png</code>，不会录制连续视频。没有可用渲染环境时，先完成不带 <code>--render</code> 的物理与日志实验。</p>
+<p>下图来自本课程 seed 7、<code>miss-grasp</code> 条件的真实运行。前后图用于观察场景与大致位置，不能展示全部失败和恢复时刻。</p>
+<p><img alt="双物体整理前：红绿方块与蓝黄目标" src="../course-media/capstone-before.png" /></p>
+<p><img alt="双物体整理后：两个方块位于各自目标区域，绿色方块部分被机械臂遮挡" src="../course-media/capstone-after.png" /></p>
+<p>最终图中的绿色方块部分被机械臂遮挡。仅凭画面无法完整判断它是否释放、是否低速稳定；请对照 <code>objects.green</code> 的状态和前面的复算结果。这正是将可视化与验收证据分开的原因。</p>
+<h2 id="_8">失败时怎样定位到具体层</h2>
+<p>没有开始搬运，先检查场景加载与活动对象；到达后抓空，检查技能结果与持物状态；运到旧目标，检查获取位置的时机；跳过了未完成任务，检查记忆是否经过当前状态复核；单个物体成功却整体失败，检查另一个对象。</p>
+<p>不要一看到失败就扩大重试次数。不可达目标、错误对象映射和已经过期的任务规格，需要不同处理。当前反馈控制每个子任务有有限动作预算，但没有解决任意障碍、任意移动目标或物体堆叠。</p>
+<h2 id="_9">毕业报告与下一次改进</h2>
+<p>报告包含任务规格、运行命令、种子与版本、三组日志、逐对象验收、恢复事件和已知限制。成功条件应在查看结果前确定；失败回合也必须保留。完成后，用一段话解释系统为什么知道何时继续、何时跳过、何时结束。</p>
+<p>基础扩展：用新种子重复三个条件，按第 15 章方法报告全部结果。进阶扩展三选一：让场景产生需要刷新记忆的新变化；将受控视觉位置接到实际动作并记录误差；为学习型技能增加固定权重加载和上层调用。每次只改变一项，并为新增路径建立验收，不能仅新增接口名称就宣称集成完成。</p>
+<p>阅读 <a href="../gallery.html#demo-so101-block-sorting">SO101 三色积木分拣案例</a>，比较它的视觉与几何控制路径和本项目的精确状态输入；再看 <a href="../gallery.html#demo-rpent-astra-pi05-20261027">RPent 技能分工案例</a>，思考下一项能力应该放在哪一层。案例是延伸阅读，本课程没有复现其完整机器人与学习模型。</p>
+<h2 id="_10">一手参考</h2>
+<ul>
+<li><a href="https://mujoco.readthedocs.io/en/stable/XMLreference.html">MuJoCo 模型与约束定义</a>：理解同场景物体、关节与附着约束。</li>
+<li><a href="https://dagroup-pku.github.io/PyRUA-Lean/docs/getting-started/how-it-works/">PyRUA-Lean：程序、动作结果与后续决策</a></li>
+<li><a href="https://openvla.github.io/">OpenVLA 原项目</a>：进一步研究视觉语言动作模型时，回到其实际输入、训练与部署条件。</li>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。展厅链接为阅读案例，不表示实验包复现了该案例的机器人、模型或论文结果。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/16-capstone.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/ADVANCED_GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="16">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="15.html">← 上一章</a><a href="../gallery.html">带着问题看案例 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

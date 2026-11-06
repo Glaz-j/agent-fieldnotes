@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="用完成证据记录进度，避免重复执行"><meta name="theme-color" content="#f3f4ee"><title>让任务历史成为可用的记忆 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=course16"><script defer src="../course.js?v=course16"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html" aria-current="page">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 把学习技能接入 Agent</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 10 章 / 记忆与观察</div><h1>让任务历史成为可用的记忆</h1><p>用完成证据记录进度，避免重复执行</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<ul>
+<li><a href="#_1">本章目标</a></li>
+<li><a href="#_2">三种记录，各自回答一个问题</a></li>
+<li><a href="#_3">完成记录应该怎样产生</a></li>
+<li><a href="#_4">第一步：运行重复任务实验</a></li>
+<li><a href="#_5">第二步：从汇总回到原始事件</a></li>
+<li><a href="#_6">第三步：做一个可重复的记录检查</a></li>
+<li><a href="#_7">任务进度不一定单调增加</a></li>
+<li><a href="#_8">案例阅读：保留真实执行历史</a></li>
+<li><a href="#_9">验收、排错与练习</a></li>
+<li><a href="#_10">一手参考</a></li>
+</ul>
+</div>
+</details><article><p>第 9 章让机器人根据当前状态恢复动作。现在增加一个常见问题：同一个任务被再次提交，系统应该重新抓放，还是报告已经完成？只看最后一张图，我们可能知道方块在哪里，却不知道它为何在那里、对应哪条请求、之前失败过几次。</p>
+<p>前置要求是完成第 6、7、9 章，能阅读技能事件与任务验收。本章继续使用仿真状态和确定性程序，不调用大模型，也不把文件保存误称为模型参数学习。</p>
+<h2 id="_1">本章目标</h2>
+<p>区分任务历史、当前世界状态和完成凭据；理解重复请求为何需要稳定身份与当前状态核对；运行带任务记忆的实验，并从原始事件解释系统为何执行或跳过一次请求。</p>
+<h2 id="_2">三种记录，各自回答一个问题</h2>
+<table>
+<thead>
+<tr>
+<th>记录</th>
+<th>回答的问题</th>
+<th>不能替代什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务请求</td>
+<td>用户要完成什么，属于哪次任务？</td>
+<td>实际执行与完成证据</td>
+</tr>
+<tr>
+<td>交互历史</td>
+<td>调用了什么，返回了什么，何时发生？</td>
+<td>当前物体是否仍在原处</td>
+</tr>
+<tr>
+<td>当前观察</td>
+<td>机器人和物体现在是什么状态？</td>
+<td>之前是否执行过同一任务</td>
+</tr>
+<tr>
+<td>完成凭据</td>
+<td>哪项任务在何时通过了什么验收？</td>
+<td>此后世界永远不变的保证</td>
+</tr>
+</tbody>
+</table>
+<p>“调用过 release”是一项历史事实，“方块现在位于目标区”是一项状态判断，“请求 A 已在事件 6 后通过验收”才是带来源的完成记录。如果把三者压成一句“已经做完”，发生争议时就没有办法定位问题。</p>
+<p>任务记忆的作用是保存决策所需的历史，而不是尽量多地堆文字。例如，抓取失败的错误码可以帮助避免同样的无效尝试，最新完成凭据可以减少重复动作。完整日志仍然保存，给模型的简要记忆则可以只保留相关事件，并能追溯回原始记录。</p>
+<p>RoboICL 将当前回合的动作、执行回执和后续观察组成交互记忆，区别于外部示范。我们借鉴这种“记录完整交互”的分析方式；本章没有实现它的上下文选择算法，也没有验证其模型表现。<a href="https://github.com/Mosi-AI/RoboICL">RoboICL 原始说明</a></p>
+<h2 id="_3">完成记录应该怎样产生</h2>
+<p>下面的箭头表示因果顺序。观察或验收失败时，不能因为动作序列结束就写入成功记录。</p>
+<pre><code class="language-text">收到任务 ID
+    |
+    v
+已有该 ID 的完成凭据？ ---- 否 ----&gt; 执行动作
+    | 是                              |
+    v                                 v
+重新核对当前任务条件              读取执行后观察
+    |                                 |
+    +-- 仍满足 --&gt; 跳过重复执行        +-- 验收成功 --&gt; 保存凭据
+    |                                 |
+    +-- 不满足 --&gt; 重新处理任务        +-- 验收失败 --&gt; 保留失败事件
+</code></pre>
+<p>任务 ID 表示同一项请求，而不是随意生成的展示标题。若“把红块放入蓝区”被改成“放入另一个区”，就不应继续复用原请求的完成状态。真实系统通常还需要任务内容版本、对象身份和场景身份；课程实验先只使用同一场景中的一个目标任务。</p>
+<p>重复处理同一请求时避免重复效果，常称为幂等处理。但物理世界会变化，因此“ID 已见过就直接返回成功”并不够。必须区分不重复发送动作与重新确认当前条件：确认可以发生，搬运不一定需要重做。</p>
+<h2 id="_4">第一步：运行重复任务实验</h2>
+<p>在包含 <code>lab/</code> 的目录中激活课程环境，然后执行：</p>
+<pre><code class="language-sh">python lab/advanced.py memory --seed 7 --out runs/ch10-memory
+</code></pre>
+<p>程序在同一个仿真世界中处理重复的任务 ID：先实际执行并验收，再保存完成依据；后续重复请求先检查当前任务条件，满足时跳过搬运。输出目录包含 <code>summary.json</code>、<code>events.jsonl</code> 和 <code>memory.json</code>。</p>
+<p>每次重新运行这条命令都会创建一个新世界。输出文件可供检查，不代表下一次命令自动从旧文件恢复记忆。不要把同一回合内的请求去重解释为跨进程持久化已经实现。</p>
+<p>这个实验展示完成证据与重复请求复核，没有证明“去掉记忆就一定反复搬运”。课程原来的反馈控制器也会先检查任务是否已经成功；要评价记忆的因果贡献，需要另设公平对照。本章先验证记录是否清楚、可追溯。</p>
+<h2 id="_5">第二步：从汇总回到原始事件</h2>
+<p>打开 <code>summary.json</code>，读取 <code>requests</code>、<code>completed_ids</code>、<code>skipped_duplicates</code>、<code>action_calls</code> 和 <code>success</code>。请求次数与技能调用次数不是同一指标：一次任务需要多次动作，重复请求可能没有新增动作。</p>
+<p>接着打开 <code>memory.json</code>。<code>completed.red_to_blue</code> 保存 <code>source</code>、<code>at_sim_time_s</code> 与 <code>observation</code>；<code>events</code> 中的 <code>completed</code> 记录首次完成，<code>revalidate_completion</code> 记录复核及 <code>valid_now</code>。把它们与 <code>events.jsonl</code> 对照：首次完成之前应有实际移动、抓取、运输和释放；跳过重复请求时，不应该出现另一套无意义的抓放。</p>
+<p>重点回答三个问题。第一，完成凭据来自哪个时刻的验收？第二，记录中的数据源是什么？第三，后续跳过依据的是旧凭据与新的检查，还是仅仅看到一个已完成标签？用文件中的具体字段作答，不要只引用终端最后的成功结果。</p>
+<h2 id="_6">第三步：做一个可重复的记录检查</h2>
+<p>把下面代码保存为仓库根目录中的 <code>inspect_task_memory.py</code>。macOS、Linux 与 PowerShell 都可以保存后执行，不需要把终端的多行输入语法互相照搬。</p>
+<pre><code class="language-python">import json
+from pathlib import Path
+
+folder = Path(&quot;runs/ch10-memory&quot;)
+summary = json.loads((folder / &quot;summary.json&quot;).read_text())
+for key in (&quot;requests&quot;, &quot;completed_ids&quot;, &quot;skipped_duplicates&quot;,
+            &quot;action_calls&quot;, &quot;success&quot;):
+    print(key, &quot;:&quot;, summary[key])
+
+print(&quot;\n完成依据与记忆事件：&quot;)
+memory = json.loads((folder / &quot;memory.json&quot;).read_text())
+print(json.dumps(memory, ensure_ascii=False, indent=2))
+</code></pre>
+<pre><code class="language-sh">python inspect_task_memory.py
+</code></pre>
+<p>这段程序只展示已有记录，不参与任务决策。将输出保存到笔记后，再把实验种子改为 8，并使用另一个目录。初始物体位置可能不同，但“有证据后记完成、重复请求先核对”的规则应保持一致。</p>
+<h2 id="_7">任务进度不一定单调增加</h2>
+<p>“曾经放入目标区”是不会被后续事件抹掉的历史；“当前仍在目标区”却可能因外力移动而变假。前者用于审计，后者用于决定是否需要继续工作。一个系统可以同时保留“过去成功过”与“现在需要重新处理”，二者并不矛盾。</p>
+<p>设计长任务时，可以把进度拆成子目标，并为每个子目标保存证据与依赖。例如，分类任务中“红块已归位”若依赖目标容器的位置，容器移动后相关空间条件就要重新检查。不要仅根据执行到第几个函数推算完成百分比。</p>
+<p>同样，失败也值得进入任务记忆。记录“哪种参数在什么观察下导致什么错误”，比写“再努力一次”更有助于下一次选择。但失败次数只是历史统计，不足以证明当前失败原因没有改变。</p>
+<h2 id="_8">案例阅读：保留真实执行历史</h2>
+<p>打开 <a href="../gallery.html#demo-roboicl-panda-memory-lift-20261029">RoboICL：Panda 视觉记忆抓取</a>，查看当前图像、历史图像与执行回执分别扮演什么角色。案例采用本地适配，不能把它的单场景展示当作记忆必然提升成功率的对照实验。</p>
+<p>再思考：如果只保留模型原计划，删掉动作实际回执，会丢失什么？模型可能把计划过的动作误认为已经执行，或把被控制器拒绝的参数记成成功经验。历史应以发生过的交互为基础，计划则单独标记。</p>
+<h2 id="_9">验收、排错与练习</h2>
+<p>验收提交两个种子的运行目录、一份完成记录解释，以及任务请求、技能事件、当前状态三者的对应表。你应能指出哪次请求没有新增动作，以及跳过前检查了什么，并说明实验没有验证跨回合持久化或大模型记忆能力。</p>
+<p>如果重复请求仍反复动作，先检查任务 ID 是否一致、完成状态何时写入、当前验收为何不满足。若没有任何动作却直接记录成功，检查是否把计划或旧文件当成了当前证据。若汇总与事件不符，先核对目录和种子，避免混读不同回合。</p>
+<p>基础题：为“执行失败但已经尝试过”设计一个状态，使它不会被误判为完成。进阶题：描述方块在首次成功后被移出目标区时应保留哪些历史、使哪些完成条件失效；列出实现该测试需要增加的事件，再运行后才报告结果。</p>
+<h2 id="_10">一手参考</h2>
+<ul>
+<li><a href="https://github.com/Mosi-AI/RoboICL">RoboICL 交互记忆与执行回执</a></li>
+<li><a href="https://innermonologue.github.io/">Inner Monologue 原始项目</a>：环境反馈如何参与后续任务规划。</li>
+<li><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/advanced.py">课程进阶实验源码</a></li>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。展厅链接为阅读案例，不表示实验包复现了该案例的机器人、模型或论文结果。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/10-task-memory.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/ADVANCED_GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="10">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="09.html">← 上一章</a><a rel="next" href="11.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="移动机械臂解除遮挡，比较观察前后的变化"><meta name="theme-color" content="#f3f4ee"><title>主动观察：为行动获取信息 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=course16"><script defer src="../course.js?v=course16"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html" aria-current="page">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 把学习技能接入 Agent</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 12 章 / 记忆与观察</div><h1>主动观察：为行动获取信息</h1><p>移动机械臂解除遮挡，比较观察前后的变化</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<ul>
+<li><a href="#_1">本章目标</a></li>
+<li><a href="#_2">感知不只发生在动作之前</a></li>
+<li><a href="#_3">先区分三项指标</a></li>
+<li><a href="#_4">第一步：生成动作前后的实际图像</a></li>
+<li><a href="#_5">第二步：先看图，再读数字</a></li>
+<li><a href="#_6">第三步：检查来源与执行是否一致</a></li>
+<li><a href="#_7">第四步：建立可复用的结果检查</a></li>
+<li><a href="#_8">从固定观察动作走向信息决策</a></li>
+<li><a href="#_9">验收、排错与练习</a></li>
+<li><a href="#_10">一手参考</a></li>
+</ul>
+</div>
+</details><article><p>第 8 章的颜色定位可能返回 <code>ok: true</code>，却没有达到预先设定的精度。机械臂遮住了方块的大部分表面，程序仍然能找到一点红色；这些残余像素的位置却偏向可见的一侧。此时再运行一次相同算法，不一定能获得不同信息。</p>
+<p>前置要求是完成第 8 章的 RGB 定位，以及第 11 章对数据来源和时效性的讨论。需要本机能够完成 MuJoCo 渲染。本章不调用 VLM，也不执行视觉抓放闭环。</p>
+<h2 id="_1">本章目标</h2>
+<p>理解动作可以服务于获取信息；运行一次真实的移臂观察实验；对照动作前后的 RGB、像素支持数和定位误差；解释信息改善为何不能直接等同于任务完成或通用视觉能力。</p>
+<h2 id="_2">感知不只发生在动作之前</h2>
+<p>传统的一次性流程是“拍照 → 算位置 → 执行”。主动观察把下一次看什么、何时看、如何改善可见性也放进决策过程。例如，移动相机、调整机器人姿态、暂时移开挡住视线的工具，都可能让目标更容易辨认。</p>
+<p>Bajcsy 的主动感知研究强调对信息获取过程本身进行建模与控制，而不只是分析已经采到的数据。本课程采用最小的对应实验：相机保持固定，让遮挡目标的机械臂移开，然后重新定位。<a href="https://people.eecs.berkeley.edu/~yang/courses/cs294-6/papers/Bajcsy.active%20Perception.pdf">Active Perception 原文</a></p>
+<pre><code class="language-text">当前图像：只看到部分红色表面
+        |
+        v
+提出信息需求：红块的水平位置是否足够准确？
+        |
+        v
+执行观察动作：移开机械臂（相机不动）
+        |
+        v
+获取新 RGB --&gt; 再次定位 --&gt; 比较证据 --&gt; 决定是否继续任务
+</code></pre>
+<p>这不要求每个动作立即推进抓放。一次没有接触方块的移动，也可能为后续决策提供更好的输入。但它消耗时间，并可能遮住别的物体，因此应当有明确的信息目标。</p>
+<h2 id="_3">先区分三项指标</h2>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>能说明什么</th>
+<th>不能独自说明什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>颜色定位 <code>ok</code></td>
+<td>是否得到符合规则的候选</td>
+<td>候选是否准确、是否完整可见</td>
+</tr>
+<tr>
+<td><code>pixels</code></td>
+<td>支持候选的颜色像素数量</td>
+<td>对象身份正确或概率置信度</td>
+</tr>
+<tr>
+<td><code>xy_error_m</code></td>
+<td>预测与独立真值的水平距离</td>
+<td>真实机器人运行时一定知道误差</td>
+</tr>
+</tbody>
+</table>
+<p>更多像素有时能缓解局部遮挡造成的偏差，但并非总能提升精度。多出另一个红色物体，也会增加像素数，却可能把中位数拉向错误区域。我们需要同时查看图像、算法假设和独立评价。</p>
+<h2 id="_4">第一步：生成动作前后的实际图像</h2>
+<p>在课程环境中运行：</p>
+<pre><code class="language-sh">python lab/advanced.py active-view --seed 7 --out runs/ch12-active-view
+</code></pre>
+<p>打开 <code>before.png</code> 和 <code>after.png</code>，再查看 <code>summary.json</code> 与 <code>events.jsonl</code>。两张图都是 MuJoCo 真实渲染，没有通过修图补出物体。相机、分辨率与颜色规则保持不变，程序执行一次预设的末端移动到 <code>(0.05, -0.23, 0.24)</code> 米。</p>
+<p>这项动作是人工指定的观察动作，不是模型从候选视角里搜索出来的，也没有读取隐藏方块位置来选择停车点。它展示改变遮挡关系的作用，不证明系统已经学会自主选择最佳视角。</p>
+<h2 id="_5">第二步：先看图，再读数字</h2>
+<p>以下是种子 7 在本机实际运行的示例。你的结论仍应以自己的原始图片和当前运行记录为准。</p>
+<p><img alt="动作前：机械臂遮挡红块" src="../course-media/active-before.png" /></p>
+<p><img alt="动作后：机械臂移开，红块露出" src="../course-media/active-after.png" /></p>
+<p>动作前，连杆挡住红块的大部分区域，画面里只剩一条红色边缘。动作后，红块在俯视图中更完整，定位依据不再只来自那一小片残余区域。与此同时，工具移动到蓝色区域附近，可能遮挡那里；不能把红块可见性改善推广成整个场景都更清楚。</p>
+<p>这次种子 7 的实测结果为：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>红色像素数</th>
+<th>水平定位误差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>动作前</td>
+<td>75</td>
+<td>约 16.07 毫米</td>
+</tr>
+<tr>
+<td>动作后</td>
+<td>306</td>
+<td>约 1.70 毫米</td>
+</tr>
+</tbody>
+</table>
+<p>两次检测都返回成功，但动作前没有达到第 8 章预先使用的 1 厘米标准，动作后达到了。这是一个具体种子的结果，不能据此估计所有遮挡布局的成功率。</p>
+<h2 id="_6">第三步：检查来源与执行是否一致</h2>
+<p><code>summary.json</code> 的 <code>before</code>、<code>after</code> 分别包含 <code>pixels</code>、<code>estimate_xyz</code>、<code>xy_error_m</code> 和检测详情。定位仍来自 RGB 颜色掩码与已标定平面；<code>truth_xyz_for_evaluation_only</code> 明确存放仅用于评价的仿真真值。</p>
+<p>真值用来回答“误差到底多大”，不参与颜色候选或观察动作的选择。若你把真值输入给定位函数，误差可以轻易变小，却改变了实验问题。也不要把视觉顶面高度与仿真物体中心高度直接相减；本章只比较水平位置。</p>
+<p>再检查 <code>observation_action_ok</code> 与技能日志中的移动目标和实际位置。没有成功执行观察动作时，前后比较不能被解释为预期姿态改变的效果；相同图片反复定位也不能当成获得了新视角。</p>
+<h2 id="_7">第四步：建立可复用的结果检查</h2>
+<p>把下面代码保存为仓库根目录的 <code>inspect_active_view.py</code>。PowerShell 用户直接保存文件并执行相同命令，无需使用 Bash 的多行输入语法。</p>
+<pre><code class="language-python">import json
+from pathlib import Path
+
+path = Path(&quot;runs/ch12-active-view/summary.json&quot;)
+result = json.loads(path.read_text())
+print(&quot;观察动作成功：&quot;, result[&quot;observation_action_ok&quot;])
+for stage in (&quot;before&quot;, &quot;after&quot;):
+    row = result[stage]
+    error = row[&quot;xy_error_m&quot;]
+    print(stage, &quot;像素数：&quot;, row[&quot;pixels&quot;],
+          &quot;预测位置：&quot;, row[&quot;estimate_xyz&quot;])
+    if error is None:
+        print(&quot;未得到定位结果，不能报告误差通过。&quot;)
+    else:
+        print(f&quot;水平误差 {error * 1000:.2f} mm；小于1cm：{error &lt; 0.01}&quot;)
+</code></pre>
+<pre><code class="language-sh">python inspect_active_view.py
+</code></pre>
+<p>将种子改为 8，输出到另一个目录，再修改检查程序路径。若初始红块已经较完整可见，移动带来的收益可能更小；若移动后仍遮挡，收益也可能为零或变差。完整保留前后结果，不要只选改善最大的回合。</p>
+<h2 id="_8">从固定观察动作走向信息决策</h2>
+<p>一个更完整的主动观察器需要定义可选动作、动作代价、信息质量指标和停止规则。首先明确当前缺少什么，例如目标身份、水平位置或可见表面；然后比较候选动作可能带来的信息与成本；最后用新观察检验是否真的改善。</p>
+<p>本实验没有计算最优信息增益。像素数量可以作为受控场景中的可见性线索，不能无条件当作通用目标函数。若目标已经足够清楚，应停止额外观察；若连续动作没有改善，应改变策略或报告无法可靠定位，而不是无限拍照。</p>
+<p>把主动观察接入第 11 章记忆时，要保存新观测的来源与时间，并明确旧估计是否被替换。观察动作本身不改变任务完成条件：红块露出来以后仍然需要后续抓取与验收，本章没有执行这些步骤。</p>
+<h2 id="_9">验收、排错与练习</h2>
+<p>验收提交两个种子的前后 PNG、定位 JSON、移动事件和指标比较，并解释一个“检测成功但误差不够小”的实例。报告中应明确固定相机、预设移臂动作、已知颜色与平面高度这些条件。</p>
+<p>若无图像，先检查 <code>doctor</code> 的渲染项。若 <code>pixels</code> 很少，查看遮挡和亮度；若像素很多但误差较大，检查多目标混合、标定与表面高度假设。若记录中真值改变，先确认物体是否真的移动，避免把目标变化误判成定位算法变化。</p>
+<p>阅读 <a href="../gallery.html#demo-mems-visual-memory-libero-three">MemS 视觉空间记忆案例</a>，区分获取新图像、更新位置估计和执行操作三个环节；该案例不是本章固定观察动作的对照评测。</p>
+<p>基础题：解释为何移动后蓝区更容易被遮挡，红块却更清楚。进阶题：设计两个预设观察位置，在不使用物体真值选动作的前提下比较它们；预先写出可见性指标、最多动作次数和停止条件，再实施实验。</p>
+<h2 id="_10">一手参考</h2>
+<ul>
+<li><a href="https://people.eecs.berkeley.edu/~yang/courses/cs294-6/papers/Bajcsy.active%20Perception.pdf">Bajcsy：Active Perception，1988</a></li>
+<li><a href="https://arxiv.org/abs/1603.02729">Bajcsy、Aloimonos、Tsotsos：Revisiting Active Perception</a></li>
+<li><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/advanced.py">课程主动观察实验源码</a></li>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。展厅链接为阅读案例，不表示实验包复现了该案例的机器人、模型或论文结果。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/12-active-perception.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/ADVANCED_GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="12">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="11.html">← 上一章</a><a rel="next" href="13.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

@@ -1,0 +1,42 @@
+# Agent Fieldnotes 许可与适用范围
+
+项目负责人吴昭烨（Glaz-j）于 2026-11-07 确认以下方案。本仓库按内容类型分别授权，不以单一许可覆盖所有文件。
+
+## 一、原创教材与课程自制媒体：CC BY-NC-SA 4.0
+
+以下内容中由本项目原创、且未另行标注第三方来源或其他条款的部分，采用 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International（署名—非商业性使用—相同方式共享 4.0 国际）：
+
+- `course/lessons/*.md`、`course/start-here.md` 的教材正文、原创教学图示和非程序示例。
+- `course/demos.json` 中本项目撰写的教学标题与说明文字。
+- `docs/learn/*.html`、`docs/start.html`、`docs/index.html` 中生成或编写的原创课程正文、教学说明与图示；HTML 结构及程序代码按第二节处理。
+- `docs/course-media/` 内本项目自建教学场景生成的录像、截图、字幕、原创说明及随附实验记录；不包括嵌入页面但实际存放于第三方材料目录的案例。
+- `README.md`、`CONTRIBUTING.md`、`project/` 内本项目原创的说明与协作文档正文。
+
+完整条款：`LICENSES/CC-BY-NC-SA-4.0.txt`
+官方文本：https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.txt
+
+署名可采用：“Agent Fieldnotes — 吴昭烨（Glaz-j），https://github.com/Glaz-j/agent-fieldnotes ，CC BY-NC-SA 4.0”。使用时还应依完整条款保留相关声明、标明修改，并保留所用材料中另列的作者署名。此示例不增加许可条款以外的要求。
+
+## 二、原创软件与网页实现：MIT
+
+以下内容中本项目原创的软件部分采用 MIT：
+
+- `lab/` 中的 Python 程序与测试、原创 XML 场景、配置、依赖清单、`example-program.json`，以及随软件分发的 `GUIDE.md`、`ADVANCED_GUIDE.md`、`VALIDATION.md` 使用说明。
+- `build_course.py`、`tools/*.py`、`course-requirements.txt` 和本项目原创的 `.github/` 配置。
+- `docs/` 下本项目原创的 JavaScript、CSS、HTML 页面结构及内嵌程序代码，包括 `docs/learn/`、`docs/start.html` 和 `docs/index.html` 的网页实现；页面中的教材文字与媒体按第一节或原来源条款处理。
+- 教材与说明文档中本项目原创的可执行代码片段，以及 `course/demos.json` 的程序配置结构；周围讲解文字按第一节处理。
+
+完整条款：`LICENSES/MIT.txt`。`lab/LICENSE` 是供独立教学实验包携带的相同 MIT 文本。
+OSI 说明：https://opensource.org/license/mit
+完整文本来源：https://raw.githubusercontent.com/spdx/license-list-data/main/text/MIT.txt
+
+MIT 适用的软件可以依其条款用于商业用途。第一节教材与媒体的非商业条件不扩展到这里列明的 MIT 软件。
+
+## 三、第三方材料与范围例外
+
+- `docs/media/`、`docs/data/`（包括其中的上游许可证、署名与来源记录）不纳入上述新授权，继续按各项材料原有声明处理。
+- 第三方论文、代码、模型、数据集、图片、视频、商标及其他引用或嵌入材料，无论出现在哪个文件或页面，都不因本说明改变原有条款。页面嵌入第三方媒体，不会将它转换为本项目的 CC 或 MIT 内容。
+- 第三方软件依赖保持其各自许可；依赖清单的许可不是对依赖本身重新授权。
+- 来源与条款请查 `docs/attributions.html`、`docs/data/attribution-licenses.json` 及相应文件内的声明。本项目仅就其有权授权的原创部分授予上述许可；未在上述范围内且未另行说明的材料，不应推定获得新授权。
+
+混合文件按内容分别适用。例如，复用一页课程的 HTML/CSS 实现适用 MIT，转载其中的原创讲解适用 CC BY-NC-SA 4.0，复用其中嵌入的外部演示则需检查该演示的原条款。具体权利、条件与免责声明以各许可完整文本为准。

@@ -100,3 +100,23 @@ GitHub Pages 从 `main` 分支的 `/docs` 发布，网站没有模型密钥或�
 课程中的展厅链接用于分析任务轨迹，不意味着教学实验包复现了对应论文或系统。课程组织参考 [Datawhale《动手学具身智能》](https://datawhalechina.github.io/dive-into-embodied-ai/) 的循序渐进方式；正文和教学实验独立编写，具体知识引用见各章。
 
 第三方案例、视频与资产来源见 [来源与许可](docs/attributions.html) 和 [署名索引](docs/data/attribution-licenses.json)。本仓库不对第三方材料重新授权。
+
+## 面向第一次动手的读者
+
+先看 [新手准备页](https://glaz-j.github.io/agent-fieldnotes/start.html)：用一个独立小程序认识终端、目录、函数、字典与JSON，再进入第2章安装机器人实验。各章补充小步自查、预期现象与参考解释。教学组织依据和下一轮试学计划见 [教学设计记录](project/teaching-design.md)。
+
+## 负责人、协作与项目状态
+
+负责人：[吴昭烨 / Glaz-j](https://github.com/Glaz-j)。公开联系与课程问题请使用 [GitHub Issues](https://github.com/Glaz-j/agent-fieldnotes/issues)。目前由负责人维护，真实贡献者以Git提交和PR记录为准；未将未确认的志愿者列入团队。
+
+欢迎提交错字、学习卡点、复跑记录与改进建议。请先阅读 [贡献指南](CONTRIBUTING.md)，再选择 [学习卡点](https://github.com/Glaz-j/agent-fieldnotes/issues/new?template=learner-feedback.yml) 或 [程序错误](https://github.com/Glaz-j/agent-fieldnotes/issues/new?template=bug-report.yml) 模板。
+
+16章教材和实验主体已完成初稿，当前处于持续校审阶段；独立读者试学和PDF阅读版列入后续计划。项目正在准备向 [Datawhale DOPMC](https://github.com/datawhalechina/DOPMC) 申请立项，**尚未提交或获得立项，不是Datawhale已认定的官方项目**。[Datawhale](https://www.datawhale.cn/) 是开源学习社区；本项目参考其课程与公开协作规范，后续参与状态以正式审核结果为准。
+
+[申请草稿与章节计划](project/PROPOSAL.md) · [提交前说明](project/submission-notes.md)。既有仓库按社区模板补齐必要资料，但没有声称它由模板新建；接入方式在申请中明确请审核方确认。
+
+## 原创内容许可
+
+负责人已于 2026-11-07 确认分范围授权：原创教材、课程页正文及课程自制录像、截图、字幕采用 [CC BY-NC-SA 4.0](LICENSES/CC-BY-NC-SA-4.0.txt)；原创教学程序、场景、随包软件使用说明、构建工具和网页实现采用 [MIT](LICENSES/MIT.txt)。教材的非商业条件不扩展到 MIT 软件。
+
+准确的文件与内容范围见根目录 [LICENSE](LICENSE)，确认记录见 [许可方案](project/licensing-proposal.md)。`docs/media/`、`docs/data/` 及所有另标来源的第三方材料保持原有条款，不因嵌入课程而被重新授权；请同时查阅 [来源与许可](docs/attributions.html)。

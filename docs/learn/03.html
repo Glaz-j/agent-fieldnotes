@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="区分物理状态、传感器观察与隐藏信息"><meta name="theme-color" content="#f3f4ee"><title>机器人究竟知道什么 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=course16"><script defer src="../course.js?v=course16"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html" aria-current="page">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 把学习技能接入 Agent</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 03 章 / 机器人基础</div><h1>机器人究竟知道什么</h1><p>区分物理状态、传感器观察与隐藏信息</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="区分物理状态、传感器观察与隐藏信息"><meta name="theme-color" content="#f3f4ee"><title>机器人究竟知道什么 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=beginner-demos"><script defer src="../course.js?v=beginner-demos"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html" aria-current="page">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 03 章 / 机器人基础</div><h1>机器人究竟知道什么</h1><p>区分物理状态、传感器观察与隐藏信息</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
 <ul>
 <li><a href="#_1">本章目标</a></li>
 <li><a href="#_2">状态是世界，观察是接口</a></li>
@@ -13,18 +13,19 @@
 </ul>
 </div>
 </details><article><p>你已经能启动场景并读取输出。现在要解决一个会影响全部实验的问题：程序拿到了方块的坐标，是否就意味着机器人“看见了”方块？答案取决于坐标从哪里来。直接读取仿真内部数据，与从图像中估计位置，是两种不同的实验条件。</p>
-<p>前置要求是完成第 2 章，能运行 <code>observe</code> 与 <code>baseline</code>，并能阅读 JSON。你不需要先训练视觉模型。</p>
+<p>前置要求是完成第 2 章，能运行 <code>observe</code> 与 <code>baseline</code>。本章会带你读 JSON 的层次，不要求先训练视觉模型。所有命令都在同一个实验根目录执行；若新开了终端，先重新激活 <code>lab/.venv</code>。</p>
 <h2 id="_1">本章目标</h2>
 <p>建立一份观察字段表，区分仿真状态、机器人自身反馈与相机感知；解释同一个状态为何能生成不同观察；从日志中找到动作前后的证据，并说明当前实验能够支持哪些结论。</p>
 <h2 id="_2">状态是世界，观察是接口</h2>
 <p>仿真器为了计算运动，需要保存关节位置、速度、物体姿态等信息。这些内部状态并不自动属于 Agent。观察接口选择其中哪些内容可以交给决策程序，也可以先经过相机渲染、检测或其他处理。</p>
-<p>用简单记号表示：世界在时刻 t 的状态是 <code>s_t</code>，决策程序获得的观察是 <code>o_t</code>，动作是 <code>a_t</code>。动作改变世界，而新观察描述变化后的信息。<code>o_t</code> 可以只是 <code>s_t</code> 的一部分，也可能带噪声或延迟。它不必足以完全恢复世界。</p>
-<p>例如，只给一张 RGB 图时，遮挡后的方块仍存在于仿真状态中，却可能完全不出现在观察里。直接输出方块三维坐标则绕过了遮挡。这种为实验提供的精确信息通常称为特权状态或仿真真值。</p>
+<p>用简单记号表示：世界在时刻 t 的状态是 <code>s_t</code>，决策程序获得的观察是 <code>o_t</code>，动作是 <code>a_t</code>。下标 t 只是标记“第几个时刻”，不用先求解方程。动作改变世界，而新观察描述变化后的信息。<code>o_t</code> 可以只是 <code>s_t</code> 的一部分，也可能带测量偏差或延迟。</p>
+<p>RGB 就是由红、绿、蓝三个颜色通道组成的普通彩色图像。只给一张 RGB 图时，遮挡后的方块仍存在于仿真状态中，却可能完全不出现在观察里。直接输出方块三维坐标则绕过了遮挡。这种为实验提供的精确信息通常称为特权状态或仿真真值。“真值”在这里指仿真器内部的数据，并非通过相机测量出来的位置。</p>
 <p>使用真值并没有问题：它能帮助我们先隔离控制与决策错误。问题在于把这种条件下的成功，解释成视觉系统已经解决了定位。我们会在第 8 章建立相机感知路径，并明确记录输入的变化。</p>
 <h2 id="_3">阅读课程的观察协议</h2>
 <p>在仓库根目录、已激活的虚拟环境中运行：</p>
-<pre><code class="language-sh">python lab/run.py observe
+<pre><code class="language-sh">python lab/run.py observe --seed 7
 </code></pre>
+<p>先找最外层的 <code>robot</code>、<code>scene</code> 和 <code>task</code>。JSON 用 <code>{}</code> 包住一组“名称—值”，用 <code>[]</code> 保存按顺序排列的数值；例如 <code>[x, y, z]</code> 表示三个方向的位置。下表中的 <code>robot.holding</code> 是阅读路径，意思是“打开 <code>robot</code> 这一组，再找 <code>holding</code>”，不是文件里一个带点号的长名称。</p>
 <p>本阶段输出的 <code>observation_source</code> 为 <code>simulator_state</code>。这是数据来源标签，不是模型名称。重点检查下面这些字段：</p>
 <table>
 <thead>
@@ -78,21 +79,38 @@
 </tbody>
 </table>
 <p>这里的 <code>holding</code> 不是现实夹爪力传感器测量，<code>block_xyz</code> 也不是检测器输出。它们准确地反映了本课程简化场景中相应的状态，但不能直接迁移成真实机器人的感知结论。</p>
+<p>种子 7 的一次初始输出中，方块位置约为 <code>[-0.06999, 0.11972, 0.02194]</code> 米。第三项是方块中心离桌面的高度，约 2.19 厘米；它不是夹爪应该下降到的高度。<code>holding: false</code> 与 <code>task.success: false</code> 则分别表示“还没夹持”和“任务还没完成”。先把数值翻译成这样一句话，再进行计算。</p>
 <h2 id="_4">实验一：写一张数据来源表</h2>
 <p>将实际输出保存到学习笔记，为每个字段补充四项说明：单位、坐标系、来源、用途。先看末端与方块的三个分量，判断你能否据此计算水平距离；再看 <code>holding</code> 和 <code>success</code>，说明二者为什么不能互相代替。</p>
 <p>假设方块已经被夹持，但仍在原地，<code>holding</code> 可以为真，任务仍未完成。再假设方块移动到目标上方却没有释放，仅有水平位置接近也不足以验收。把状态拆开，才能定位究竟是哪项条件缺失。</p>
-<p>最后，划出你愿意提供给决策程序的字段，以及只保留给评测器的字段。本阶段实验可以公开使用真值；以后比较视觉方法时，则必须检查评测器的内部坐标有没有通过提示词或工具响应泄漏回决策程序。</p>
+<p>最后，划出你愿意提供给决策程序的字段，以及只保留给评测器的字段。评测器就是专门按任务条件打分的程序：它可以知道正确位置，用来检查预测，却不一定应把答案交给正在做预测的程序。本阶段公开使用真值；以后比较视觉方法时，要检查内部坐标有没有通过模型输入文字或工具返回值传回决策程序。</p>
 <h2 id="_5">实验二：用动作前后信息解释变化</h2>
 <p>运行一条带日志的基线：</p>
 <pre><code class="language-sh">python lab/run.py baseline --seed 7 --out runs/observation-study
 </code></pre>
-<p>打开目录中的 <code>events.jsonl</code>。JSONL 的每一行是一个独立 JSON 事件；按文件顺序阅读，找到抓取前、抓取后、释放后的相关记录。再打开 <code>summary.json</code>，将汇总结果与事件中的状态对照。</p>
+<p>打开 <code>runs/observation-study/events.jsonl</code>。JSONL 的每一行是一个独立 JSON 事件，所以一行可能很长。每条事件都先记录调用什么工具和参数，再把动作后的观察放在 <code>result.observation</code> 中。它与 <code>observe</code> 的内容相似，只是外面多了一层执行记录。</p>
+<p>为了先看懂变化，把下面代码保存成根目录中的 <code>inspect_observations.py</code>。保存为纯文本 <code>.py</code> 文件后运行，macOS、Linux 和 PowerShell 都适用。</p>
+<pre><code class="language-python">import json
+from pathlib import Path
+
+path = Path(&quot;runs/observation-study/events.jsonl&quot;)
+for line in path.read_text().splitlines():
+    event = json.loads(line)
+    obs = event[&quot;result&quot;][&quot;observation&quot;]
+    print(event[&quot;step&quot;], event[&quot;tool&quot;],
+          &quot;持物：&quot;, obs[&quot;robot&quot;][&quot;holding&quot;],
+          &quot;方块：&quot;, obs[&quot;scene&quot;][&quot;block_xyz&quot;],
+          &quot;任务完成：&quot;, obs[&quot;task&quot;][&quot;success&quot;])
+</code></pre>
+<pre><code class="language-sh">python inspect_observations.py
+</code></pre>
+<p>你会看到七行，编号从 0 到 6。正常基线中，编号 1 的下降后仍未持物；编号 2 的 <code>grasp</code> 后开始持物，但任务仍未完成；编号 6 的 <code>release</code> 后持物为假、任务完成为真。再打开 <code>summary.json</code>，把汇总与这些逐步证据对照。若自己的结果不同，先保留实际输出并找到首次不同的行。</p>
 <p>为三个时刻各写一句话，句子必须包含证据。例如，“附着状态由假变真”只支持教学抓取状态发生变化；要说明物体真的被带走，还需要比较后续方块位置。不要把自己的预期写成实际输出。</p>
 <p>再找一次移动事件，记录要求到达的位置和反馈中的实际位置。这两者可能很接近，却属于不同类别：前者是命令，后者才是执行后的观察。控制误差要从它们的差值计算，不能直接把命令复制进结果表。</p>
 <h2 id="_6">观察还包含时间含义</h2>
 <p>同一个数字在不同时间有不同价值。抓取前获得的方块位置，在方块被推动后可能已经过期；旧位置即使来自准确的真值，也不能代表现在。</p>
 <p>课程日志中的 <code>step</code> 和 <code>sim_time_s</code> 分别记录事件编号与仿真时间，能帮助追踪先后关系。做笔记时保留它们和对应动作，不要只摘出一个孤立坐标。仿真时间不等于现实等待时间；将来接入异步相机与模型时，还要记录采集时间与处理时间，慢的推理可能让“刚收到”的结果对应较早画面。</p>
-<p>另外，读取底层数组时要区分引用与快照。MuJoCo 的运行数据会随仿真更新；保存一个仍指向同一数组的引用，不一定保存了过去。本课程的 JSON 记录用于留下具体数值，自己扩展日志时也应在记录时复制需要的数据。</p>
+<p>自己扩展日志时，还要区分“引用”与“快照”。引用像一个指向当前数据的入口；快照像拍下一张照片。MuJoCo 的数组会随仿真更新，因此只保存入口不一定保存了过去。本课程的 JSON 文件已经把当时的具体数值写下来，适合按时间回看。</p>
 <h2 id="_7">案例阅读：记忆能否代替新观察</h2>
 <p>阅读 <a href="../gallery.html#demo-mems-visual-memory-libero-three">MemS 视觉空间记忆案例</a>，再对照 <a href="../gallery.html#demo-mems-target-shift-libero-three">目标移动案例</a>。这两项是现有展厅材料，不是本章实验包的完整复现。</p>
 <p>记录系统记住了什么，以及环境变化后哪些记忆需要更新。记忆可以减少重复推理，但不能保证环境保持不变。评估记忆的价值，应同时看它帮助了哪些决策，以及错误记忆是否能被新证据修正。</p>
@@ -100,9 +118,10 @@
 <p>验收产物是一张数据来源表和三段带事件证据的状态解释。你应能明确说出：当前控制实验使用仿真真值，尚未证明相机定位能力；任务成功需要多项条件，工具返回值只覆盖其中一部分。</p>
 <p>常见错误包括把坐标叫作“视觉识别结果”、把动作目标当成实际位置、把旧观察当成当前状态，以及把评测器知道的所有信息都交给 Agent。遇到不确定字段，先查生成它的代码，不要从名字猜测来源。</p>
 <p>基础题：只保留末端位置和夹持状态，决策程序还缺少什么才能定位方块？挑战题：设计一张遮挡场景图，列出仿真真值、RGB 观察和历史记忆三者各自能提供的信息，并指出仍然无法确定的内容。</p>
+<p>现在已经能从记录里读出“工具在哪里、目标在哪里”。下一章要解决的是：怎样解释这些坐标，并把一个位置要求变成真正的移动。</p>
 <h2 id="_9">一手参考</h2>
 <ul>
 <li><a href="https://mujoco.readthedocs.io/en/stable/programming/simulation.html#state-and-control">MuJoCo 状态与控制</a>：仿真状态和控制量的正式说明。</li>
 <li><a href="https://mujoco.readthedocs.io/en/stable/python.html">MuJoCo Python 数据访问</a>：底层数组与数据复制的行为。</li>
 <li><a href="https://github.com/Glaz-j/agent-fieldnotes/tree/main/lab">课程实验源码</a>：本章观察字段的实际定义。</li>
-</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。展厅链接为阅读案例，不表示实验包复现了该案例的机器人、模型或论文结果。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/03-observation-state.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="3">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="02.html">← 上一章</a><a rel="next" href="04.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/03-observation-state.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="3">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="02.html">← 上一章</a><a rel="next" href="04.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

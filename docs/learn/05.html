@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="为移动、抓取与放置定义可检查的接口"><meta name="theme-color" content="#f3f4ee"><title>把动作封装成技能 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=course16"><script defer src="../course.js?v=course16"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html" aria-current="page">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 把学习技能接入 Agent</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 05 章 / 机器人基础</div><h1>把动作封装成技能</h1><p>为移动、抓取与放置定义可检查的接口</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="为移动、抓取与放置定义可检查的接口"><meta name="theme-color" content="#f3f4ee"><title>把动作封装成技能 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=beginner-demos"><script defer src="../course.js?v=beginner-demos"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html" aria-current="page">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 05 章 / 机器人基础</div><h1>把动作封装成技能</h1><p>为移动、抓取与放置定义可检查的接口</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
 <ul>
 <li><a href="#_1">本章目标</a></li>
 <li><a href="#_2">技能不是只有一个函数名字</a></li>
@@ -12,13 +12,13 @@
 <li><a href="#_9">一手参考</a></li>
 </ul>
 </div>
-</details><article><p>如果每次决策都要重新处理关节角、执行步数和附着状态，最小任务也会迅速变得混乱。技能接口把常用操作组织成明确的输入、执行过程与反馈，让上层能够选择动作，也能够知道动作为什么失败。</p>
+</details><article><p>上一章已经把一个位置交给 <code>move</code>，并检查了它是否到位。如果每次搬运都要重新处理关节角、执行步数和持物状态，最小任务也会迅速变得混乱。技能接口把常用操作组织成明确的输入、执行过程与反馈，让上层能够选择动作，也能够知道动作为什么失败。</p>
 <p>前置要求是完成第 4 章，理解世界坐标、可达性以及目标和实际位置的区别。你将继续使用同一个 SCARA 场景，不需要模型密钥。</p>
 <h2 id="_1">本章目标</h2>
 <p>读懂课程的四个基础技能，为每个技能写清前置条件和执行后检查；从一次基线日志还原完整操作；区分工具成功、物体状态变化和任务成功，并识别一个忽略失败反馈的执行器。</p>
 <h2 id="_2">技能不是只有一个函数名字</h2>
-<p><code>grasp()</code> 看起来没有参数，但它并不在任何时刻都能成功：机器人需要靠近方块，而且不能已经持有物体。一个有用的技能协议至少包括以下内容。</p>
-<p>输入规定参数、单位和坐标系；前置条件规定当前是否适合执行；执行过程规定内部做什么；返回值报告结果和原因；执行后检查确认承诺是否兑现。不要把所有失败都压成一个“出错了”，否则上层无法区分需要重新定位、先抬升，还是改一个不可达目标。</p>
+<p><code>grasp()</code> 看起来没有参数，但它并不在任何时刻都能成功：机器人需要靠近方块，而且不能已经持有物体。这些“开始之前必须满足的条件”叫前置条件。例如，释放的前置条件是手里有物体，调用后的检查则是物体确实被释放。</p>
+<p>输入规定参数、单位和坐标系；执行过程规定内部做什么；返回值报告结果和原因；执行后检查确认承诺是否兑现。这些约定合起来就是接口协议。明确的错误原因能帮助上层区分需要重新定位、先抬升，还是改一个不可达目标。</p>
 <p>课程的基础接口如下：</p>
 <table>
 <thead>
@@ -52,29 +52,92 @@
 </tbody>
 </table>
 <p>相机定位接口放到第 8 章讲解。这里先让状态输入和基础动作之间的关系完整可检查。</p>
+<p>表中的名字是程序内部的 Python 接口。终端入口只提供 <code>observe</code>、<code>move</code>、<code>baseline</code> 等已列出的子命令，没有独立的 <code>grasp</code> 子命令。本章通过一次 <code>baseline</code> 运行连续调用抓取与释放，这样所有动作才会操作同一个场景。</p>
 <h2 id="_3">仔细读懂三个动作的边界</h2>
 <p><code>move</code> 的 z 范围是 <code>0.045</code> 至 <code>0.32</code> 米；它先检查几何可达性，再设置关节控制目标并推进仿真。末端与请求位置的距离小于 <code>0.02</code> 米时报告到位。如果末端低于 <code>0.12</code> 米而水平目标距离超过 <code>0.04</code> 米，接口返回 <code>lift_before_lateral_motion</code>，要求先抬升。</p>
-<p>这项规则是教学执行约束，不是完备的碰撞规划。它使“先抬升、再横移”的过程可见，但没有证明任意场景中的路径都安全无碰撞。</p>
-<p><code>grasp</code> 要求末端与方块的水平距离小于 <code>0.035</code> 米，垂直距离小于 <code>0.05</code> 米。成功时启用显式焊接约束，模拟抓住方块。这个简化让我们研究技能组合和反馈，不能用来声称真实指尖接触或摩擦抓取已经解决。</p>
+<p>例如，工具刚下降到 6 厘米高，要向旁边移动 10 厘米，就需要先在原地抬到 18 厘米，再横移。这样可以读懂错误提示要求做什么。这项规则是教学执行约束；场景中的连杆和夹爪没有参与碰撞检查，所以它没有提供完整避障能力。</p>
+<p><code>grasp</code> 要求末端与方块的水平距离小于 <code>0.035</code> 米，垂直距离小于 <code>0.05</code> 米。成功时启用焊接约束：可以把它理解成在仿真里临时建立一个连接，使工具与方块保持抓取时的相对位置和朝向。这个教学近似让我们研究技能组合与反馈，而没有模拟指尖怎样靠摩擦夹稳方块。</p>
 <p><code>release</code> 解除约束后继续推进仿真，让物体有时间落下。解除约束成功不意味着放置成功；若释放位置不对，方块仍可能落在目标区之外。</p>
 <h2 id="_4">实验一：还原基线的七次调用</h2>
-<p>在仓库根目录执行：</p>
+<p>在包含 <code>lab/</code> 的实验根目录、已经激活环境的终端中执行：</p>
 <pre><code class="language-sh">python lab/run.py baseline --seed 7 --out runs/skills-baseline
 </code></pre>
-<p>打开 <code>events.jsonl</code>。每行包含 <code>step</code>、<code>sim_time_s</code>、<code>tool</code>、<code>arguments</code> 与 <code>result</code>。其中 <code>result.observation</code> 是该次动作后的状态，<code>result.ok</code> 是技能结果，失败时还有 <code>result.error</code>。</p>
-<p>按顺序给七次调用写上动作意图：到方块上方、下降、抓取、抬升、到目标上方、下降、释放。不要只写“move”。同一种技能在不同阶段承担不同目的；理解意图，才能知道失败后应该返回哪个阶段。</p>
-<p>随后检查三类证据：每次移动的目标与实际末端位置，抓取后是否持物，释放后方块是否进入目标且稳定。最后打开 <code>summary.json</code>，确认 <code>mode</code> 为 <code>baseline</code>、<code>model_calls</code> 为 0，并将 <code>success</code> 与最终状态对照。</p>
+<p>打开 <code>runs/skills-baseline/events.jsonl</code>。每行包含 <code>step</code>、<code>sim_time_s</code>、<code>tool</code>、<code>arguments</code> 与 <code>result</code>。<code>arguments</code> 是交给工具的参数，空字典 <code>{}</code> 表示这次没有参数；<code>result.observation</code> 是该次动作后的状态，<code>result.ok</code> 是技能结果，失败时还有 <code>result.error</code>。</p>
+<p>对照正常基线的七行记录，给每次调用补上意图：</p>
+<table>
+<thead>
+<tr>
+<th><code>step</code></th>
+<th>工具</th>
+<th>本次要做什么</th>
+<th>正常执行后的 <code>holding</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>move</code></td>
+<td>到方块上方</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>move</code></td>
+<td>下降接近方块</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>grasp</code></td>
+<td>建立夹持连接</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>move</code></td>
+<td>抬升方块</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>move</code></td>
+<td>到目标上方</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>move</code></td>
+<td>下降准备放置</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>release</code></td>
+<td>解除夹持并等待物体落稳</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<p>同一种 <code>move</code> 在不同阶段承担不同目的。理解意图，才能知道失败后应该返回哪个阶段。想缩短输出，可以复用第 3 章的检查程序，将文件路径改成 <code>runs/skills-baseline/events.jsonl</code>。</p>
+<p>随后检查三类证据：每次移动的目标与实际末端位置，抓取后是否持物，释放后方块是否进入目标且稳定。最后查看汇总：</p>
+<pre><code class="language-sh">python -m json.tool runs/skills-baseline/summary.json
+</code></pre>
+<p>确认 <code>mode</code> 为 <code>baseline</code>、<code>model_calls</code> 为 0、<code>success</code> 为真。注意编号 2 的抓取成功时已经可以有 <code>result.ok: true</code> 和 <code>holding: true</code>，但 <code>task.success</code> 仍为假，因为方块还没放入目标区。这是“工具完成”和“任务完成”最容易直接看到的区别。</p>
 <p>当前任务验收同时检查已经释放、方块水平位置距目标中心小于 <code>0.045</code> 米、方块高度处于 <code>0.015</code> 至 <code>0.065</code> 米之间、平移速度小于 <code>0.05</code> 米每秒。因此，短暂经过目标上方与完成放置不是同一个事件。这些阈值是本课程场景的具体定义，不是所有机器人任务通用的标准。</p>
 <h2 id="_5">实验二：一个工具失败以后发生什么</h2>
 <p>保持同一个种子，加入一次人为抓空扰动：</p>
 <pre><code class="language-sh">python lab/run.py baseline --seed 7 --perturb miss-grasp --out runs/skills-miss
 </code></pre>
-<p>本次实验会让第一次抓取明确返回 <code>injected_miss_grasp</code>。这是可重复的教学故障注入，不是在测量物理抓取的随机失效率。命令的非零退出码符合本次失败实验的目的，仍应打开日志查看全过程。</p>
-<p>找到失败的那一行，再向后阅读。基线仍按原定顺序继续移动与释放，因为它有意忽略工具反馈。观察后续 <code>holding</code> 是否改变，最后是否出现 <code>empty_gripper</code>，并用 <code>summary.json</code> 的 <code>success</code> 给出任务结论。</p>
+<p>本次实验会让第一次符合位置条件的抓取返回 <code>injected_miss_grasp</code>，意思是“人为安排的这次抓取没有建立连接”。故障注入就是由实验程序主动制造一个已知失败，便于重复研究后续反应；它不会额外模拟一段夹爪滑落动作。命令以退出码 2 结束属于本次实验的预期结果，仍应打开日志查看全过程。</p>
+<p>在 <code>runs/skills-miss/events.jsonl</code> 找到编号 2 的失败行，再向后阅读。基线仍按原定顺序继续移动与释放，因为它有意忽略工具反馈。后续 <code>holding</code> 应保持为假，最后一次释放会返回 <code>empty_gripper</code>，即“手里没有物体”。汇总的 <code>success</code> 为假；即使其中 <code>error</code> 为 <code>null</code>，也只说明没有记录到上层程序异常，技能失败要到各事件的 <code>result.error</code> 中查看。</p>
 <p>这个对照揭示了一个区别：技能接口能准确报告失败，上层执行器仍可能做错。不能因为一次任务失败，就把全部责任归给感知或底层控制。第 6 章会加入读取反馈的闭环，第 9 章再比较恢复行为；本章先把问题定位清楚。</p>
+<p>先看一遍下一章会用到的规则闭环恢复演示。留意字幕中第一次 <code>injected_miss_grasp</code>，以及随后是否再次抓取、让红块随工具抬起。</p>
+<figure class="lesson-demo" id="demo-course-recovery"><div class="demo-label">本课实验录像</div><video controls playsinline preload="none" poster="../course-media/course-recovery.png" aria-label="第一次抓空之后，反馈控制器如何重试"><source src="../course-media/course-recovery.mp4" type="video/mp4"><track kind="captions" src="../course-media/course-recovery.vtt" srclang="zh" label="动作与状态说明" default><p>当前浏览器无法播放，请<a href="../course-media/course-recovery.mp4">打开录像文件</a>。</p></video><figcaption><strong>第一次抓空之后，反馈控制器如何重试</strong><p>种子 7，第一次有效抓取被故意拒绝。先看 injected_miss_grasp 与 holding=false，再看第二次抓取后的状态；这段录像供第 6 章闭环学习预览。</p><p class="demo-scope">本课 SCARA 实际仿真录像 · 状态输入与规则控制 · 无模型调用。动作间加入定格便于读字幕；无音轨。</p><p class="demo-source"><a href="../course-media/course-recovery.json">查看本次动作与验收记录</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/tools/record_course_demos.py">录像生成源码</a></p></figcaption><details class="demo-steps"><summary>逐步观看：点击记录跳到对应画面</summary><ol><li><button type="button" data-seek="0.0"><span>00:00</span> 初始场景：红块 → 蓝区</button></li><li><button type="button" data-seek="1.0"><span>00:01</span> 移动：目标 (-0.070, 0.120, 0.180) m</button></li><li><button type="button" data-seek="3.2"><span>00:03</span> 移动：目标 (-0.070, 0.120, 0.060) m</button></li><li><button type="button" data-seek="5.4"><span>00:05</span> 抓取 → 失败：injected_miss_grasp；holding=false</button></li><li><button type="button" data-seek="6.9"><span>00:06</span> 抓取</button></li><li><button type="button" data-seek="7.9"><span>00:07</span> 移动：目标 (-0.070, 0.120, 0.180) m</button></li><li><button type="button" data-seek="10.1"><span>00:10</span> 移动：目标 (0.080, -0.180, 0.180) m</button></li><li><button type="button" data-seek="12.3"><span>00:12</span> 移动：目标 (0.080, -0.180, 0.065) m</button></li><li><button type="button" data-seek="14.5"><span>00:14</span> 释放</button></li><li><button type="button" data-seek="16.5"><span>00:16</span> 最终验收：通过</button></li></ol></details></figure>
+
+<p>两次抓取之间未必有明显位移，所以要把字幕与物体是否随行一起看。这个版本读取“尚未持物”的反馈后重试，共执行 8 次工具调用；本章固定基线则执行 7 次后失败。两者都没有调用语言模型，区别在于是否利用技能结果改变下一步。</p>
 <h2 id="_6">从技能调用到任务状态</h2>
 <p>可以把任务写成几个阶段：寻找目标、接近、抓取、运输、释放、验收。但阶段跳转必须有证据。调用过 <code>grasp</code> 不应自动进入运输阶段；应该先确认抓取结果和持物状态。调用过 <code>release</code> 也不应直接宣布完成；应该再检查任务条件。</p>
-<p>同样，不能无限重试。对不可达坐标重复移动，与对一次暂时抓空重新靠近，需要不同策略。错误原因决定是否值得重试，重试预算决定何时停止并报告问题。这些规则既适用于确定性程序，也适用于下一章接入的模型决策。</p>
+<p>同样，不能无限重试。对不可达坐标重复移动，与对一次暂时抓空重新靠近，需要不同策略。错误原因决定是否值得重试，重试预算决定何时停止并报告问题。这些规则既适用于确定性程序，也适用于以后接入的模型决策（第 7 章选学）。</p>
 <h2 id="_7">案例阅读：程序封装了多少决策</h2>
 <p>打开 <a href="../gallery.html#demo-pyrualean-astra-cells-20261028">PyRUA-Lean 代码单元案例</a>。尝试区分模型生成的代码、代码调用的动作和动作内部执行。若一个代码单元包含循环与条件分支，它就承担了部分局部决策；不能只按代码单元数量计算机器人实际执行了几步。</p>
 <p>本章借案例练习接口分析，不承诺用本课程 SCARA 实验复现案例中的机器人与实验设置。</p>
@@ -87,4 +150,4 @@
 <li><a href="https://mujoco.readthedocs.io/en/stable/XMLreference.html#equality-weld">MuJoCo 焊接约束定义</a>：理解教学附着方式的物理建模含义。</li>
 <li><a href="https://code-as-policies.github.io/">Code as Policies 原始项目</a>：代码组织感知与控制接口的实例。</li>
 <li><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/run.py">课程技能与执行器源码</a>：阈值、错误类型与日志的直接依据。</li>
-</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。展厅链接为阅读案例，不表示实验包复现了该案例的机器人、模型或论文结果。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/05-robot-skills.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="5">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="04.html">← 上一章</a><a rel="next" href="06.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/05-robot-skills.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="5">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="04.html">← 上一章</a><a rel="next" href="06.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

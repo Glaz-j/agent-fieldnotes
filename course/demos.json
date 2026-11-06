@@ -1,0 +1,47 @@
+{
+  "course-baseline": {
+    "title": "从接近到释放：本课机械臂的七次技能调用",
+    "type": "teaching",
+    "note": "种子 7，无扰动，固定动作序列。按字幕依次找出接近、下降、抓取、抬升、运输、下降与释放。"
+  },
+  "course-recovery": {
+    "title": "第一次抓空之后，反馈控制器如何重试",
+    "type": "teaching",
+    "note": "种子 7，第一次有效抓取被故意拒绝。先看 injected_miss_grasp 与 holding=false，再看第二次抓取后的状态；这段录像供第 6 章闭环学习预览。"
+  },
+  "course-shift-baseline": {
+    "title": "对照 A：目标移动，固定序列仍去旧位置",
+    "type": "teaching",
+    "note": "种子 7，首次抓取成功后蓝色目标移位。固定序列沿用初始目标坐标，动作执行完毕，但最终验收失败。"
+  },
+  "course-shift-feedback": {
+    "title": "对照 B：读取新目标，再完成搬运",
+    "type": "teaching",
+    "note": "与对照 A 使用相同种子和扰动。反馈控制器重新读取目标位置，将方块放入移动后的蓝区。"
+  },
+  "course-capstone": {
+    "title": "同一场景中的两次搬运与一次重复请求",
+    "type": "teaching",
+    "note": "种子 7，第一次抓空后恢复；红块到蓝区、绿块到黄区，再复核并跳过重复的红块请求。绿色方块部分被机械臂遮挡，最终结果还需对照两物体的验收记录。"
+  },
+  "mems-target-shift-libero-three": {
+    "title": "先看现象：目标容器移动后，动作也要改变",
+    "type": "gallery",
+    "trial": 0
+  },
+  "roboicl-panda-memory-lift-20261029": {
+    "title": "把当前画面、历史画面与执行回执连起来读",
+    "type": "gallery",
+    "trial": 0
+  },
+  "pyrualean-astra-cells-20261028": {
+    "title": "一个代码单元，可以组织多个机器人动作",
+    "type": "gallery",
+    "trial": 0
+  },
+  "rpent-astra-pi05-20261027": {
+    "title": "高层选择动作，底层技能负责执行",
+    "type": "gallery",
+    "trial": 0
+  }
+}

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="理解坐标系、逆运动学与控制器"><meta name="theme-color" content="#f3f4ee"><title>从坐标到机械臂运动 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=course16"><script defer src="../course.js?v=course16"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html" aria-current="page">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 把学习技能接入 Agent</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 04 章 / 机器人基础</div><h1>从坐标到机械臂运动</h1><p>理解坐标系、逆运动学与控制器</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="理解坐标系、逆运动学与控制器"><meta name="theme-color" content="#f3f4ee"><title>从坐标到机械臂运动 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=beginner-demos"><script defer src="../course.js?v=beginner-demos"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html" aria-current="page">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 04 章 / 机器人基础</div><h1>从坐标到机械臂运动</h1><p>理解坐标系、逆运动学与控制器</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
 <ul>
 <li><a href="#_1">本章目标</a></li>
 <li><a href="#_2">先固定坐标和单位</a></li>
@@ -13,23 +13,27 @@
 </ul>
 </div>
 </details><article><p>“往左一点”对人很自然，对机器人却不够明确：是谁的左边，移动多少，用什么单位？这一章把含糊的空间要求变成可以执行、可以检查的坐标命令，并用课程的简化 SCARA 理解运动学。</p>
-<p>前置要求是完成第 3 章，知道目标位置与实际观察不同，并能阅读三角函数。推导可以先跟着几何关系理解，不要求你已经学过机械臂控制理论。</p>
+<p>上一章让你读出了位置，这一章把位置与动作接起来。你需要认识平面坐标；三角函数部分会先给直观例子，再给公式。第一次阅读先弄清“相对谁测量、用什么单位、是否能到达”，然后运行下面的实验，不必先掌握完整机械臂控制理论。</p>
 <h2 id="_1">本章目标</h2>
 <p>你将区分世界坐标、机器人基座坐标和关节坐标；用两段连杆解释正运动学与逆运动学；运行可达和不可达的移动命令；根据反馈判断位置误差，而不是把“命令被接受”当成“已经到位”。</p>
 <h2 id="_2">先固定坐标和单位</h2>
-<p>课程 <code>move(x, y, z)</code> 接收世界坐标系中的绝对位置，距离单位是米。世界系的 z 轴向上；x、y 方向以场景定义为准，屏幕左右会随相机视角变化。<code>x=-0.05</code> 表示目标的世界 x 坐标为负 0.05 米，不表示“相对现在后退 5 厘米”。</p>
-<p>基座位于世界坐标 <code>(-0.4, 0, 0.32)</code>，水平两段连杆长分别为 <code>0.35</code> 与 <code>0.30</code> 米。关节角度用弧度表达，竖直滑动关节的位移用米表达。关节坐标和末端坐标回答的是不同问题：前者描述机器人怎样弯曲，后者描述工具在哪里。</p>
+<p>坐标系就是规定从哪里开始量、沿哪些方向量的一把三维尺。世界坐标系固定在场景中，机器人基座坐标系固定在机械臂底座上；两把尺可以有不同原点，所以同一个点会有不同数字。</p>
+<p>课程 <code>move(x, y, z)</code> 接收世界坐标系中的绝对位置，距离单位是米。桌面为 <code>z=0</code>，z 轴向上；x、y 方向以场景定义为准，屏幕左右会随相机视角变化。<code>x=-0.05</code> 表示目标的世界 x 坐标为负 0.05 米，不表示“相对现在后退 5 厘米”。</p>
+<p>基座位于世界坐标 <code>(-0.4, 0, 0.32)</code>，水平两段连杆长分别为 <code>0.35</code> 与 <code>0.30</code> 米。连杆就是连接关节的那两段刚性手臂。关节角度用弧度表达：半圈是 π 弧度，也就是 180°；四分之一圈是 π/2。竖直滑动关节的位移仍用米，不能把它当成第三个角度。</p>
+<p>关节坐标描述机器人怎样弯曲，末端坐标描述工具在哪里。上层可以要求工具去一个位置，底层再算出关节应怎样转动，两者并不冲突。</p>
 <p>本场景基座坐标轴与世界坐标轴方向一致，水平换算只需减去基座平移：</p>
 <pre><code class="language-text">x_base = x_world - (-0.4)
 y_base = y_world - 0
 </code></pre>
 <p>若基座还发生旋转，就需要同时变换方向，不能只减一个偏移量。我们暂时选择轴方向一致的场景，是为了先看清这一步。</p>
+<p>例如，世界目标 <code>(-0.05, 0.10)</code> 换成基座的水平坐标，是 <code>(-0.05 + 0.4, 0.10) = (0.35, 0.10)</code>。它表示目标在基座 x 方向 35 厘米、y 方向 10 厘米处。竖直滑动也有类似偏移：要求工具到世界高度 <code>0.18</code> 米时，理想滑动目标为 <code>0.18 - 0.32 = -0.14</code> 米，负号表示从基座高度向下移动。</p>
 <h2 id="_3">从关节到末端：正运动学</h2>
-<p>把两段连杆画在纸上。第一段朝向是 <code>q1</code>，第二段相对于第一段又旋转 <code>q2</code>，所以第二段在基座中的朝向是 <code>q1 + q2</code>。将两段长度投影到水平坐标轴并相加：</p>
+<p>把两段连杆画在纸上，长度分别记为 <code>l1</code>、<code>l2</code>。第一段朝向是 <code>q1</code>，第二段相对于第一段又旋转 <code>q2</code>，所以第二段在基座中的朝向是 <code>q1 + q2</code>。<code>cos</code> 和 <code>sin</code> 分别帮助我们算一段倾斜连杆在 x、y 方向伸出了多远；把两段贡献相加：</p>
 <pre><code class="language-text">x_base = l1 * cos(q1) + l2 * cos(q1 + q2)
 y_base = l1 * sin(q1) + l2 * sin(q1 + q2)
 </code></pre>
 <p>这就是本章的水平正运动学：给定关节角度，计算末端位置。竖直高度由第三个滑动关节决定。注意不要把 <code>cos(q2)</code> 直接当作第二段的世界方向，也不要把角度制数值直接传给以弧度为单位的三角函数。</p>
+<p>先用直角检验理解：<code>q1=0</code>、<code>q2=π/2</code> 时，第一段向 x 方向伸出 0.35 米，第二段向 y 方向伸出 0.30 米，所以基座坐标是 <code>(0.35, 0.30)</code>，世界坐标是 <code>(-0.05, 0.30)</code>。这个可以画出来的例子，就是公式在做的事。</p>
 <h2 id="_4">从末端到关节：逆运动学</h2>
 <p>逆运动学反过来问：末端要去某个位置，关节应该取什么值？对两连杆平面机构，可以由连杆和目标点形成的三角形得到：</p>
 <pre><code class="language-text">c2 = (x_base² + y_base² - l1² - l2²) / (2 * l1 * l2)
@@ -38,34 +42,37 @@ q1 = atan2(y_base, x_base)
      - atan2(l2 * sin(q2), l1 + l2 * cos(q2))
 </code></pre>
 <p>这里的 <code>±</code> 提醒我们，同一个末端位置通常可能对应两种弯肘姿态。到达同一位置，不等于机器人形状相同。课程实现选择一个分支；更复杂系统还要结合关节限制、碰撞和当前姿态选择解。</p>
+<p>公式中的 <code>arccos</code> 是已知余弦值反求角度；<code>atan2(y, x)</code> 根据 x、y 同时判断方向，能够区分目标位于哪个象限。课程代码会替你计算逆解，本章主要要理解它何时有解、为什么有时不止一个解。</p>
 <p>如果 <code>c2</code> 超出 <code>[-1, 1]</code>，理想几何下就没有实数解。等价地，不考虑关节限制时，目标到基座的水平距离必须位于两段长度差与长度和之间，也就是本场景的 <code>0.05</code> 至 <code>0.65</code> 米。这只是水平几何条件，还没有检查高度范围、关节限制和运动途中障碍。</p>
 <h2 id="_5">实验一：执行一次可达移动</h2>
-<p>在已经激活环境的仓库根目录运行：</p>
-<pre><code class="language-sh">python lab/run.py move --x -0.05 --y 0.10 --z 0.18 --out runs/move-018
+<p>回到包含 <code>lab/</code> 的实验根目录，并确认环境已经激活。下面命令的 <code>--x</code>、<code>--y</code>、<code>--z</code> 就是交给 <code>move</code> 的世界目标坐标：</p>
+<pre><code class="language-sh">python lab/run.py move --seed 7 --x -0.05 --y 0.10 --z 0.18 --out runs/move-018
 </code></pre>
-<p>先计算这个点到基座的水平距离，确认它落在理想几何范围内，再读返回结果。找到执行反馈中的 <code>robot.tool_xyz</code>，把它与请求的 <code>[-0.05, 0.10, 0.18]</code> 写在两列。</p>
+<p>这个点距基座的水平距离是 <code>sqrt(0.35² + 0.10²)</code>，约 <code>0.364</code> 米，落在理想几何范围内。<code>sqrt</code> 表示开平方。再读返回结果：最外层 <code>ok</code> 是本次移动结果，实际位置在 <code>observation.robot.tool_xyz</code>，把它与请求的 <code>[-0.05, 0.10, 0.18]</code> 写在两列。</p>
 <p>用三个分量差的平方和开方，计算位置误差：<code>e = sqrt(dx² + dy² + dz²)</code>。课程移动接口以小于 <code>0.02</code> 米作为到位阈值。记录实际误差和接口返回的 <code>ok</code>，才能知道工具报告是否与状态变化一致。</p>
+<p>本机种子 7 的一条实际反馈为 <code>[-0.05, 0.10002, 0.17893]</code> 米。目标减去实际位置，三个差约为 <code>0</code>、<code>-0.00002</code>、<code>0.00107</code> 米，合成误差约 1.07 毫米。它小于 2 厘米阈值，所以 <code>ok</code> 为真，但这不表示误差恰好为零。自己的数值以实际输出为准。</p>
 <p>接着仅改变目标 z，另存第二次独立实验：</p>
-<pre><code class="language-sh">python lab/run.py move --x -0.05 --y 0.10 --z 0.22 --out runs/move-022
+<pre><code class="language-sh">python lab/run.py move --seed 7 --x -0.05 --y 0.10 --z 0.22 --out runs/move-022
 </code></pre>
 <p>比较返回的水平位置和高度。不要以为第二条终端命令会自动接着上一条命令的场景执行；完整连续操作由同一次基线或 Agent 运行保存状态。</p>
 <h2 id="_6">实验二：让不可达请求明确失败</h2>
 <p>先预测下面的结果，再运行：</p>
-<pre><code class="language-sh">python lab/run.py move --x 1.0 --y 0.0 --z 0.18 --out runs/move-unreachable
+<pre><code class="language-sh">python lab/run.py move --seed 7 --x 1.0 --y 0.0 --z 0.18 --out runs/move-unreachable
 </code></pre>
-<p>该点与基座的水平距离远大于两段连杆总长。接口应返回 <code>ok: false</code> 和 <code>error: unreachable</code>，命令以退出码 2 结束，并在拒绝时不修改仿真状态。这里的失败是有用的接口结果，不能将目标偷偷截断到边界后还声称完成了原请求。</p>
+<p>该点与基座的水平距离为 <code>1.0 - (-0.4) = 1.4</code> 米，远大于 0.65 米的连杆总长。接口应返回 <code>ok: false</code> 和 <code>error: unreachable</code>，命令以退出码 2 结束，并在拒绝时不修改仿真状态。这里的失败是有用的接口结果，保留 <code>runs/move-unreachable</code> 的记录继续分析即可。</p>
 <p>在笔记中解释拒绝原因，列出上层可以选择的下一步：重新检查坐标系、确认单位、重新定位目标，或者明确报告无法到达。盲目重复同一个不可达坐标不会增加成功机会。</p>
 <h2 id="_7">算出解还不等于完成运动</h2>
 <p>运动学只回答几何关系。实际执行还需要把目标变成控制信号，让状态随时间变化，再检查跟踪误差。即使起点和终点都可达，途中也可能碰到障碍；一个可达性检查不能代替路径规划。</p>
 <p>还有一个容易忽略的区别：在关节空间平滑改变角度，不保证末端沿直线移动。两段连杆的三角函数关系会把关节变化映射为曲线。因此，不能凭终点正确就声称机器人执行了指定的直线路径。</p>
-<p>本课程先学习末端位置接口，并没有提供任意六维姿态控制。用户要求“把杯口朝上”时，姿态必须成为额外的任务条件；不能只把杯子中心移到目标点就认为约束全部满足。</p>
+<p>本课程先学习末端位置接口。完整的“位姿”还包含朝向：同一个位置上的杯子可以杯口朝上，也可以倒扣。用户要求“把杯口朝上”时，需要同时控制朝向；当前三参数 <code>move(x,y,z)</code> 没有提供这项任意姿态控制能力。</p>
 <h2 id="_8">验收与常见错误</h2>
 <p>保留两次可达移动的位置对照和一次不可达返回，附上基座换算、水平距离与误差计算。你应能说明哪个判断来自几何，哪个来自执行反馈，以及哪些问题仍不在本实验的验证范围里。</p>
 <p>最常见的错误是把厘米当米、把相对位移当绝对坐标、忘记基座偏移、把关节角当末端位置，以及用相机画面的左右推断世界坐标正负。遇到奇怪动作，按这几个检查项逐一排查，比直接修改决策提示词更容易找到原因。</p>
 <h2 id="_9">练习与一手参考</h2>
 <p>基础题：手算 <code>q1=0</code>、<code>q2=0</code> 时末端的世界水平位置，并解释为什么该姿态位于伸展边界。挑战题：选择一个几何可达点，分别计算两个逆解，再用正运动学代回，检查它们是否到达同一点。</p>
+<p>现在已经能发出一次有单位、有坐标系、能检查结果的移动。下一章把移动与抓取、释放组合起来，写清每项技能在什么时候可以开始、完成后应该检查什么。</p>
 <ul>
 <li><a href="https://motion.cs.illinois.edu/RoboticSystems/InverseKinematics.html">Kris Hauser：Robotic Systems，逆运动学</a>：两连杆推导、多个解和可行性约束。</li>
 <li><a href="https://mujoco.readthedocs.io/en/stable/programming/simulation.html#simulation-loop">MuJoCo 仿真循环</a>：控制输入与状态推进之间的关系。</li>
 <li><a href="https://github.com/Glaz-j/agent-fieldnotes/tree/main/lab">课程实验源码</a>：教学模型尺寸、坐标约定与移动接口实现。</li>
-</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。展厅链接为阅读案例，不表示实验包复现了该案例的机器人、模型或论文结果。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/04-coordinates-motion.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="4">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="03.html">← 上一章</a><a rel="next" href="05.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/04-coordinates-motion.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="4">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="03.html">← 上一章</a><a rel="next" href="05.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

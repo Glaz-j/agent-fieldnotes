@@ -1,22 +1,52 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="匹配条件、做消融，用完整记录解释结果"><meta name="theme-color" content="#f3f4ee"><title>设计可比较的机器人实验 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=course16"><script defer src="../course.js?v=course16"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 把学习技能接入 Agent</a><a href="15.html" aria-current="page">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 15 章 / 整合与评测</div><h1>设计可比较的机器人实验</h1><p>匹配条件、做消融，用完整记录解释结果</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="匹配条件、做消融，用完整记录解释结果"><meta name="theme-color" content="#f3f4ee"><title>设计可比较的机器人实验 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=beginner-demos"><script defer src="../course.js?v=beginner-demos"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html" aria-current="page">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 15 章 / 整合与评测</div><h1>设计可比较的机器人实验</h1><p>匹配条件、做消融，用完整记录解释结果</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
 <ul>
 <li><a href="#_1">本章目标</a></li>
-<li><a href="#_2">第一步：先定义要回答的问题</a></li>
-<li><a href="#_3">第二步：运行预先确定的矩阵</a></li>
-<li><a href="#_4">第三步：验证配对，而不是只相信种子相同</a></li>
-<li><a href="#_5">第四步：读懂真实结果</a></li>
-<li><a href="#_6">第五步：从事件做失败归因</a></li>
-<li><a href="#_7">先定义分母，再计算指标</a></li>
+<li><a href="#_2">第一步：先看一个小对照</a></li>
+<li><a href="#_3">第二步：扩大成可解释的四策略实验</a></li>
+<li><a href="#_4">第三步：运行预先确定的测试组合</a></li>
+<li><a href="#_5">第四步：验证配对，而不是只相信种子相同</a></li>
+<li><a href="#_6">第五步：读懂真实结果</a></li>
+<li><a href="#_7">第六步：从事件做失败归因</a></li>
+<li><a href="#_8">先定义分母，再计算指标</a></li>
 <li><a href="#5-5">为什么 5 / 5 不能叫“稳定百分之百”</a></li>
-<li><a href="#_8">本章验收与继续实验</a></li>
+<li><a href="#_9">本章验收与继续实验</a></li>
 </ul>
 </div>
-</details><article><p>一个方法完成任务，另一个方法失败，还不足以说明前者更好：它们可能遇到了不同初始位置、使用了不同观察，或者拥有不同预算。本章将比较条件固定下来，通过配对种子与消融，定位恢复能力来自哪个机制。</p>
+</details><article><p>第 14 章比较了学习模型与解析专家：两者在相同目标位置接受测试，才容易看清差异。本章把这个思路用于整个任务，研究反馈控制为什么能应对抓空和目标移动。</p>
+<p>先记住两个词：<strong>配对</strong>是让不同方法遇到相同场景；<strong>消融</strong>是在同一个完整方法里移除一项功能，观察结果怎样变化。前者减少“题目不同”的影响，后者帮助定位“哪个部件有用”。</p>
 <p>前置要求是理解第 9 章扰动、第 10—11 章记忆，以及技能日志。本实验使用确定性控制器；随机种子改变场景初始化，不是语言模型采样种子，也不是训练神经网络的种子。</p>
 <h2 id="_1">本章目标</h2>
 <p>完成 60 回合的四策略对照，验证初始条件匹配，从原始事件解释失败，并报告样本量限制。最终交付全部回合、分组表和两个机制归因，不只挑选成功案例。</p>
-<h2 id="_2">第一步：先定义要回答的问题</h2>
+<h2 id="_2">第一步：先看一个小对照</h2>
+<p>假设第一次抓取失败。有重试的控制器再次抓取，没有重试的控制器立即停止。如果两者场景相同，这个差异就比较容易解释。先运行一个种子的缩小版实验：</p>
+<pre><code class="language-sh">python lab/advanced.py benchmark --seeds 1 --out runs/ch15-mini
+python -m json.tool runs/ch15-mini/summary.json
+</code></pre>
+<p><code>benchmark</code> 在这里就是自动安排对照并汇总结果的程序。命令仍会运行全部三种条件与四种策略，共 12 回合，但你先只找 <code>perturb: miss-grasp</code> 下这两行：</p>
+<table>
+<thead>
+<tr>
+<th><code>policy</code></th>
+<th><code>successes / episodes</code></th>
+<th><code>mean_tool_calls</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>feedback</code></td>
+<td>1 / 1</td>
+<td>8</td>
+</tr>
+<tr>
+<td><code>no-retry</code></td>
+<td>0 / 1</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>一次从新场景开始、执行到结束的过程叫一个<strong>回合</strong>，日志用 <code>episode</code> 表示。表中“3 次调用就结束”并不是更高效地完成任务，而是提前失败。这个小对照先教你同时看结果和开销，还不足以说明多个初始化下的表现。</p>
+<h2 id="_3">第二步：扩大成可解释的四策略实验</h2>
 <p>本章有两个具体问题：抓空后重试是否帮助恢复？目标移动后重新读取位置是否必要？为了回答它们，比较四种策略：</p>
 <table>
 <thead>
@@ -54,16 +84,16 @@
 </tr>
 </tbody>
 </table>
-<p>固定基线与完整反馈有多处差异，二者对比只能说明整体流程不同。后两项从反馈控制器中分别移除一个机制，才更接近回答“哪一项起了作用”。消融是控制变量的实验设计，不只是给同一程序换个名称。</p>
-<h2 id="_3">第二步：运行预先确定的矩阵</h2>
+<p>固定基线与完整反馈有多处差异，二者对比只能说明整体流程不同。后两项共享完整反馈控制器的实现，分别关闭“失败后继续”和“刷新目标位置”这一个开关，所以属于消融。其它部分保持一致，结果才容易归因。</p>
+<h2 id="_4">第三步：运行预先确定的测试组合</h2>
 <p>在已激活环境、包含 <code>lab/</code> 的目录执行：</p>
 <pre><code class="language-sh">python lab/advanced.py benchmark --seeds 5 --out runs/ch15-benchmark
 python -m json.tool runs/ch15-benchmark/summary.json
 </code></pre>
-<p><code>--seeds 5</code> 表示种子 0 到 4。每个种子分别测试无扰动、一次抓空、一次目标移动，再运行四种策略，共 <code>5×3×4=60</code> 回合。这里使用的是 <code>--seeds</code>，单数 <code>--seed</code> 不负责指定这个评估矩阵。</p>
+<p><code>--seeds 5</code> 表示种子 0 到 4。随机种子决定本次怎样抽取初始位置；相同代码中使用相同种子，可以重新得到相同初始化。每个种子分别测试无扰动、一次抓空、一次目标移动，再运行四种策略，共 <code>5×3×4=60</code> 回合。这组完整组合也常称为实验矩阵。这里使用的是 <code>--seeds</code>，单数 <code>--seed</code> 不负责指定这些种子。</p>
 <p><code>summary.json</code> 保存分组成功数与平均工具调用数；<code>episodes.json</code> 保存每个回合的初始、最终观察；<code>events.jsonl</code> 在每条工具事件上附加种子、扰动和策略，便于回到具体失败。</p>
 <p>运行结束不代表所有回合成功。评估程序的职责是完成测试矩阵，预期失败也必须进入结果。不要因失败删掉回合，或让一个非零结果使后续策略没有机会执行。</p>
-<h2 id="_4">第三步：验证配对，而不是只相信种子相同</h2>
+<h2 id="_5">第四步：验证配对，而不是只相信种子相同</h2>
 <p>相同种子只有在相同初始化程序、参数与版本下才有比较意义。本实验为每个策略创建新世界，并保存 <code>initial_observation</code>。将下面的完整程序保存为 <code>check_pairs.py</code>，运行 <code>python check_pairs.py</code>；macOS、Linux 与 PowerShell 都可采用此方式。</p>
 <pre><code class="language-python">import json
 from pathlib import Path
@@ -89,8 +119,9 @@ for condition in conditions:
             tie += int(a == b)
         print(condition, other, &quot;完整反馈胜/负/平：&quot;, win, loss, tie)
 </code></pre>
-<p>这段程序检查矩阵是否缺回合、是否存在重复键，以及配对初始状态是否一致。它不检查全部实验公平性；机器人模型、观察权限、终止规则等仍需要从实现与配置核对。</p>
-<h2 id="_5">第四步：读懂真实结果</h2>
+<p>代码中的 <code>index</code> 是一张查找表，用“种子、扰动、策略”三项找到对应回合；<code>assert</code> 检查条件是否成立，失败时停止并提示位置。<code>win/loss/tie</code> 只比较配对回合的任务成功与否，不评价动作是否优雅。</p>
+<p>预期抓空条件下完整反馈相对于 <code>no-retry</code> 打印 <code>5 0 0</code>，目标移动条件下相对于 <code>stale-spatial</code> 也打印 <code>5 0 0</code>。其它四行均为 <code>0 0 5</code>。若配对检查先失败，应先核对文件路径、版本和初始化条件，再解释策略差异。</p>
+<h2 id="_6">第五步：读懂真实结果</h2>
 <p>发布前实际运行的五个种子得到下面的成功数。请将你的结果与原始文件对照，而不是把这张表当作要手工填出的答案。</p>
 <table>
 <thead>
@@ -131,19 +162,20 @@ for condition in conditions:
 <p>去除重试只在抓空条件下出现差异，支持“恢复该故障需要失败后继续尝试”的解释。陈旧目标只在目标移动条件下出现差异，支持“动作参数需要更新”的解释。这些归因限于本实验注入的故障，不是对所有抓取失败和动态场景的定理。</p>
 <p>再看开销：抓空条件下完整反馈平均调用 8 次工具，去除重试只调用 3 次，但后者任务失败。目标移动下陈旧位置策略用满 32 次工具仍失败，完整反馈为 7 次。单独说“调用更少”或“行动更多”都不能代表效果更好。</p>
 <p>当前评估日志没有显式的 <code>termination_reason</code> 字段。“用满预算”的判断来自未成功、32 次工具调用，以及源码中控制循环上限三项证据，属于据此作出的解释。报告时不要把这个解释伪装成日志里已经提供的字段。</p>
-<h2 id="_6">第五步：从事件做失败归因</h2>
+<h2 id="_7">第六步：从事件做失败归因</h2>
 <p>挑一个失败回合，在 <code>events.jsonl</code> 中按 <code>seed</code>、<code>perturb</code>、<code>policy</code> 筛选。先找第一处异常，再看它是否被后续状态纠正，最后查看独立任务验收。</p>
 <p>抓空通常有显式错误 <code>injected_miss_grasp</code>；目标陈旧却可能每次移动都返回成功，因为机器人确实到了错误的旧位置。后一类失败应归因于使用了过期目标，而不能算成运动控制未到位。</p>
 <p>记录中还应区分接口错误、技能失败、目标关系不满足与预算耗尽。对一个回合可以保留多个证据，但不要把每条失败工具事件都算成一次独立任务失败，否则失败率的分母会混乱。</p>
-<h2 id="_7">先定义分母，再计算指标</h2>
+<h2 id="_8">先定义分母，再计算指标</h2>
 <p>任务成功率的分母是指定条件下的回合数；工具错误比例的分母是工具事件数；重试恢复比例的分母则应是实际遭遇目标故障的回合。三者回答不同问题，不能互相替换。本实验的 <code>mean_tool_calls</code> 使用该分组全部回合，包括提前停止与用满预算的失败。</p>
 <p>如果只统计成功回合的调用开销，也可以得到有用信息，但必须标明筛选条件，同时报告被排除的失败数量。一个只完成最容易任务的策略，成功回合可能非常短，这不表示它整体更高效。</p>
 <p>分析结果后可以提出新假设，但不要在同一批种子上反复改规则，直到全部通过，再将它们称为未见测试集。保留用于开发的种子，另定一批最终评估种子；如新增故障类型，也先规定注入时机和强度。第 14 章的训练与测试分离，在这里对应的是方案调整与最终比较之间的分离。</p>
 <h2 id="5-5">为什么 5 / 5 不能叫“稳定百分之百”</h2>
 <p>五个初始化样本只覆盖一个很窄的范围。同一个确定性种子重复运行五次，可以检查复现性，却不会变成五个新的独立场景。三种扰动各自五次，也不能合并成“每个条件有十五个样本”。</p>
-<p>即使采用独立同分布伯努利样本的理想假设，5 次全成功的 95% Wilson 区间下界也只有约 0.566。这里用它说明小样本的不确定性，不把该区间解释成真实机器人的可靠性承诺。区间所依据的目标分布必须先定义，不能用统计公式弥补没有代表性的任务集合。<a href="https://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm">NIST 比例区间说明</a></p>
+<p>进阶阅读：把每个回合记为成功 1、失败 0，可以用统计区间表达成功比例估计的不确定性。如果各回合独立地来自同一场景分布，5 次全成功的 95% Wilson 区间下界也只有约 0.566，说明五个样本留下的估计范围仍很宽。初次学习不必推导公式，先做到报告“成功数 / 总数”，并说明这些场景从哪里来。<a href="https://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm">NIST 比例区间说明</a></p>
 <p>强化学习评估研究也指出，仅比较少量运行的点估计，可能得到与考虑不确定性后不同的结论。本章没有复现其算法评测，而是采用保留回合和说明样本量的基本原则。<a href="https://arxiv.org/abs/2108.13264">原论文</a></p>
-<h2 id="_8">本章验收与继续实验</h2>
+<h2 id="_9">本章验收与继续实验</h2>
 <p>提交完整的三份记录、配对检查输出、成功数表与失败事件分析。报告同时写清观察来自仿真状态、没有模型调用、抓取为附着近似，以及三种故障条件的定义。</p>
 <p>基础题：为“去除重试仍在目标移动下成功”给出机制解释。进阶题：先冻结一个新实验方案，再运行 <code>--seeds 20</code>；比较样本增加后哪些结论变化，不能仅追加恰好有利的种子。若更改脚本检查程序，同时更新预期回合数和种子范围。</p>
-<p>阅读 <a href="../gallery.html#demo-astra-elevator-feedback-comparison">Astra：不同反馈接口对照</a>，列出要做公平比较还需要知道哪些条件。展厅材料用于练习审视证据；不要把本章结果与不同机器人、不同输入的案例直接排成同一排行榜。</p></article><div class="lab-note">本课程实验使用独立的简化教学环境。展厅链接为阅读案例，不表示实验包复现了该案例的机器人、模型或论文结果。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/15-evaluation.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/ADVANCED_GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="15">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="14.html">← 上一章</a><a rel="next" href="16.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>
+<p>阅读 <a href="../gallery.html#demo-astra-elevator-feedback-comparison">Astra：不同反馈接口对照</a>，列出要做公平比较还需要知道哪些条件。展厅材料用于练习审视证据；不要把本章结果与不同机器人、不同输入的案例直接排成同一排行榜。</p>
+<p>下一章将控制、任务记忆和逐对象验收组合成双物体任务。你可以沿用本章方法，先看一个回合发生了什么，再比较不同扰动和种子。</p></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/15-evaluation.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/ADVANCED_GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="15">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="14.html">← 上一章</a><a rel="next" href="16.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

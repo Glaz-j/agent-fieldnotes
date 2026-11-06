@@ -1,0 +1,1909 @@
+{
+  "key": "course-capstone",
+  "seed": 7,
+  "perturb": "miss-grasp",
+  "model_calls": 0,
+  "success": true,
+  "duration_s": 36.2,
+  "fps": 20,
+  "capture": "real MuJoCo frames at simulation speed; frozen review pauses between skills; no audio",
+  "versions": {
+    "mujoco": "3.3.7",
+    "numpy": "2.2.6",
+    "imageio_ffmpeg": "0.6.0"
+  },
+  "source_sha256": {
+    "lab/run.py": "e84f315833811879b8231063fd90a86bc2ebc8aa502f99857ebd558e51d490ad",
+    "lab/advanced.py": "194ce4e3d91a186e3e17191a742d95656c57df33153882c26a3e9f2ee7fe1d66",
+    "lab/scene.xml": "80bd7a4dc2c59d9b7ad92651f358d75c03ac4258318e025d5586cdcaf27764d5",
+    "lab/capstone.xml": "b720ee03fa0eb05f0fba79568e5a506c46b2272c99a8cfadb1f0d702609af9da",
+    "tools/record_course_demos.py": "69d33aa3c5d4d30d5572a2f957f1bb2814a9f88c092007029f32979124e81885"
+  },
+  "initial_observation": {
+    "observation_source": "simulator_state",
+    "robot": {
+      "joints_rad": [
+        0.0,
+        1.7
+      ],
+      "vertical_slide_m": -0.00107,
+      "tool_xyz": [
+        -0.08865,
+        0.2975,
+        0.31893
+      ],
+      "holding": false
+    },
+    "scene": {
+      "block_xyz": [
+        -0.09375,
+        0.11986,
+        0.02194
+      ],
+      "goal_xyz": [
+        0.12,
+        -0.19,
+        0.007
+      ],
+      "block_linear_speed_m_s": 5.601645281347477e-16
+    },
+    "task": {
+      "success": false,
+      "all_success": false
+    },
+    "active_object": "red",
+    "objects": {
+      "red": {
+        "block_xyz": [
+          -0.09374522667429974,
+          0.11986069004847974,
+          0.021942866596208404
+        ],
+        "goal_xyz": [
+          0.12,
+          -0.19,
+          0.007
+        ],
+        "linear_speed_m_s": 5.601645281347477e-16,
+        "holding": false,
+        "success": false
+      },
+      "green": {
+        "block_xyz": [
+          -0.10621571549245484,
+          -0.10373964049857619,
+          0.021942866596208404
+        ],
+        "goal_xyz": [
+          0.08,
+          0.18,
+          0.007
+        ],
+        "linear_speed_m_s": 5.648645612934706e-16,
+        "holding": false,
+        "success": false
+      }
+    }
+  },
+  "final_observation": {
+    "observation_source": "simulator_state",
+    "robot": {
+      "joints_rad": [
+        -0.24551,
+        1.32892
+      ],
+      "vertical_slide_m": -0.25607,
+      "tool_xyz": [
+        0.08,
+        0.18,
+        0.06393
+      ],
+      "holding": false
+    },
+    "scene": {
+      "block_xyz": [
+        0.11917,
+        -0.18894,
+        0.03071
+      ],
+      "goal_xyz": [
+        0.12,
+        -0.19,
+        0.007
+      ],
+      "block_linear_speed_m_s": 0.01161503575895435
+    },
+    "task": {
+      "success": true,
+      "all_success": true
+    },
+    "active_object": "red",
+    "objects": {
+      "red": {
+        "block_xyz": [
+          0.11916912100775948,
+          -0.18894288739976084,
+          0.0307142644867333
+        ],
+        "goal_xyz": [
+          0.12,
+          -0.19,
+          0.007
+        ],
+        "linear_speed_m_s": 0.01161503575895435,
+        "holding": false,
+        "success": true
+      },
+      "green": {
+        "block_xyz": [
+          0.07868961371897137,
+          0.17939409661283057,
+          0.030658820375359552
+        ],
+        "goal_xyz": [
+          0.08,
+          0.18,
+          0.007
+        ],
+        "linear_speed_m_s": 0.0039841178530268485,
+        "holding": false,
+        "success": true
+      }
+    }
+  },
+  "events": [
+    {
+      "step": 0,
+      "sim_time_s": 2.4,
+      "tool": "move",
+      "arguments": {
+        "x": -0.09374522667429974,
+        "y": 0.11986069004847974,
+        "z": 0.18
+      },
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.54037,
+              2.09074
+            ],
+            "vertical_slide_m": -0.14107,
+            "tool_xyz": [
+              -0.09374,
+              0.11988,
+              0.17893
+            ],
+            "holding": false
+          },
+          "scene": {
+            "block_xyz": [
+              -0.09375,
+              0.11986,
+              0.02194
+            ],
+            "goal_xyz": [
+              0.12,
+              -0.19,
+              0.007
+            ],
+            "block_linear_speed_m_s": 4.658945479347491e-16
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "red",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                -0.09374522667429974,
+                0.11986069004847974,
+                0.021942866596208404
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 4.658945479347491e-16,
+              "holding": false,
+              "success": false
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571549245484,
+                -0.10373964049857619,
+                0.021942866596208407
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 3.8682461684359126e-16,
+              "holding": false,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 1,
+      "sim_time_s": 3.8,
+      "tool": "move",
+      "arguments": {
+        "x": -0.09374522667429974,
+        "y": 0.11986069004847974,
+        "z": 0.06
+      },
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.54043,
+              2.09078
+            ],
+            "vertical_slide_m": -0.26107,
+            "tool_xyz": [
+              -0.09375,
+              0.11986,
+              0.05893
+            ],
+            "holding": false
+          },
+          "scene": {
+            "block_xyz": [
+              -0.09375,
+              0.11986,
+              0.02194
+            ],
+            "goal_xyz": [
+              0.12,
+              -0.19,
+              0.007
+            ],
+            "block_linear_speed_m_s": 4.690483417198622e-16
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "red",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                -0.09374522667429974,
+                0.11986069004847974,
+                0.021942866596208404
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 4.690483417198622e-16,
+              "holding": false,
+              "success": false
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571549245484,
+                -0.10373964049857619,
+                0.021942866596208407
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 3.8426685248138723e-16,
+              "holding": false,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 2,
+      "sim_time_s": 3.8,
+      "tool": "grasp",
+      "arguments": {},
+      "result": {
+        "ok": false,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.54043,
+              2.09078
+            ],
+            "vertical_slide_m": -0.26107,
+            "tool_xyz": [
+              -0.09375,
+              0.11986,
+              0.05893
+            ],
+            "holding": false
+          },
+          "scene": {
+            "block_xyz": [
+              -0.09375,
+              0.11986,
+              0.02194
+            ],
+            "goal_xyz": [
+              0.12,
+              -0.19,
+              0.007
+            ],
+            "block_linear_speed_m_s": 4.690483417198622e-16
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "red",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                -0.09374522667429974,
+                0.11986069004847974,
+                0.021942866596208404
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 4.690483417198622e-16,
+              "holding": false,
+              "success": false
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571549245484,
+                -0.10373964049857619,
+                0.021942866596208407
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 3.8426685248138723e-16,
+              "holding": false,
+              "success": false
+            }
+          }
+        },
+        "error": "injected_miss_grasp"
+      }
+    },
+    {
+      "step": 3,
+      "sim_time_s": 4.0,
+      "tool": "grasp",
+      "arguments": {},
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.54043,
+              2.09078
+            ],
+            "vertical_slide_m": -0.26107,
+            "tool_xyz": [
+              -0.09375,
+              0.11986,
+              0.05893
+            ],
+            "holding": true
+          },
+          "scene": {
+            "block_xyz": [
+              -0.09375,
+              0.11986,
+              0.02194
+            ],
+            "goal_xyz": [
+              0.12,
+              -0.19,
+              0.007
+            ],
+            "block_linear_speed_m_s": 3.825342516525003e-09
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "red",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                -0.09374522701642854,
+                0.11986068880428527,
+                0.02194286659618541
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 3.825342516525003e-09,
+              "holding": true,
+              "success": false
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571549245484,
+                -0.10373964049857619,
+                0.021942866596208407
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 3.84016079521605e-16,
+              "holding": false,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 4,
+      "sim_time_s": 5.4,
+      "tool": "move",
+      "arguments": {
+        "x": -0.09374522656663381,
+        "y": 0.11986069076676681,
+        "z": 0.18
+      },
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.54043,
+              2.09078
+            ],
+            "vertical_slide_m": -0.14156,
+            "tool_xyz": [
+              -0.09375,
+              0.11986,
+              0.17844
+            ],
+            "holding": true
+          },
+          "scene": {
+            "block_xyz": [
+              -0.09375,
+              0.11986,
+              0.14142
+            ],
+            "goal_xyz": [
+              0.12,
+              -0.19,
+              0.007
+            ],
+            "block_linear_speed_m_s": 2.691991034067473e-12
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "red",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                -0.09374522702377593,
+                0.11986068877440706,
+                0.1414207653307847
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 2.691991034067473e-12,
+              "holding": true,
+              "success": false
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571549245484,
+                -0.10373964049857619,
+                0.021942866596208407
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 3.7861475223882554e-16,
+              "holding": false,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 5,
+      "sim_time_s": 6.8,
+      "tool": "move",
+      "arguments": {
+        "x": 0.12,
+        "y": -0.19,
+        "z": 0.18
+      },
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.85615,
+              1.10679
+            ],
+            "vertical_slide_m": -0.14156,
+            "tool_xyz": [
+              0.12,
+              -0.18996,
+              0.17844
+            ],
+            "holding": true
+          },
+          "scene": {
+            "block_xyz": [
+              0.12,
+              -0.18996,
+              0.14142
+            ],
+            "goal_xyz": [
+              0.12,
+              -0.19,
+              0.007
+            ],
+            "block_linear_speed_m_s": 0.0002770029179572299
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "red",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.11999774964930195,
+                -0.18995821688837217,
+                0.14142076533095263
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.0002770029179572299,
+              "holding": true,
+              "success": false
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571549245484,
+                -0.10373964049857619,
+                0.021942866596208407
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 3.9652686891215354e-16,
+              "holding": false,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 6,
+      "sim_time_s": 8.2,
+      "tool": "move",
+      "arguments": {
+        "x": 0.12,
+        "y": -0.19,
+        "z": 0.065
+      },
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.85622,
+              1.10665
+            ],
+            "vertical_slide_m": -0.25413,
+            "tool_xyz": [
+              0.12,
+              -0.19003,
+              0.06587
+            ],
+            "holding": true
+          },
+          "scene": {
+            "block_xyz": [
+              0.12,
+              -0.19004,
+              0.02894
+            ],
+            "goal_xyz": [
+              0.12,
+              -0.19,
+              0.007
+            ],
+            "block_linear_speed_m_s": 0.005202292218776712
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "red",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.12000358661849968,
+                -0.19003755652969195,
+                0.028941737740353735
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.005202292218776712,
+              "holding": true,
+              "success": false
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571549245484,
+                -0.10373964049857619,
+                0.021942866596208407
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 3.816558717466266e-16,
+              "holding": false,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 7,
+      "sim_time_s": 9.4,
+      "tool": "release",
+      "arguments": {},
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.85618,
+              1.1067
+            ],
+            "vertical_slide_m": -0.25607,
+            "tool_xyz": [
+              0.12,
+              -0.19,
+              0.06393
+            ],
+            "holding": false
+          },
+          "scene": {
+            "block_xyz": [
+              0.11842,
+              -0.18949,
+              0.03061
+            ],
+            "goal_xyz": [
+              0.12,
+              -0.19,
+              0.007
+            ],
+            "block_linear_speed_m_s": 0.014523486657729985
+          },
+          "task": {
+            "success": true,
+            "all_success": false
+          },
+          "active_object": "red",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.11841644910872544,
+                -0.18948510947390876,
+                0.030613552810151063
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.014523486657729985,
+              "holding": false,
+              "success": true
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571549245484,
+                -0.10373964049857619,
+                0.021942866596208407
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 3.9353530610851705e-16,
+              "holding": false,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 8,
+      "sim_time_s": 10.8,
+      "tool": "move",
+      "arguments": {
+        "x": 0.11999999815263096,
+        "y": -0.19000001254148333,
+        "z": 0.18
+      },
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.85618,
+              1.1067
+            ],
+            "vertical_slide_m": -0.14107,
+            "tool_xyz": [
+              0.12,
+              -0.19,
+              0.17893
+            ],
+            "holding": false
+          },
+          "scene": {
+            "block_xyz": [
+              -0.10622,
+              -0.10374,
+              0.02194
+            ],
+            "goal_xyz": [
+              0.08,
+              0.18,
+              0.007
+            ],
+            "block_linear_speed_m_s": 3.9787209329620004e-16
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "green",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.11916749748071359,
+                -0.18893974650434658,
+                0.030665145851217074
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.011348893450929456,
+              "holding": false,
+              "success": true
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571549245484,
+                -0.10373964049857619,
+                0.021942866596208407
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 3.9787209329620004e-16,
+              "holding": false,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 9,
+      "sim_time_s": 12.2,
+      "tool": "move",
+      "arguments": {
+        "x": -0.10621571549245484,
+        "y": -0.10373964049857619,
+        "z": 0.18
+      },
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -1.27404,
+              2.15265
+            ],
+            "vertical_slide_m": -0.14107,
+            "tool_xyz": [
+              -0.10619,
+              -0.10375,
+              0.17893
+            ],
+            "holding": false
+          },
+          "scene": {
+            "block_xyz": [
+              -0.10622,
+              -0.10374,
+              0.02194
+            ],
+            "goal_xyz": [
+              0.08,
+              0.18,
+              0.007
+            ],
+            "block_linear_speed_m_s": 3.839331216662711e-16
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "green",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.11922264021374168,
+                -0.18889184916327598,
+                0.03070607226904554
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.011570572564284006,
+              "holding": false,
+              "success": true
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571549245484,
+                -0.10373964049857619,
+                0.021942866596208407
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 3.839331216662711e-16,
+              "holding": false,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 10,
+      "sim_time_s": 13.6,
+      "tool": "move",
+      "arguments": {
+        "x": -0.10621571549245484,
+        "y": -0.10373964049857619,
+        "z": 0.06
+      },
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -1.27409,
+              2.15276
+            ],
+            "vertical_slide_m": -0.26107,
+            "tool_xyz": [
+              -0.10622,
+              -0.10374,
+              0.05893
+            ],
+            "holding": false
+          },
+          "scene": {
+            "block_xyz": [
+              -0.10622,
+              -0.10374,
+              0.02194
+            ],
+            "goal_xyz": [
+              0.08,
+              0.18,
+              0.007
+            ],
+            "block_linear_speed_m_s": 3.8517205654704896e-16
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "green",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.11916908588008734,
+                -0.18894282007272803,
+                0.03071303172672547
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.011608329750092608,
+              "holding": false,
+              "success": true
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571549245484,
+                -0.10373964049857619,
+                0.021942866596208407
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 3.8517205654704896e-16,
+              "holding": false,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 11,
+      "sim_time_s": 13.8,
+      "tool": "grasp",
+      "arguments": {},
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -1.27409,
+              2.15276
+            ],
+            "vertical_slide_m": -0.26107,
+            "tool_xyz": [
+              -0.10622,
+              -0.10374,
+              0.05893
+            ],
+            "holding": true
+          },
+          "scene": {
+            "block_xyz": [
+              -0.10622,
+              -0.10374,
+              0.02194
+            ],
+            "goal_xyz": [
+              0.08,
+              0.18,
+              0.007
+            ],
+            "block_linear_speed_m_s": 5.7691891413074776e-09
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "green",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.11922242961311358,
+                -0.18889144548101688,
+                0.03071332522102508
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.011609925779758744,
+              "holding": false,
+              "success": true
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571741309485,
+                -0.10373964025478803,
+                0.02194286659618541
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 5.7691891413074776e-09,
+              "holding": true,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 12,
+      "sim_time_s": 15.2,
+      "tool": "move",
+      "arguments": {
+        "x": -0.10621571441874902,
+        "y": -0.10373964076455999,
+        "z": 0.18
+      },
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -1.27409,
+              2.15276
+            ],
+            "vertical_slide_m": -0.14156,
+            "tool_xyz": [
+              -0.10622,
+              -0.10374,
+              0.17844
+            ],
+            "holding": true
+          },
+          "scene": {
+            "block_xyz": [
+              -0.10622,
+              -0.10374,
+              0.14142
+            ],
+            "goal_xyz": [
+              0.08,
+              0.18,
+              0.007
+            ],
+            "block_linear_speed_m_s": 2.691604293583187e-12
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "green",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.1191691170466556,
+                -0.18894287980785845,
+                0.030714125131813513
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.011614277395839227,
+              "holding": false,
+              "success": true
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571745893955,
+                -0.10373964024762049,
+                0.1414207653307847
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 2.691604293583187e-12,
+              "holding": true,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 13,
+      "sim_time_s": 16.6,
+      "tool": "move",
+      "arguments": {
+        "x": 0.08,
+        "y": 0.18,
+        "z": 0.18
+      },
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.24562,
+              1.32901
+            ],
+            "vertical_slide_m": -0.14156,
+            "tool_xyz": [
+              0.08,
+              0.17996,
+              0.17844
+            ],
+            "holding": true
+          },
+          "scene": {
+            "block_xyz": [
+              0.08,
+              0.17996,
+              0.14142
+            ],
+            "goal_xyz": [
+              0.08,
+              0.18,
+              0.007
+            ],
+            "block_linear_speed_m_s": 0.00026304599851134425
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "green",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.11922240344092641,
+                -0.18889139531856786,
+                0.030714244272540114
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.011614925749508339,
+              "holding": false,
+              "success": true
+            },
+            "green": {
+              "block_xyz": [
+                0.07999614235002295,
+                0.17995984816613805,
+                0.14142076533092884
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 0.00026304599851134425,
+              "holding": true,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 14,
+      "sim_time_s": 18.0,
+      "tool": "move",
+      "arguments": {
+        "x": 0.08,
+        "y": 0.18,
+        "z": 0.065
+      },
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.24557,
+              1.32884
+            ],
+            "vertical_slide_m": -0.25412,
+            "tool_xyz": [
+              0.08003,
+              0.17996,
+              0.06588
+            ],
+            "holding": true
+          },
+          "scene": {
+            "block_xyz": [
+              0.08003,
+              0.17995,
+              0.02894
+            ],
+            "goal_xyz": [
+              0.08,
+              0.18,
+              0.007
+            ],
+            "block_linear_speed_m_s": 0.004753996170900634
+          },
+          "task": {
+            "success": false,
+            "all_success": false
+          },
+          "active_object": "green",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.11916912093695604,
+                -0.1889428872640589,
+                0.030714261995043908
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.011615022198624925,
+              "holding": false,
+              "success": true
+            },
+            "green": {
+              "block_xyz": [
+                0.0800325443628171,
+                0.17995288819899033,
+                0.02894436823424764
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 0.004753996170900634,
+              "holding": true,
+              "success": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "step": 15,
+      "sim_time_s": 19.2,
+      "tool": "release",
+      "arguments": {},
+      "result": {
+        "ok": true,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.24551,
+              1.32892
+            ],
+            "vertical_slide_m": -0.25607,
+            "tool_xyz": [
+              0.08,
+              0.18,
+              0.06393
+            ],
+            "holding": false
+          },
+          "scene": {
+            "block_xyz": [
+              0.07869,
+              0.17939,
+              0.03066
+            ],
+            "goal_xyz": [
+              0.08,
+              0.18,
+              0.007
+            ],
+            "block_linear_speed_m_s": 0.0039841178530268485
+          },
+          "task": {
+            "success": true,
+            "all_success": true
+          },
+          "active_object": "green",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.11916912100775948,
+                -0.18894288739976084,
+                0.0307142644867333
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.01161503575895435,
+              "holding": false,
+              "success": true
+            },
+            "green": {
+              "block_xyz": [
+                0.07868961371897137,
+                0.17939409661283057,
+                0.030658820375359552
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 0.0039841178530268485,
+              "holding": false,
+              "success": true
+            }
+          }
+        }
+      }
+    }
+  ],
+  "cues": [
+    {
+      "start": 0.0,
+      "end": 1.0,
+      "text": "初始场景：红块 → 蓝区；绿块 → 黄区",
+      "phase": "milestone"
+    },
+    {
+      "start": 1.0,
+      "end": 2.4,
+      "text": "红块 · 移动：目标 (-0.094, 0.120, 0.180) m",
+      "phase": "action"
+    },
+    {
+      "start": 2.4,
+      "end": 3.2,
+      "text": "红块 · 移动：目标 (-0.094, 0.120, 0.180) m → ok=true；holding=false",
+      "phase": "result"
+    },
+    {
+      "start": 3.2,
+      "end": 4.6,
+      "text": "红块 · 移动：目标 (-0.094, 0.120, 0.060) m",
+      "phase": "action"
+    },
+    {
+      "start": 4.6,
+      "end": 5.4,
+      "text": "红块 · 移动：目标 (-0.094, 0.120, 0.060) m → ok=true；holding=false",
+      "phase": "result"
+    },
+    {
+      "start": 5.4,
+      "end": 6.9,
+      "text": "红块 · 抓取 → 失败：injected_miss_grasp；holding=false",
+      "phase": "result"
+    },
+    {
+      "start": 6.9,
+      "end": 7.1,
+      "text": "红块 · 抓取",
+      "phase": "action"
+    },
+    {
+      "start": 7.1,
+      "end": 7.9,
+      "text": "红块 · 抓取 → ok=true；holding=true",
+      "phase": "result"
+    },
+    {
+      "start": 7.9,
+      "end": 9.3,
+      "text": "红块 · 移动：目标 (-0.094, 0.120, 0.180) m",
+      "phase": "action"
+    },
+    {
+      "start": 9.3,
+      "end": 10.1,
+      "text": "红块 · 移动：目标 (-0.094, 0.120, 0.180) m → ok=true；holding=true",
+      "phase": "result"
+    },
+    {
+      "start": 10.1,
+      "end": 11.5,
+      "text": "红块 · 移动：目标 (0.120, -0.190, 0.180) m",
+      "phase": "action"
+    },
+    {
+      "start": 11.5,
+      "end": 12.3,
+      "text": "红块 · 移动：目标 (0.120, -0.190, 0.180) m → ok=true；holding=true",
+      "phase": "result"
+    },
+    {
+      "start": 12.3,
+      "end": 13.7,
+      "text": "红块 · 移动：目标 (0.120, -0.190, 0.065) m",
+      "phase": "action"
+    },
+    {
+      "start": 13.7,
+      "end": 14.5,
+      "text": "红块 · 移动：目标 (0.120, -0.190, 0.065) m → ok=true；holding=true",
+      "phase": "result"
+    },
+    {
+      "start": 14.5,
+      "end": 15.7,
+      "text": "红块 · 释放",
+      "phase": "action"
+    },
+    {
+      "start": 15.7,
+      "end": 16.5,
+      "text": "红块 · 释放 → ok=true；holding=false",
+      "phase": "result"
+    },
+    {
+      "start": 16.5,
+      "end": 17.9,
+      "text": "绿块 · 移动：目标 (0.120, -0.190, 0.180) m",
+      "phase": "action"
+    },
+    {
+      "start": 17.9,
+      "end": 18.7,
+      "text": "绿块 · 移动：目标 (0.120, -0.190, 0.180) m → ok=true；holding=false",
+      "phase": "result"
+    },
+    {
+      "start": 18.7,
+      "end": 20.1,
+      "text": "绿块 · 移动：目标 (-0.106, -0.104, 0.180) m",
+      "phase": "action"
+    },
+    {
+      "start": 20.1,
+      "end": 20.9,
+      "text": "绿块 · 移动：目标 (-0.106, -0.104, 0.180) m → ok=true；holding=false",
+      "phase": "result"
+    },
+    {
+      "start": 20.9,
+      "end": 22.3,
+      "text": "绿块 · 移动：目标 (-0.106, -0.104, 0.060) m",
+      "phase": "action"
+    },
+    {
+      "start": 22.3,
+      "end": 23.1,
+      "text": "绿块 · 移动：目标 (-0.106, -0.104, 0.060) m → ok=true；holding=false",
+      "phase": "result"
+    },
+    {
+      "start": 23.1,
+      "end": 23.3,
+      "text": "绿块 · 抓取",
+      "phase": "action"
+    },
+    {
+      "start": 23.3,
+      "end": 24.1,
+      "text": "绿块 · 抓取 → ok=true；holding=true",
+      "phase": "result"
+    },
+    {
+      "start": 24.1,
+      "end": 25.5,
+      "text": "绿块 · 移动：目标 (-0.106, -0.104, 0.180) m",
+      "phase": "action"
+    },
+    {
+      "start": 25.5,
+      "end": 26.3,
+      "text": "绿块 · 移动：目标 (-0.106, -0.104, 0.180) m → ok=true；holding=true",
+      "phase": "result"
+    },
+    {
+      "start": 26.3,
+      "end": 27.7,
+      "text": "绿块 · 移动：目标 (0.080, 0.180, 0.180) m",
+      "phase": "action"
+    },
+    {
+      "start": 27.7,
+      "end": 28.5,
+      "text": "绿块 · 移动：目标 (0.080, 0.180, 0.180) m → ok=true；holding=true",
+      "phase": "result"
+    },
+    {
+      "start": 28.5,
+      "end": 29.9,
+      "text": "绿块 · 移动：目标 (0.080, 0.180, 0.065) m",
+      "phase": "action"
+    },
+    {
+      "start": 29.9,
+      "end": 30.7,
+      "text": "绿块 · 移动：目标 (0.080, 0.180, 0.065) m → ok=true；holding=true",
+      "phase": "result"
+    },
+    {
+      "start": 30.7,
+      "end": 31.9,
+      "text": "绿块 · 释放",
+      "phase": "action"
+    },
+    {
+      "start": 31.9,
+      "end": 32.7,
+      "text": "绿块 · 释放 → ok=true；holding=false",
+      "phase": "result"
+    },
+    {
+      "start": 32.7,
+      "end": 34.7,
+      "text": "重复请求：重新核对红块位置，仍然完成，跳过搬运",
+      "phase": "milestone"
+    },
+    {
+      "start": 34.7,
+      "end": 36.2,
+      "text": "最终验收：通过",
+      "phase": "milestone"
+    }
+  ],
+  "skipped_duplicates": 1,
+  "memory": {
+    "completed": {
+      "red_to_blue": {
+        "source": "simulator_state",
+        "at_sim_time_s": 9.399999999999809,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.85618,
+              1.1067
+            ],
+            "vertical_slide_m": -0.25607,
+            "tool_xyz": [
+              0.12,
+              -0.19,
+              0.06393
+            ],
+            "holding": false
+          },
+          "scene": {
+            "block_xyz": [
+              0.11842,
+              -0.18949,
+              0.03061
+            ],
+            "goal_xyz": [
+              0.12,
+              -0.19,
+              0.007
+            ],
+            "block_linear_speed_m_s": 0.014523486657729985
+          },
+          "task": {
+            "success": true,
+            "all_success": false
+          },
+          "active_object": "red",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.11841644910872544,
+                -0.18948510947390876,
+                0.030613552810151063
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.014523486657729985,
+              "holding": false,
+              "success": true
+            },
+            "green": {
+              "block_xyz": [
+                -0.10621571549245484,
+                -0.10373964049857619,
+                0.021942866596208407
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 3.9353530610851705e-16,
+              "holding": false,
+              "success": false
+            }
+          }
+        }
+      },
+      "green_to_yellow": {
+        "source": "simulator_state",
+        "at_sim_time_s": 19.200000000000237,
+        "observation": {
+          "observation_source": "simulator_state",
+          "robot": {
+            "joints_rad": [
+              -0.24551,
+              1.32892
+            ],
+            "vertical_slide_m": -0.25607,
+            "tool_xyz": [
+              0.08,
+              0.18,
+              0.06393
+            ],
+            "holding": false
+          },
+          "scene": {
+            "block_xyz": [
+              0.07869,
+              0.17939,
+              0.03066
+            ],
+            "goal_xyz": [
+              0.08,
+              0.18,
+              0.007
+            ],
+            "block_linear_speed_m_s": 0.0039841178530268485
+          },
+          "task": {
+            "success": true,
+            "all_success": true
+          },
+          "active_object": "green",
+          "objects": {
+            "red": {
+              "block_xyz": [
+                0.11916912100775948,
+                -0.18894288739976084,
+                0.0307142644867333
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "linear_speed_m_s": 0.01161503575895435,
+              "holding": false,
+              "success": true
+            },
+            "green": {
+              "block_xyz": [
+                0.07868961371897137,
+                0.17939409661283057,
+                0.030658820375359552
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "linear_speed_m_s": 0.0039841178530268485,
+              "holding": false,
+              "success": true
+            }
+          }
+        }
+      }
+    },
+    "events": [
+      {
+        "event": "completed",
+        "task_id": "red_to_blue",
+        "evidence": {
+          "source": "simulator_state",
+          "at_sim_time_s": 9.399999999999809,
+          "observation": {
+            "observation_source": "simulator_state",
+            "robot": {
+              "joints_rad": [
+                -0.85618,
+                1.1067
+              ],
+              "vertical_slide_m": -0.25607,
+              "tool_xyz": [
+                0.12,
+                -0.19,
+                0.06393
+              ],
+              "holding": false
+            },
+            "scene": {
+              "block_xyz": [
+                0.11842,
+                -0.18949,
+                0.03061
+              ],
+              "goal_xyz": [
+                0.12,
+                -0.19,
+                0.007
+              ],
+              "block_linear_speed_m_s": 0.014523486657729985
+            },
+            "task": {
+              "success": true,
+              "all_success": false
+            },
+            "active_object": "red",
+            "objects": {
+              "red": {
+                "block_xyz": [
+                  0.11841644910872544,
+                  -0.18948510947390876,
+                  0.030613552810151063
+                ],
+                "goal_xyz": [
+                  0.12,
+                  -0.19,
+                  0.007
+                ],
+                "linear_speed_m_s": 0.014523486657729985,
+                "holding": false,
+                "success": true
+              },
+              "green": {
+                "block_xyz": [
+                  -0.10621571549245484,
+                  -0.10373964049857619,
+                  0.021942866596208407
+                ],
+                "goal_xyz": [
+                  0.08,
+                  0.18,
+                  0.007
+                ],
+                "linear_speed_m_s": 3.9353530610851705e-16,
+                "holding": false,
+                "success": false
+              }
+            }
+          }
+        }
+      },
+      {
+        "event": "completed",
+        "task_id": "green_to_yellow",
+        "evidence": {
+          "source": "simulator_state",
+          "at_sim_time_s": 19.200000000000237,
+          "observation": {
+            "observation_source": "simulator_state",
+            "robot": {
+              "joints_rad": [
+                -0.24551,
+                1.32892
+              ],
+              "vertical_slide_m": -0.25607,
+              "tool_xyz": [
+                0.08,
+                0.18,
+                0.06393
+              ],
+              "holding": false
+            },
+            "scene": {
+              "block_xyz": [
+                0.07869,
+                0.17939,
+                0.03066
+              ],
+              "goal_xyz": [
+                0.08,
+                0.18,
+                0.007
+              ],
+              "block_linear_speed_m_s": 0.0039841178530268485
+            },
+            "task": {
+              "success": true,
+              "all_success": true
+            },
+            "active_object": "green",
+            "objects": {
+              "red": {
+                "block_xyz": [
+                  0.11916912100775948,
+                  -0.18894288739976084,
+                  0.0307142644867333
+                ],
+                "goal_xyz": [
+                  0.12,
+                  -0.19,
+                  0.007
+                ],
+                "linear_speed_m_s": 0.01161503575895435,
+                "holding": false,
+                "success": true
+              },
+              "green": {
+                "block_xyz": [
+                  0.07868961371897137,
+                  0.17939409661283057,
+                  0.030658820375359552
+                ],
+                "goal_xyz": [
+                  0.08,
+                  0.18,
+                  0.007
+                ],
+                "linear_speed_m_s": 0.0039841178530268485,
+                "holding": false,
+                "success": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "event": "revalidate_completion",
+        "task_id": "red_to_blue",
+        "at_sim_time_s": 19.200000000000237,
+        "valid_now": true
+      }
+    ]
+  },
+  "controller": "feedback_controller with TaskMemory and red/green/red scheduler"
+}

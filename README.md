@@ -22,11 +22,15 @@
 11. 会更新的空间记忆
 12. 主动观察：为行动获取信息
 13. 用程序表达机器人计划
-14. 把学习技能接入 Agent
+14. 学习一个局部运动技能
 15. 设计可比较的机器人实验
 16. 毕业项目：桌面搬运助手
 
 每章包括概念解释、实验步骤、验收、排错、练习与原始参考资料。进度保存在读者浏览器中。
+
+初学者修订补充了术语解释、日志读取示例、预期结果和章间衔接；在线模型调用放在第 7 章选学部分。第 8、12 章的视觉练习，第 13 章的计划解释器，以及第 14 章的局部技能学习分别运行；第 16 章明确列出毕业项目实际组合的模块。
+
+正文直接嵌入 9 段演示：5 段课程 SCARA 真实轨迹和 4 段已有展厅案例。课程轨迹附动作字幕、可点击时间记录与原始验收 JSON，包含失败对照。视频默认不自动播放；场景设置与来源随录像说明。
 
 ## 运行教学实验
 
@@ -67,6 +71,10 @@ python lab/advanced.py capstone --seed 7 --perturb miss-grasp --out runs/capston
 | `lab/` | 教学仿真代码、场景、依赖与测试 |
 | `build_course.py` | 生成课程网页与可下载实验包 |
 | `docs/learn/` | 生成的课程阅读页 |
+| `course/demos.json` | 正文演示选择与教学说明 |
+| `docs/course-media/` | 课程实际仿真录像、字幕、截图与事件记录 |
+| `tools/record_course_demos.py` | 录制既有控制器的实际仿真过程 |
+| `tools/check_course.py` | 校验阅读页、媒体、站内链接和下载包 |
 | `docs/index.html` | 生成的课程首页 |
 | `docs/gallery.html` | 原展厅，新增章节关联 |
 | `docs/data/`、`docs/media/` | 原有案例记录与视频图像 |
@@ -77,8 +85,11 @@ python lab/advanced.py capstone --seed 7 --perturb miss-grasp --out runs/capston
 python3 -m venv .course-venv
 .course-venv/bin/python -m pip install -r course-requirements.txt
 .course-venv/bin/python build_course.py
+python3 tools/check_course.py
 python3 -m http.server 4330 --directory docs --bind 127.0.0.1
 ```
+
+课程作者需要重新录制时，在已经安装教学依赖的环境额外运行 `python -m pip install imageio-ffmpeg==0.6.0`，再执行 `python tools/record_course_demos.py`。录像按实际仿真速度取帧，只在动作之间加入定格以便读字幕；录制没有改变技能、控制器、物理步数或验收条件。学生运行实验不需要安装编码器。
 
 GitHub Pages 从 `main` 分支的 `/docs` 发布，网站没有模型密钥或服务端调用。旧的首页 `#demo-…` 分享链接会跳转到原案例，实验总览也指向案例库。
 

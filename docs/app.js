@@ -217,13 +217,13 @@ function openDemo(id,opener,options={}){
     active_perception: [[12,'主动观察：为行动获取信息']],
     planner: [[5,'把动作封装成技能']],
     control: [[4,'从坐标到机械臂运动']],
-    vla: [[14,'把学习技能接入 Agent']],
-    learned: [[14,'把学习技能接入 Agent']],
-    skill_adaptation: [[14,'把学习技能接入 Agent']],
+    vla: [[14,'学习一个局部运动技能']],
+    learned: [[14,'学习一个局部运动技能']],
+    skill_adaptation: [[14,'学习一个局部运动技能']],
     skill_reuse: [[10,'让任务历史成为可用的记忆']],
     world_model: [[13,'用程序表达机器人计划']]
   };
-  const lessons = d.id.startsWith('robomme-') ? [[10,'让任务历史成为可用的记忆'],[15,'设计可比较的机器人实验']] : d.id.startsWith('rpent-') ? [[14,'把学习技能接入 Agent']] : routeLessons[d.route] || [[1,'拆解一个机器人 Agent']];
+  const lessons = d.id.startsWith('robomme-') ? [[10,'让任务历史成为可用的记忆'],[15,'设计可比较的机器人实验']] : d.id.startsWith('rpent-') ? [[14,'学习一个局部运动技能']] : routeLessons[d.route] || [[1,'拆解一个机器人 Agent']];
   const relatedCourse = document.querySelector('#course-related');
   if (relatedCourse) relatedCourse.innerHTML = `<p style="padding:14px;background:#e1ead8;border-radius:5px;font-size:13px;line-height:1.8"><strong>带着问题看案例</strong><br>${lessons.map(([n,title])=>`<a href="learn/${String(n).padStart(2,'0')}.html">第 ${n} 章 · ${title} →</a>`).join('<br>')}<br>此处为已有实验阅读案例；课程实验包使用独立的简化教学环境。</p>`;
 

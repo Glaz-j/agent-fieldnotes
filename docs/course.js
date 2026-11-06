@@ -11,3 +11,18 @@ const count=document.querySelector('#progress-count');if(count)count.textContent
 for(const pre of document.querySelectorAll('article pre')){const button=document.createElement('button');button.type='button';button.className='copy-code';button.textContent='复制代码';button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(pre.querySelector('code').textContent);button.textContent='已复制'}catch{button.textContent='请选中代码复制'}});pre.append(button)}
 const nav=document.querySelector('.course-nav details');
 if(nav){if(matchMedia('(max-width:680px)').matches){nav.open=false}else{const current=nav.querySelector('[aria-current=page]');const sidebar=nav.closest('.course-nav');if(current&&sidebar)sidebar.scrollTop=Math.max(0,current.offsetTop-sidebar.clientHeight/2)}}
+
+// Readers choose when to play; a single film plays at a time.
+for(const figure of document.querySelectorAll('.lesson-demo')){
+  const video=figure.querySelector('video');
+  video.addEventListener('play',()=>{document.querySelectorAll('video').forEach(other=>{if(other!==video)other.pause()})});
+  const buttons=[...figure.querySelectorAll('[data-seek]')];
+  for(const button of buttons){button.addEventListener('click',()=>{
+    const seek=()=>{video.currentTime=Number(button.dataset.seek);video.scrollIntoView({block:'center'});video.play().catch(()=>{})};
+    if(video.readyState>=1)seek();else{video.addEventListener('loadedmetadata',seek,{once:true});video.load()}
+  })}
+  video.addEventListener('timeupdate',()=>{
+    let active=null;for(const button of buttons){if(Number(button.dataset.seek)<=video.currentTime)active=button}
+    for(const button of buttons){if(button===active)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current')}
+  });
+}

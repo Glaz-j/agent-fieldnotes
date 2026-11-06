@@ -1,113 +1,184 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="观察、行动、检查，再决定下一步"><meta name="theme-color" content="#f3f4ee"><title>第一个机器人 Agent 循环 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=course16"><script defer src="../course.js?v=course16"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html" aria-current="page">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 把学习技能接入 Agent</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 06 章 / Agent 闭环</div><h1>第一个机器人 Agent 循环</h1><p>观察、行动、检查，再决定下一步</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="观察、行动、检查，再决定下一步"><meta name="theme-color" content="#f3f4ee"><title>第一个机器人 Agent 循环 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css?v=beginner-demos"><script defer src="../course.js?v=beginner-demos"></script></head><body data-lesson-count="16"><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 16 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html" aria-current="page">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">记忆与观察</div><a href="10.html">10 · 让任务历史成为可用的记忆</a><a href="11.html">11 · 会更新的空间记忆</a><a href="12.html">12 · 主动观察：为行动获取信息</a><div class="nav-group">整合与评测</div><a href="13.html">13 · 用程序表达机器人计划</a><a href="14.html">14 · 学习一个局部运动技能</a><a href="15.html">15 · 设计可比较的机器人实验</a><a href="16.html">16 · 毕业项目：桌面搬运助手</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 06 章 / Agent 闭环</div><h1>第一个机器人 Agent 循环</h1><p>观察、行动、检查，再决定下一步</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
 <ul>
-<li><a href="#_1">本章目标</a></li>
-<li><a href="#_2">先区分循环与决策器</a></li>
-<li><a href="#_3">第一步：明确工具能做什么</a></li>
-<li><a href="#_4">第二步：运行确定性闭环</a></li>
-<li><a href="#_5">第三步：给日志标注因果关系</a></li>
-<li><a href="#_6">第四步：理解真实模型的接入位置</a></li>
-<li><a href="#_7">本章验收与排查</a></li>
-<li><a href="#_8">从展厅读一个真实案例</a></li>
-<li><a href="#_9">练习与参考</a></li>
+<li><a href="#_1">本章目标：看懂一次决策为什么发生</a></li>
+<li><a href="#_2">先用一个具体意外理解闭环</a></li>
+<li><a href="#_3">第一步：认清工具、观察与任务三个接口</a></li>
+<li><a href="#_4">第二步：运行一次无扰动的闭环</a></li>
+<li><a href="#_5">第三步：把七次动作与规则逐项对应</a></li>
+<li><a href="#_6">第四步：用小程序读日志</a></li>
+<li><a href="#_7">验收与常见卡点</a></li>
+<li><a href="#_8">参考</a></li>
 </ul>
 </div>
-</details><article><p>前五章已经把环境、观察、坐标和技能接口准备好。本章把它们接成一个能够根据反馈选择下一步的循环。先让每个环节都可检查，再接真实语言模型，才能区分系统问题与模型问题。</p>
-<p>前置要求：完成第 2 章安装，能运行固定脚本基线，理解 <code>move</code>、<code>grasp</code> 与 <code>release</code> 的作用。后面的命令均在仓库根目录、已经激活的 Python 虚拟环境中执行。</p>
-<h2 id="_1">本章目标</h2>
-<p>完成一次红色方块到蓝色区域的搬运，读懂完整动作记录，并说清楚决策来自哪里。你将得到 <code>events.jsonl</code> 和 <code>summary.json</code>，能解释一次动作返回与整个任务成功之间的区别。</p>
-<h2 id="_2">先区分循环与决策器</h2>
-<p>一个最小循环包含五件事：取得观察，选择动作，检查参数，执行工具，再把结果送回下一轮。循环还需要停止条件，否则一次失败可能变成无限重试。</p>
-<p>本课程有两种决策模式。<code>scripted</code> 由人工编写的确定性规则决定下一步，用于学习闭环结构；它没有调用大模型，也不能作为语言模型具身能力的证据。<code>llm</code> 才把任务、工具说明与反馈发给外部模型，由模型返回工具调用。两者共享教学环境，便于把接口问题与决策差异分开研究。</p>
-<p>下面是理解结构的伪代码，不是需要复制执行的实现：</p>
-<pre><code class="language-text">在预算范围内重复：
-    读取当前信息
-    由规则或模型选择一个工具调用
-    检查工具名、参数与允许范围
-    执行工具，保存返回值
-    检查任务是否完成；完成则结束
-预算耗尽或无法继续：记录失败并结束
+</details><article><p>第 5 章已经能用固定顺序完成一次抓放：移动、抓取、搬运、释放。现在只改一个地方：不再预先决定全部动作，而是在每一步结束后重新看状态，再选下一步。这就是本章要搭起的反馈循环。</p>
+<p>前置要求：完成第 2 章安装，能运行第 5 章的 <code>baseline</code>，知道 <code>move</code>、<code>grasp</code>、<code>release</code> 各做什么。本章全部离线运行，不需要注册模型服务或填写密钥。后面的命令都在含有 <code>lab/</code> 的仓库根目录、已激活的虚拟环境中执行。</p>
+<h2 id="_1">本章目标：看懂一次决策为什么发生</h2>
+<p>完成红色方块到蓝色区域的搬运，得到 <code>events.jsonl</code> 和 <code>summary.json</code>。完成后，你应能指着日志解释：“这一步为什么抓取？抓取后为什么抬高？什么时候该停止？”</p>
+<p>这里的 Agent 循环是“观察—决策—行动—再观察”的软件结构。当前决策器是一组人工写好的规则，名称为 <code>scripted</code>；确定性意味着相同状态会得到相同选择。它不是大模型推理。以后可以替换决策器，但观察、工具和任务验收这些接口仍然需要保留。</p>
+<h2 id="_2">先用一个具体意外理解闭环</h2>
+<p>假设第三步抓空了。固定脚本仍然执行第四步“抬高”、第五步“移到蓝区”，只是这次没有方块跟随。反馈控制器会先重新读取 <code>holding</code>：它表示方块是否已经附着在工具上。若还是 <code>false</code>，就不会进入“搬运已抓物体”的分支。</p>
+<p><strong>闭环</strong>指执行结果会影响后续动作；这里闭合的是信息回路，不是机械臂走了一条闭合曲线。<strong>状态机</strong>则是编写这种规则的一种方式：根据“尚未抓住”“已经抓住”“任务完成”等状态选择动作。</p>
+<p>下面是结构说明，不是需要复制执行的 Python：</p>
+<pre><code class="language-text">最多进行 32 轮：
+    读取当前观察
+    如果任务已经完成：结束
+    根据是否持物、工具位置和目标位置选择一个动作
+    执行动作，并记录动作返回的观察
+仍未完成：保留失败结果并结束
 </code></pre>
-<p>这里最容易遗漏的是“保存返回值”。若抓取失败后仍按原计划搬运，程序虽然调用了很多工具，行动却没有真正受反馈影响。</p>
-<h2 id="_3">第一步：明确工具能做什么</h2>
+<p>实际 <code>scripted_agent</code> 在下一轮调用 <code>observe()</code> 读取当前状态，不靠理解错误消息文字来恢复。例如抓空后，它看到 <code>holding</code> 仍为假，于是继续满足抓取分支。<code>error</code> 字段主要留给我们排查原因。</p>
+<h2 id="_3">第一步：认清工具、观察与任务三个接口</h2>
 <table>
 <thead>
 <tr>
-<th>工具</th>
-<th>输入与作用</th>
-<th>不能据此推断什么</th>
+<th>接口或字段</th>
+<th>本章中的作用</th>
+<th>一个容易混淆的地方</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>observe</code></td>
-<td>读取当前教学场景状态</td>
-<td>坐标不是相机识别结果</td>
+<td><code>observe()</code></td>
+<td>读取机器人、方块、目标的当前状态</td>
+<td>本章坐标直接来自仿真器，不是相机识别</td>
 </tr>
 <tr>
-<td><code>move</code></td>
-<td>接受世界坐标 <code>x, y, z</code>，尝试移动末端</td>
-<td>到达位置不等于抓到了物体</td>
+<td><code>move(x,y,z)</code></td>
+<td>让工具尝试到达世界坐标，单位米</td>
+<td>到达方块旁边不等于抓住方块</td>
 </tr>
 <tr>
-<td><code>grasp</code></td>
-<td>尝试建立教学抓取附着</td>
-<td>返回成功不代表真实摩擦夹持已验证</td>
+<td><code>grasp()</code></td>
+<td>在足够靠近时建立教学抓取附着</td>
+<td><code>holding</code> 才能帮助确认是否已持物</td>
 </tr>
 <tr>
-<td><code>release</code></td>
-<td>解除附着、放下物体</td>
-<td>松开不等于放进目标区域</td>
+<td><code>release()</code></td>
+<td>解除附着并等待物体落下</td>
+<td>在错误位置放下也可能 <code>ok: true</code></td>
 </tr>
 <tr>
-<td><code>locate_color</code></td>
-<td>按 <code>block</code> 或 <code>goal</code> 定位受控颜色目标</td>
-<td>不具备任意物体识别能力</td>
+<td><code>task.success</code></td>
+<td>判断整个搬运任务是否完成</td>
+<td>它与单个工具的 <code>result.ok</code> 不同</td>
 </tr>
 </tbody>
 </table>
-<p>上表列出 <code>World</code> 教学环境提供的接口；当前在线模型实际只获得 <code>observe</code>、<code>move</code>、<code>grasp</code>、<code>release</code> 四个基础工具，<code>locate_color</code> 用于第 8 章独立练习，没有注册为在线模型的视觉工具。</p>
-<p>本章离线循环使用精确状态观察。简化 SCARA 机械臂通过显式约束附着来模拟抓取，实验重点是接口与反馈；第 8 章才独立研究 RGB 像素如何产生位置估计。</p>
-<h2 id="_4">第二步：运行确定性闭环</h2>
+<p><code>World</code> 还提供颜色定位接口，留到第 8 章单独练习。本章不使用图像。抓取采用简化 SCARA 与显式附着约束，目的是学习控制流程，不代表验证了真实夹爪摩擦。</p>
+<h2 id="_4">第二步：运行一次无扰动的闭环</h2>
 <pre><code class="language-sh">python lab/run.py agent --mode scripted --seed 7 --out runs/ch06-scripted --perturb none
 </code></pre>
-<p>先不要增加扰动。固定种子可以保留一致的初始化条件，单独的输出目录则保留本次证据。观察控制器如何从接近、抓取、搬运走到释放，以及中间何时重新读取状态。</p>
-<p>运行后执行下面的完整检查程序。它只读取日志，不控制机器人：</p>
-<pre><code class="language-sh">python - &lt;&lt;'PY'
-import json
+<p>参数从左到右表示：运行 Agent、使用规则模式、采用种子 7、把文件写入指定目录、不注入扰动。种子控制初始方块的位置；固定种子有助于比较两个方法。命令默认只计算物理过程、打印结果，不会弹出动画窗口，这是正常现象。</p>
+<p>本机参考结果的关键字段如下，其余完整状态仍保存在文件里：</p>
+<pre><code class="language-json">{
+  &quot;mode&quot;: &quot;scripted&quot;,
+  &quot;seed&quot;: 7,
+  &quot;perturb&quot;: &quot;none&quot;,
+  &quot;success&quot;: true,
+  &quot;steps&quot;: 7,
+  &quot;model_calls&quot;: 0,
+  &quot;error&quot;: null
+}
+</code></pre>
+<p>这里 <code>null</code> 表示没有记录到程序异常，不是所有问题都不存在：一次任务也可能 <code>error: null</code> 但 <code>success: false</code>。<code>steps</code> 是保存的工具事件数，<code>model_calls</code> 是尝试的模型请求次数。<code>model_calls: 0</code> 说明这次没有调用模型。</p>
+<h2 id="_5">第三步：把七次动作与规则逐项对应</h2>
+<p>下表描述种子 7、无扰动时的七次工具调用。<code>p</code> 代表当前方块位置，<code>g</code> 代表当前目标位置；高度 <code>0.18 m</code> 用于抬升，<code>0.06/0.065 m</code> 用于接近与放置。</p>
+<table>
+<thead>
+<tr>
+<th>事件 <code>step</code></th>
+<th>工具</th>
+<th>决策依据</th>
+<th>调用后的关键变化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>move(p.x,p.y,0.18)</code></td>
+<td>空手，工具的水平位置还不靠近方块</td>
+<td>到方块上方</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>move(p.x,p.y,0.06)</code></td>
+<td>水平位置已接近，但工具太高</td>
+<td>下降到抓取附近</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>grasp()</code></td>
+<td>空手且已接近方块</td>
+<td><code>holding</code> 变为 <code>true</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>move(tool.x,tool.y,0.18)</code></td>
+<td>已持物，要横向移动但目前过低</td>
+<td>先抬高</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>move(g.x,g.y,0.18)</code></td>
+<td>已持物且高度合适，还没到目标上方</td>
+<td>移向当前蓝区</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>move(g.x,g.y,0.065)</code></td>
+<td>已到目标上方，但仍然较高</td>
+<td>降低准备放置</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>release()</code></td>
+<td>已持物且达到放置位置</td>
+<td>松开，等待物体落下</td>
+</tr>
+</tbody>
+</table>
+<p>下一轮读取到 <code>task.success: true</code>，循环结束。这张表解释本次轨迹，不是程序硬编码的七行执行计划；第 9 章注入抓空后，规则会多执行一次抓取。</p>
+<h2 id="_6">第四步：用小程序读日志</h2>
+<p>JSON 是保存一份结构化数据的格式；JSONL 则是“一行一个 JSON 对象”，适合保存连续事件。<code>summary.json</code> 是本回合汇总，<code>events.jsonl</code> 是逐步记录。<code>step</code> 从 0 开始，所以 <code>step: 2</code> 是第三次事件。</p>
+<p>把以下完整代码保存为仓库根目录的 <code>inspect_ch06.py</code>，再执行它。保存为文件的方式适用于 macOS、Linux 和 Windows，无需学习不同终端的多行输入语法。</p>
+<pre><code class="language-python">import json
 from pathlib import Path
 
-run = Path(&quot;runs/ch06-scripted&quot;)
-summary = json.loads((run / &quot;summary.json&quot;).read_text())
-print(json.dumps(summary, ensure_ascii=False, indent=2))
-print(&quot;\n逐条事件：&quot;)
-for index, line in enumerate((run / &quot;events.jsonl&quot;).read_text().splitlines(), 1):
-    event = json.loads(line)
-    print(index, json.dumps(event, ensure_ascii=False))
+folder = Path(&quot;runs/ch06-scripted&quot;)
+summary = json.loads((folder / &quot;summary.json&quot;).read_text())
+events = [json.loads(line) for line in
+          (folder / &quot;events.jsonl&quot;).read_text().splitlines()]
+
+print(&quot;任务成功:&quot;, summary[&quot;success&quot;], &quot;模型调用:&quot;, summary[&quot;model_calls&quot;])
+print(&quot;step  tool     ok     holding  task_success&quot;)
+for event in events:
+    result = event[&quot;result&quot;]
+    observation = result[&quot;observation&quot;]
+    print(event[&quot;step&quot;], event[&quot;tool&quot;], result[&quot;ok&quot;],
+          observation[&quot;robot&quot;][&quot;holding&quot;], observation[&quot;task&quot;][&quot;success&quot;])
+
 assert summary[&quot;mode&quot;] == &quot;scripted&quot;
 assert summary[&quot;model_calls&quot;] == 0
-assert summary[&quot;success&quot;] is True, &quot;程序运行结束，但任务验收未通过&quot;
-PY
+assert len(events) == summary[&quot;steps&quot;]
+assert summary[&quot;success&quot;] is True
 </code></pre>
-<p><code>model_calls</code> 为零是本实验的重要验收信息。<code>steps</code> 用来描述执行开销，<code>success</code> 才描述任务验收；<code>error</code> 则帮助解释异常。不要把“命令正常结束”写成“模型成功完成任务”。</p>
-<h2 id="_5">第三步：给日志标注因果关系</h2>
-<p>从记录中挑出第一次抓取，在纸上连出三段证据：抓取前末端和方块处于什么关系，<code>grasp</code> 返回了什么，下一步为什么继续或重试。再检查释放之后的场景，找出支持最终成功判断的状态。</p>
-<p>这一步是在验证反馈是否真的进入决策。看到动作顺序相同并不能证明没有闭环：在没有扰动时，固定脚本与反馈控制器可能恰好做出相同动作。第 9 章会有意制造失败，让两者的差异显现。</p>
-<h2 id="_6">第四步：理解真实模型的接入位置</h2>
-<p>在线模式通过兼容 Chat Completions 的工具调用接口工作。先在本机环境配置 <code>AF_API_KEY</code>、<code>AF_MODEL</code> 和 <code>AF_BASE_URL</code>；基础地址应指向服务的 API 根路径，程序会追加 <code>/chat/completions</code>。然后运行：</p>
-<pre><code class="language-sh">python lab/run.py agent --mode llm --seed 7 --out runs/ch06-llm --perturb none
+<pre><code class="language-sh">python inspect_ch06.py
 </code></pre>
-<p>不要把密钥写进课程网页、代码仓库或实验截图。网站本身不执行模型请求。本课程首期验证的是离线流程；未配置有效密钥的环境没有完成真实在线模型实测，因此这里不预报在线成功率。</p>
-<p>模型应依据工具返回选择下一步；返回普通文字、虚构工具名或无效坐标都不等于执行成功。遇到接口不兼容时，先检查模型是否支持工具调用，以及本地日志中的错误，不能把接口失败计作机器人运动失败。</p>
-<h2 id="_7">本章验收与排查</h2>
-<p>验收时交付命令、两个日志文件，以及一段抓取前后证据。你应能回答：用了哪个模式？是否调用模型？观察来自状态还是像素？最终由什么条件验收？</p>
-<p>若动作执行但任务失败，先检查抓取反馈和目标位置；若没有任何动作，检查参数、依赖或在线接口错误；若日志里的状态始终不变，检查是否真的执行了工具。每次重跑换一个输出目录，避免混淆记录。</p>
-<h2 id="_8">从展厅读一个真实案例</h2>
-<p>打开 <a href="../gallery.html#demo-pyrualean-astra-cells-20261028">PyRUA-Lean：用代码组织机器人动作</a>。观察一段代码如何组织多次工具调用，以及动作结果在哪里影响后续步骤。PyRUA-Lean 的实际接口与本章工具不同，展厅是阅读案例，不是本实验已经复现原系统的证明。</p>
-<p>Code as Policies 展示了语言模型生成代码、组合感知与控制接口的研究路线；本章先把这样的接口边界拆开练习。<a href="https://code-as-policies.github.io/">原项目与论文</a></p>
-<h2 id="_9">练习与参考</h2>
-<p>基础题：把种子改为 8，保存新记录，标出坐标改变但任务阶段不变的地方。进阶题：比较两种模式的日志，明确哪些字段足以证明发生了真实模型调用；没有密钥时，写出需要收集的证据，不填写虚构结果。</p>
+<p>应看到七行事件，第三行抓取之后 <code>holding</code> 为 <code>True</code>，最后释放后为 <code>False</code> 且任务成功。Python 打印的 <code>True/False</code> 与 JSON 中的 <code>true/false</code> 含义相同。<code>assert</code> 是检查条件的语句；条件不成立时会抛出错误，提醒你检查证据，而不是继续宣称通过。</p>
+<p>每行观察是<strong>该动作执行之后</strong>的状态。要了解抓取前发生了什么，应看前一条移动事件的观察，不能把抓取后的 <code>holding: true</code> 当成抓取前已有物体。下一步为什么抬高，则需要结合抓取后的观察与上面的决策表。</p>
+<h2 id="_7">验收与常见卡点</h2>
+<p>本章验收需要两个日志文件和一个解释：抓取前工具在哪，抓取后哪个字段变化，为什么随后选择抬高。仅有最终 <code>success</code> 不能展示你读懂了闭环。</p>
 <ul>
-<li><a href="https://dagroup-pku.github.io/PyRUA-Lean/docs/getting-started/how-it-works/">PyRUA-Lean：运行机制与代码交互</a></li>
-<li><a href="https://mujoco.readthedocs.io/en/stable/python.html">MuJoCo 官方 Python 文档</a></li>
-</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。展厅链接为阅读案例，不表示实验包复现了该案例的机器人、模型或论文结果。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/06-agent-loop.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="6">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="05.html">← 上一章</a><a rel="next" href="07.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>
+<li>找不到日志：确认从仓库根目录运行，并检查 <code>--out</code> 指定的目录；命令不会自动沿用上一章的输出位置。</li>
+<li>没有动画：本命令不打开交互查看器，先用事件表检查动作，后续课程提供实际录像对照。</li>
+<li>看见 <code>ok: true</code> 就认为完成：继续检查 <code>task.success</code>，尤其注意释放发生的位置。</li>
+<li>七次动作与固定基线完全一样：无扰动时本来就可能相同，要通过第 9 章对照检验反馈的作用。</li>
+</ul>
+<p>基础练习：换成 <code>--seed 8 --out runs/ch06-seed8</code>，并修改检查程序的目录。比较初始位置与动作类型，解释为什么坐标变了，任务阶段仍可相同。</p>
+<p>下一章先解决“什么任务可以被接受、怎样才算完成”。真实模型接入放在第 7 章末作为选学；跳过它不影响后续任何离线实验。以后阅读 <a href="../gallery.html#demo-pyrualean-astra-cells-20261028">PyRUA-Lean 的代码组织案例</a>时，可以继续追问“反馈在哪一行改变了下一步”，但它的机器人与接口不同，不是本章已经复现的系统。</p>
+<h2 id="_8">参考</h2>
+<ul>
+<li><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/run.py">课程循环与工具实现</a></li>
+<li><a href="https://mujoco.readthedocs.io/en/3.3.7/python.html">MuJoCo 3.3.7 Python 接口</a></li>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。标为“展厅阅读案例”的录像采用各自的机器人与模型设置；标为“本课实验录像”的内容来自本课程代码的实际运行。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/06-agent-loop.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="6">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="05.html">← 上一章</a><a rel="next" href="07.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

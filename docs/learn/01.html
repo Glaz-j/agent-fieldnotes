@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="任务、观察、决策与执行分别由谁负责"><meta name="theme-color" content="#f3f4ee"><title>拆解一个机器人 Agent · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css"><script defer src="../course.js"></script></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 9 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html" aria-current="page">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 01 章 / 机器人基础</div><h1>拆解一个机器人 Agent</h1><p>任务、观察、决策与执行分别由谁负责</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<ul>
+<li><a href="#_1">本章目标</a></li>
+<li><a href="#_2">从一个可检查的任务开始</a></li>
+<li><a href="#_3">一次操作中的六个环节</a></li>
+<li><a href="#_4">三种会动的系统</a></li>
+<li><a href="#_5">案例阅读：目标容器移动以后</a></li>
+<li><a href="#_6">动手任务：给系统画一张责任图</a></li>
+<li><a href="#_7">常见误解</a></li>
+<li><a href="#_8">练习</a></li>
+<li><a href="#_9">一手参考</a></li>
+</ul>
+</div>
+</details><article><p>你在展厅里看到机械臂抓起积木、移动到容器上方、松开夹爪。动作很连贯，但仅凭录像，我们还不知道下一步是预先写好的，还是模型根据新画面临时决定的。课程的第一项能力，就是沿着一次操作找出每个决定的来源。</p>
+<p>本章不要求安装环境。你只需要会阅读简单 Python 函数；实验是观察案例、画出系统结构，并给一个任务写验收条件。</p>
+<h2 id="_1">本章目标</h2>
+<p>学完后，你应能解释任务、观察、决策、技能、控制和验收之间的关系；能够区分固定脚本、规则闭环与在线模型决策；还能说明“机器人动了”“工具返回成功”和“任务完成”为什么是三件事。</p>
+<h2 id="_2">从一个可检查的任务开始</h2>
+<p>我们先采用一个小任务：把红色方块移到蓝色目标区。这里至少有三个条件：操作的是指定物体、物体进入指定区域、机械臂已经释放物体。若机械臂只是夹着方块经过目标上方，不能算完成。</p>
+<p>任务描述给出了希望发生的变化，验收函数把变化变成可以检查的条件。例如，最初可以用仿真中的方块位置判断它是否进入目标区。这是教学阶段的精确判定，后续才讨论视觉误差。写清条件，比给任务起一个宏大的名字更有用。</p>
+<h2 id="_3">一次操作中的六个环节</h2>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>输入与输出</th>
+<th>需要回答的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务</td>
+<td>人的要求 → 目标和约束</td>
+<td>操作什么，放到哪里，什么叫完成？</td>
+</tr>
+<tr>
+<td>观察</td>
+<td>传感器或仿真 → 当前信息</td>
+<td>现在能看到什么？信息是何时取得的？</td>
+</tr>
+<tr>
+<td>决策</td>
+<td>任务和观察 → 下一步动作</td>
+<td>该找物体、移动、抓取，还是停止？</td>
+</tr>
+<tr>
+<td>技能</td>
+<td>动作及参数 → 一段执行过程</td>
+<td>怎样把“到达这个位置”转换成机器人运动？</td>
+</tr>
+<tr>
+<td>控制与仿真</td>
+<td>控制目标 → 状态变化</td>
+<td>关节是否真正到位，物体发生了什么变化？</td>
+</tr>
+<tr>
+<td>验收</td>
+<td>执行后的观察 → 结果</td>
+<td>目标是否达成，是否需要纠正？</td>
+</tr>
+</tbody>
+</table>
+<p>决策不必覆盖每个物理仿真步。上层可以选择“移动到方块上方”，技能内部再完成多个控制步。把高层目标与底层执行分开，能让我们分别检查语言理解、动作参数和控制误差。</p>
+<p>但分层不是一条固定规定。有的系统输出技能名称，有的输出末端路点，有的生成一段程序，有的直接输出动作序列。阅读一个项目时，先找到它的动作接口，再讨论模型“控制了什么”。</p>
+<h2 id="_4">三种会动的系统</h2>
+<p>固定脚本按预设顺序调用动作。只要场景与假设一致，它就可能很好用；若方块换了位置，旧坐标可能失效。</p>
+<p>规则闭环在动作之间检查状态。例如，没抓住就重新靠近。它能够纠错，但下一步由人写的规则决定，不能因此称为在线大模型 Agent。</p>
+<p>在线模型决策把当前观察交给模型，由模型选择下一步，再将执行结果返回模型。模型调用、输入、动作和反馈应该能够在日志里追踪。一次模型生成后反复执行的固定程序，也要与每步重新调用模型区别记录。</p>
+<p>课程默认实验先提供确定性的脚本或规则示范，让大家不需要密钥也能理解控制流程。在线模型入口会在第 6 章单独讲解。我们比较两种模式的行为，但不把离线演示包装成真实模型调用。</p>
+<h2 id="_5">案例阅读：目标容器移动以后</h2>
+<p>打开 <a href="../gallery.html#demo-mems-target-shift-libero-three">MemS 目标移动案例</a>。这是已有的案例阅读材料，课程实验包不等同于该项目的完整复现。</p>
+<p>先观看第一次目标定位，再找到目标被移动后的片段。记录三个问题：系统在什么时刻获得新观察？旧位置是否仍参与后续动作？重新定位后，哪一个动作改变了？如果录像或说明没有给出某个信息，就在记录中写“材料未提供”，不要靠动作流畅程度补出推理过程。</p>
+<p>然后阅读 <a href="../gallery.html#demo-pyrualean-astra-cells-20261028">PyRUA-Lean 代码单元案例</a>，观察一次模型输出是否包含多个动作和局部检查。这样的执行方式能帮助我们理解：模型调用次数、技能调用次数与仿真步数是不同的计量单位。</p>
+<h2 id="_6">动手任务：给系统画一张责任图</h2>
+<p>新建一份自己的学习笔记，写下“红色方块进入蓝色目标区”的任务，并完成以下工作：</p>
+<ol>
+<li>画出“任务 → 观察 → 决策 → 技能 → 执行 → 新观察”的循环，把验收放在适当位置。</li>
+<li>为每个环节写一个可能的错误：认错物体、坐标用错、抓空、提前宣布完成等。</li>
+<li>为每个错误选择要检查的证据。识别错误看输入画面和对象判断；控制错误看目标与实际状态；提前停止看终止前的检查结果。</li>
+<li>给两个展厅案例分别标注模型的输入、动作接口和已有材料能够证明的范围。</li>
+</ol>
+<p>验收时，你应能用一句话说明每个模块的责任，并且能回答：如果完全去掉语言模型，系统中哪些部分仍然有用？答案应该包括仿真环境、技能、状态记录和任务验收。</p>
+<h2 id="_7">常见误解</h2>
+<p>“看见机械臂完成一次任务，所以系统很可靠”忽略了失败尝试和初始条件。课程后面会要求保存所有指定测试的结果。</p>
+<p>“模型说完成了，所以完成了”把系统的判断当成了外部事实。终止前应有可检查的证据。</p>
+<p>“技能越复杂越先进”也不成立。复杂技能可能把感知和恢复藏在内部。选择什么粒度，要看我们希望学习和比较哪一层。</p>
+<h2 id="_8">练习</h2>
+<p>基础题：把任务改成“把两个方块按颜色分类”，补充三个新的验收条件。挑战题：设计一个录像看起来成功、实际不符合任务条件的例子，并说明哪项观测能揭示它。</p>
+<p>下一章将安装实验环境，把这张责任图里的“执行”和“观察”真正运行起来。</p>
+<h2 id="_9">一手参考</h2>
+<ul>
+<li><a href="https://mujoco.readthedocs.io/en/stable/overview.html">MuJoCo 官方概览</a>：了解物理仿真承担的职责。</li>
+<li><a href="https://code-as-policies.github.io/">Code as Policies 项目</a>：语言模型生成程序、程序调用感知与控制接口的原始项目说明。</li>
+<li><a href="https://github.com/Glaz-j/agent-fieldnotes">Agent Fieldnotes 仓库说明</a>：现有展厅材料的收录范围。</li>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。展厅链接为阅读案例，不表示实验包复现了该案例的机器人、模型或论文结果。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/01-robot-agent.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="1">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a href="../index.html">← 学习路线</a><a rel="next" href="02.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

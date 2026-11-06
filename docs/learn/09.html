@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="面对抓取失败与目标移动，重新组织行动"><meta name="theme-color" content="#f3f4ee"><title>执行验证与失败恢复 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css"><script defer src="../course.js"></script></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 9 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html" aria-current="page">09 · 执行验证与失败恢复</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 09 章 / Agent 闭环</div><h1>执行验证与失败恢复</h1><p>面对抓取失败与目标移动，重新组织行动</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<ul>
+<li><a href="#_1">本章目标</a></li>
+<li><a href="#_2">三层“成功”不能混在一起</a></li>
+<li><a href="#_3">第一步：先跑无扰动对照</a></li>
+<li><a href="#_4">第二步：让第一次抓取失败</a></li>
+<li><a href="#_5">第三步：让目标位置发生变化</a></li>
+<li><a href="#_6">第四步：把结果和失败事件一起读出来</a></li>
+<li><a href="#_7">第五步：用多个回合限制结论</a></li>
+<li><a href="#_8">有限恢复与排查顺序</a></li>
+<li><a href="#_9">本章验收、案例与练习</a></li>
+</ul>
+</div>
+</details><article><p>一次顺利的搬运无法证明控制器会处理意外。本章主动制造两个可重复的变化：第一次抓取失效，以及抓取后目标区域移动。用同一场景比较固定脚本与反馈控制器，看看哪些信息真正改变了动作。</p>
+<p>前置要求：完成第 6 章日志检查与第 7 章目标验收。实验使用精确状态观察和确定性规则，不调用大模型；这里验证的是反馈机制，而非在线模型的推理能力。</p>
+<h2 id="_1">本章目标</h2>
+<p>运行三组对照，定位第一处失败及恢复动作，用统一标准比较结果。你的结论应限定在本教学环境和所运行种子范围内，保留全部回合，而不是只展示成功视频。</p>
+<h2 id="_2">三层“成功”不能混在一起</h2>
+<p>第一层是程序完成：命令没有崩溃。第二层是工具完成：例如某次 <code>move</code> 到达指定位置，或 <code>grasp</code> 建立附着。第三层是任务完成：红色方块已经释放，稳定处于当前蓝色目标范围内。</p>
+<p>课程的 <code>World.success()</code> 同时检查：不再附着、水平距离小于 0.045 米、方块中心高度处于 0.015 到 0.065 米之间、平移速度小于 0.05 米每秒。每步观察中的 <code>scene.block_linear_speed_m_s</code> 记录平移速率，可与位置及持物状态一起核对。位置在日志中经过小数舍入，阈值边缘仍应以原始状态计算为准。这是当前场景的教学验收条件，不能直接作为另一种物体或真实机器人任务的标准。</p>
+<p>其中“当前目标”很关键。若蓝区域移动后仍在旧位置放下方块，即使所有动作工具都返回正常，任务依然失败。最终验收独立于控制器的口头宣告。</p>
+<h2 id="_3">第一步：先跑无扰动对照</h2>
+<pre><code class="language-sh">python lab/run.py baseline --seed 7 --perturb none --out runs/ch09-baseline-clean
+python lab/run.py agent --mode scripted --seed 7 --perturb none --out runs/ch09-agent-clean
+</code></pre>
+<p>固定脚本在开始时缓存方块与目标坐标，然后执行既定动作，不根据结果改计划。<code>scripted</code> 控制器每一轮读取当前状态，根据是否附着、末端与物体或目标的关系选择下一步。顺利场景下，两者都可能完成任务。</p>
+<h2 id="_4">第二步：让第一次抓取失败</h2>
+<pre><code class="language-sh">python lab/run.py baseline --seed 7 --perturb miss-grasp --out runs/ch09-baseline-miss
+python lab/run.py agent --mode scripted --seed 7 --perturb miss-grasp --out runs/ch09-agent-miss
+</code></pre>
+<p>扰动在第一次满足抓取位置条件的 <code>grasp</code> 上触发一次，返回 <code>injected_miss_grasp</code>，不会建立附着。它是人为注入的接口失败，不代表仿真已经建模真实滑落或摩擦不足。</p>
+<p>固定脚本继续搬运和释放，却没有物体随行。反馈控制器重新观察到没有抓住方块，可以再次尝试。这里的恢复来自显式规则，不能写成模型自行发明了重试策略。</p>
+<p>失败回合会以非零退出码结束，属于本章预期结果；在终端逐条运行后续命令。不要用要求每条命令成功的批处理方式，让第一个预期失败阻止其他对照。</p>
+<h2 id="_5">第三步：让目标位置发生变化</h2>
+<pre><code class="language-sh">python lab/run.py baseline --seed 7 --perturb shift-goal --out runs/ch09-baseline-shift
+python lab/run.py agent --mode scripted --seed 7 --perturb shift-goal --out runs/ch09-agent-shift
+</code></pre>
+<p>扰动在首次成功抓取后把蓝区域移到新位置。固定脚本使用缓存的旧坐标，反馈控制器根据更新后的观察移动。检查日志中 <code>goal_xyz</code> 何时变化，再检查下一次横向移动的目标，建立“观察变化导致动作变化”的证据链。</p>
+<p>这一实验刻意缩小了问题：区域只移动一次，新位置仍在可达范围内。它不证明控制器能够追踪任意速度的动态物体，也没有验证真实碰撞、遮挡和连续视觉反馈。</p>
+<h2 id="_6">第四步：把结果和失败事件一起读出来</h2>
+<p>运行下面的完整比较程序：</p>
+<pre><code class="language-sh">python - &lt;&lt;'PY'
+import json
+from pathlib import Path
+
+names = (
+    &quot;baseline-clean&quot;, &quot;agent-clean&quot;, &quot;baseline-miss&quot;,
+    &quot;agent-miss&quot;, &quot;baseline-shift&quot;, &quot;agent-shift&quot;,
+)
+for name in names:
+    folder = Path(&quot;runs&quot;) / f&quot;ch09-{name}&quot;
+    summary = json.loads((folder / &quot;summary.json&quot;).read_text())
+    events = [json.loads(line) for line in
+              (folder / &quot;events.jsonl&quot;).read_text().splitlines()]
+    failures = [event for event in events if not event[&quot;result&quot;][&quot;ok&quot;]]
+    print(name, &quot;任务成功：&quot;, summary[&quot;success&quot;],
+          &quot;工具调用：&quot;, summary[&quot;steps&quot;], &quot;模型调用：&quot;, summary[&quot;model_calls&quot;])
+    for event in failures:
+        print(&quot;  失败步骤：&quot;, event[&quot;step&quot;], event[&quot;tool&quot;], event[&quot;result&quot;].get(&quot;error&quot;))
+PY
+</code></pre>
+<p>预期可以观察到：无扰动时两者完成任务；两种扰动下固定脚本失败，而确定性闭环完成恢复。以实际记录为准，出现差异就保留失败并排查。尤其注意目标移动的失败可能没有任何工具报错，只有最终任务验收失败。</p>
+<h2 id="_7">第五步：用多个回合限制结论</h2>
+<pre><code class="language-sh">python lab/run.py evaluate --seeds 5 --out runs/ch09-evaluation
+</code></pre>
+<p>该命令对种子 0 到 4，分别运行两种控制方式与三种扰动，共 30 个回合；各回合目录与 <code>evaluation.json</code> 保留详细结果。报告每组成功数、总回合数和工具调用开销，再说明扰动定义。</p>
+<p>不能把这 30 个简化仿真回合写成真实机械臂、通用具身任务或语言模型能力的成功率。它们支持的结论是：在这组确定性测试中，反馈与重读目标对指定失败有帮助。</p>
+<h2 id="_8">有限恢复与排查顺序</h2>
+<p>当前规则循环最多执行 32 轮。预算是终止边界，并不保证每种失败都能恢复。重复同一条无效动作直到预算耗尽，只能说明系统没有无限运行，不能算合理恢复。</p>
+<p>排查时先看参数是否有效，再看移动或抓取是否达成，最后看最终关系是否满足。遇到不可达坐标，应改变目标或停止；遇到暂时抓取失败，可以有限重试；遇到目标变化，应重新观察。恢复策略必须与失败原因对应。</p>
+<h2 id="_9">本章验收、案例与练习</h2>
+<p>交付六份单回合日志、一份多回合结果，以及两个解释：抓取失败后为何重试，目标移动后为何改坐标。两条解释都必须引用具体事件，不能只引用最后的 <code>success</code>。</p>
+<p>打开 <a href="../gallery.html#demo-mems-target-shift-libero-three">MemS：目标碗被推走后会怎样</a>，把其中的观察、记忆更新和再规划与本章对照。展厅案例提供阅读材料；这里没有复现其完整感知与记忆系统。</p>
+<p>基础题：在目标移动日志中找出第一次位置变化和随后采用新坐标的动作。进阶题：提出一个当前规则无法解决的失败，并写出识别条件、最多重试次数和终止原因；实现后再报告实验结果。</p>
+<ul>
+<li><a href="https://github.com/darthjaja6/MemS">MemS 原始实现与空间记忆说明</a></li>
+<li><a href="https://dagroup-pku.github.io/PyRUA-Lean/docs/getting-started/how-it-works/">PyRUA-Lean：动作结果与代码执行机制</a></li>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。展厅链接为阅读案例，不表示实验包复现了该案例的机器人、模型或论文结果。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/09-verification-recovery.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="9">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="08.html">← 上一章</a><a href="../gallery.html">带着问题看案例 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

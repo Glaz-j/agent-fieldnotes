@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="处理指令、歧义与任务完成条件"><meta name="theme-color" content="#f3f4ee"><title>把语言变成可检查的目标 · Agent Fieldnotes</title><link rel="stylesheet" href="../course.css"><script defer src="../course.js"></script></head><body><a class="skip" href="#main">跳到正文</a><header class="topbar"><a class="brand" href="../index.html"><b>af</b><span>Agent Fieldnotes<small>机器人 Agent · 从理解到动手</small></span></a><nav aria-label="主导航"><a href="../index.html#curriculum">学习路线</a><a href="../gallery.html">实验案例</a><a class="repo" href="https://github.com/Glaz-j/agent-fieldnotes">GitHub ↗</a></nav></header><main id="main" class="lesson-layout"><aside class="course-nav" aria-label="课程目录"><details open><summary>课程目录 · 9 章</summary><nav><div class="nav-group">机器人基础</div><a href="01.html">01 · 拆解一个机器人 Agent</a><a href="02.html">02 · 运行第一个仿真环境</a><a href="03.html">03 · 机器人究竟知道什么</a><a href="04.html">04 · 从坐标到机械臂运动</a><a href="05.html">05 · 把动作封装成技能</a><div class="nav-group">Agent 闭环</div><a href="06.html">06 · 第一个机器人 Agent 循环</a><a href="07.html" aria-current="page">07 · 把语言变成可检查的目标</a><a href="08.html">08 · 从 RGB 图像估计位置</a><a href="09.html">09 · 执行验证与失败恢复</a><div class="nav-group">继续动手</div><a href="../downloads/agent-fieldnotes-lab.zip" download>下载教学实验包 ↓</a><a href="../gallery.html">实验案例库 ↗</a></nav></details></aside><div class="reading"><header><div class="label">第 07 章 / Agent 闭环</div><h1>把语言变成可检查的目标</h1><p>处理指令、歧义与任务完成条件</p><div class="lesson-meta">讲解 · 动手实验 · 验收检查 · 练习</div></header><details class="toc-box"><summary>本章内容</summary><div class="toc">
+<ul>
+<li><a href="#_1">本章目标</a></li>
+<li><a href="#_2">为什么目标需要独立表示</a></li>
+<li><a href="#_3">第一步：解析明确的指令</a></li>
+<li><a href="#_4">第二步：让含糊指令停在执行之前</a></li>
+<li><a href="#_5">第三步：把已确认任务交给控制器</a></li>
+<li><a href="#_6">第四步：先写验收，再看轨迹</a></li>
+<li><a href="#_7">本章验收与失败排查</a></li>
+<li><a href="#_8">从展厅看更复杂的目标</a></li>
+<li><a href="#_9">练习与参考</a></li>
+</ul>
+</div>
+</details><article><p>“把它放好”听起来很自然，却没有告诉机器人“它”是谁、“好”在哪里。即使模型生成一段流畅计划，也不能因此判断任务已经被正确理解。本章把用户指令、目标表示、执行过程和验收条件分开。</p>
+<p>前置要求：完成第 6 章离线循环，理解工具参数和 JSON。实验继续使用同一个红色方块与蓝色目标区域，不增加机器人硬件或训练模型。</p>
+<h2 id="_1">本章目标</h2>
+<p>解析一条受支持指令，识别一条需要澄清的指令，把确认后的任务送入控制器，并根据状态而非文字回答验收。最终提交三份证据：解析输出、澄清输出和执行记录。</p>
+<h2 id="_2">为什么目标需要独立表示</h2>
+<p>自然语言面向人，目标对象面向程序。对于“把红色方块放到蓝色区域”，至少需要确定被操作对象、目标区域与完成关系。执行计划则回答怎么实现它，例如接近、抓取、搬运、释放。</p>
+<p>目标与计划分开后，即使搬运路线改变，任务仍然相同；即使目标区域移动，程序也应重新查找它，而不是把最初坐标当成任务本身。实体身份是“蓝色区域”，位置只是某次观察得到的属性。</p>
+<p>验收还要区分动作结果与最终关系：移动到目标上方、释放成功、方块确实落入目标，是三个不同命题。一个工具返回正常，只能说明它负责的那一步发生了什么。</p>
+<h2 id="_3">第一步：解析明确的指令</h2>
+<p>在仓库根目录、激活第 2 章的环境后运行：</p>
+<pre><code class="language-sh">python lab/run.py parse-goal --instruction '把红色方块放到蓝色区域'
+</code></pre>
+<p>阅读完整输出：<code>status</code> 表示解析是否通过，<code>object</code> 指向红方块，<code>target</code> 指向蓝区域，<code>parser</code> 说明解析来自受限规则。完成条件由环境的验收函数定义，不包含在这一小段 JSON 中。这里的解析器只接受明确模板并进行全文匹配，不调用语言模型，也不提供通用中文理解能力。</p>
+<p>使用这样的小解析器，是为了先让“输入是否被接受”可以测试。以后替换成模型生成结构化目标，仍然需要校验对象是否存在、关系是否受支持，以及是否有足够信息。JSON 能被解析，只证明格式成立，不能证明语义正确。</p>
+<p>当前程序只用 <code>status</code> 控制是否允许执行，<code>object</code> 和 <code>target</code> 用于展示目标表示；控制器和验收函数仍固定为同一个红块到蓝区的任务。修改这两个 JSON 值不会自动增加对象支持，通用目标执行还需要参数化控制器与验收函数。</p>
+<h2 id="_4">第二步：让含糊指令停在执行之前</h2>
+<pre><code class="language-sh">python lab/run.py parse-goal --instruction '把方块放到目标区域'
+</code></pre>
+<p>这条指令没有给出课程要求的颜色信息，应进入 <code>needs_clarification</code>。记录解析器提出的问题，不要手工补成成功结果。真实机器人需要澄清时，控制流程应该等待新输入；一个程序“猜中了”当前唯一物体，不表示它学会了解决指代。</p>
+<p>再检查不受支持的对象：</p>
+<pre><code class="language-sh">python lab/run.py parse-goal --instruction '把绿色方块放到蓝色区域'
+</code></pre>
+<p>当前场景没有绿色方块。正确的边界是说明缺少对象或需要澄清，不能悄悄把绿色换成红色。解析命令只解释任务，不执行搬运，因此适合用来检查不同输入。</p>
+<h2 id="_5">第三步：把已确认任务交给控制器</h2>
+<pre><code class="language-sh">python lab/run.py agent --mode scripted --seed 7 --instruction '把红色方块放到蓝色区域' --out runs/ch07-goal
+</code></pre>
+<p>任务一旦进入执行，控制器应该围绕已确认的目标行动。先观察，再操作，结束时检查实际状态。用下面的命令查看结果：</p>
+<pre><code class="language-sh">python - &lt;&lt;'PY'
+import json
+from pathlib import Path
+
+summary = json.loads(Path(&quot;runs/ch07-goal/summary.json&quot;).read_text())
+for key in (&quot;mode&quot;, &quot;seed&quot;, &quot;success&quot;, &quot;steps&quot;, &quot;model_calls&quot;, &quot;error&quot;):
+    print(f&quot;{key}: {summary[key]}&quot;)
+assert summary[&quot;mode&quot;] == &quot;scripted&quot;
+assert summary[&quot;model_calls&quot;] == 0
+assert summary[&quot;success&quot;] is True
+PY
+</code></pre>
+<p>然后回看 <code>events.jsonl</code> 的最终观察。尝试用自己的话描述验收需要的信息：方块是否仍附着在末端，方块与目标区域的相对位置是否满足环境定义。具体容差以实现中的验收函数为准，不能在报告里自行放宽标准。</p>
+<h2 id="_6">第四步：先写验收，再看轨迹</h2>
+<p>给自己设一个小规则：阅读运行记录前，先写下成功条件。例如“红色方块被释放并处于当前蓝色区域的允许范围内”。读完事件记录后，只按这条规则判断；不要因为机器人动作看起来合理就改成成功。</p>
+<p>这会暴露两类常见问题。第一类是目标解释错了，后续动作都围绕错误对象展开。第二类是目标正确，但执行失败，例如抓取没有建立或释放在旧位置。两类问题应分别归因，不能统称“模型不够聪明”。</p>
+<p>SayCan 将语言层面的任务相关性与技能在当前环境中的可行性结合起来选择技能。它提醒我们，理解用户想要什么与判断机器人现在能做什么，是需要连接的两个环节。本章只实现有限目标解析与规则控制，没有训练 SayCan 的可供性模型。<a href="https://say-can.github.io/">原项目与论文</a></p>
+<h2 id="_7">本章验收与失败排查</h2>
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>应提供的证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>明确指令被接受</td>
+<td><code>parse-goal</code> 的完整输出</td>
+</tr>
+<tr>
+<td>缺少信息不会被悄悄补齐</td>
+<td><code>needs_clarification</code> 结果与澄清问题</td>
+</tr>
+<tr>
+<td>不存在的对象不会被替换</td>
+<td>绿色方块指令的输出</td>
+</tr>
+<tr>
+<td>执行完成了目标</td>
+<td>独立验收结果与最终状态</td>
+</tr>
+</tbody>
+</table>
+<p>如果本应澄清的句子被接受，先缩小解析规则，不要靠增加运动动作补救。对于否定句、多对象比较、先后顺序等超出当前语法的表达，使用解析命令检查边界，不直接交给机器人执行。若明确指令解析正确却搬运失败，回到第 6 章按工具反馈定位原因。</p>
+<h2 id="_8">从展厅看更复杂的目标</h2>
+<p>打开 <a href="../gallery.html#demo-robomme-pick-count">RoboMME：数清次数，再按下结束按钮</a>。这里的成功条件依赖事件次数，单看最终一帧往往不够。写下“完成第几次”需要保留什么历史，再比较本章仅依赖当前状态的放置任务。</p>
+<p>这个案例用于理解目标表示为何会扩展到时间与记忆。当前单方块实验没有实现 RoboMME 的任务集，也没有通过它的完整评测。</p>
+<h2 id="_9">练习与参考</h2>
+<p>基础题：整理六条指令，分为支持、需要澄清、当前不支持三类，保存实际解析结果。进阶题：为“按顺序放置两个物体”写一个目标结构草案，并指出需要新增哪些场景实体和验收信息；先完成设计，不宣称当前代码已经支持。</p>
+<ul>
+<li><a href="https://docs.python.org/3/library/json.html">Python 官方 JSON 文档</a></li>
+<li><a href="https://github.com/jackbjed/embodied-astra-robomme">RoboMME Agent 参考实现与实验说明</a></li>
+</ul></article><div class="lab-note">本课程实验使用独立的简化教学环境。展厅链接为阅读案例，不表示实验包复现了该案例的机器人、模型或论文结果。<br><a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/course/lessons/07-checkable-goals.md">查看本章源文件</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/blob/main/lab/GUIDE.md">查看实验说明</a></div><div class="lesson-bottom"><label class="finish-label"><input type="checkbox" id="lesson-complete" data-lesson="7">我已完成本章学习与验收</label><p class="progress-note" id="progress-status" role="status">学习进度仅保存在当前浏览器。</p><nav class="pager" aria-label="章节翻页"><a rel="prev" href="06.html">← 上一章</a><a rel="next" href="08.html">下一章 →</a></nav></div></div></main><footer class="footer"><span>Agent Fieldnotes · 在实验中学习机器人 Agent</span><span><a href="../attributions.html">案例来源与许可</a> · <a href="https://github.com/Glaz-j/agent-fieldnotes/issues">问题与勘误</a> · <a href="https://glazwu.cn/zhaoye/">关于作者</a></span></footer></body></html>

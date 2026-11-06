@@ -1,0 +1,41 @@
+<mujoco model="fieldnotes_teaching_scara">
+  <compiler angle="radian"/>
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+  <visual><global offwidth="640" offheight="480"/><headlight diffuse="0.8 0.8 0.8"/></visual>
+  <default><joint damping="3" armature="0.03"/><geom friction="0.8 0.02 0.01"/></default>
+  <worldbody>
+    <light pos="0 -0.3 1.5" dir="0 0 -1"/>
+    <geom name="table" type="plane" size="0.8 0.6 0.02" rgba="0.75 0.77 0.74 1"/>
+    <camera name="top" pos="0 0 1.4" quat="1 0 0 0" fovy="48"/>
+    <body name="goal" mocap="true" pos="0.08 -0.18 0.007">
+      <geom type="cylinder" size="0.08 0.007" rgba="0.02 0.15 0.95 1"/>
+    </body>
+    <body name="base" pos="-0.4 0 0.32">
+      <geom type="cylinder" size="0.055 0.16" pos="0 0 -0.16" rgba="0.18 0.22 0.24 1"/>
+      <body name="arm1">
+        <joint name="q1" type="hinge" axis="0 0 1" range="-3.14 3.14"/>
+        <geom type="capsule" fromto="0 0 0 0.35 0 0" size="0.018" rgba="0.3 0.55 0.55 1" contype="0" conaffinity="0"/>
+        <body name="arm2" pos="0.35 0 0">
+          <joint name="q2" type="hinge" axis="0 0 1" range="-3.14 3.14"/>
+          <geom type="capsule" fromto="0 0 0 0.30 0 0" size="0.016" rgba="0.5 0.7 0.65 1" contype="0" conaffinity="0"/>
+          <body name="tool" pos="0.30 0 0">
+            <joint name="z" type="slide" axis="0 0 1" range="-0.28 0"/>
+            <geom type="cylinder" size="0.012 0.03" rgba="0.2 0.2 0.2 1" contype="0" conaffinity="0"/>
+            <geom type="box" pos="0 0.032 -0.015" size="0.025 0.006 0.025" rgba="0.2 0.2 0.2 1" contype="0" conaffinity="0"/>
+            <geom type="box" pos="0 -0.032 -0.015" size="0.025 0.006 0.025" rgba="0.2 0.2 0.2 1" contype="0" conaffinity="0"/>
+          </body>
+        </body>
+      </body>
+    </body>
+    <body name="block" pos="-0.08 0.08 0.024">
+      <freejoint name="block_free"/>
+      <geom type="box" size="0.022 0.022 0.022" mass="0.04" rgba="0.95 0.04 0.025 1"/>
+    </body>
+  </worldbody>
+  <actuator>
+    <position joint="q1" kp="180" kv="25" ctrlrange="-3.14 3.14"/>
+    <position joint="q2" kp="150" kv="20" ctrlrange="-3.14 3.14"/>
+    <position joint="z" kp="800" kv="40" ctrlrange="-0.28 0"/>
+  </actuator>
+  <equality><weld name="grasp_constraint" body1="tool" body2="block" active="false" solref="0.005 1"/></equality>
+</mujoco>

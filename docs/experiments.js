@@ -15,7 +15,7 @@
   const $ = selector => document.querySelector(selector);
   const state = {view:'embodied',layout:'cards',query:'',mechanism:'all',source:'all',status:'all'};
   let data;
-  const cardLink = (card,project) => './#demo-'+encodeURIComponent(card.id)+(project?.representativeId===card.id?'?trial='+project.previewTrialNumber:'');
+  const cardLink = (card,project) => 'gallery.html#demo-'+encodeURIComponent(card.id)+(project?.representativeId===card.id?'?trial='+project.previewTrialNumber:'');
   function previewCard(card,family,project) {
     const b=card.projectBrief,mechanism=data.mechanisms.find(m=>m.id===card.mechanism)?.title||'';
     const preview=card.id===project.representativeId?project.preview:card.preview;

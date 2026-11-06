@@ -210,6 +210,11 @@ function openDemo(id,opener,options={}){
   $('#detail-route').textContent=d.projectBrief?.familyTitle||routeNames[d.route]||d.route;$('#dialog-title').textContent=d.title;$('#dialog-description').textContent=d.projectBrief?.summary||d.description;
   renderProjectExplainer(d);$('#detail-evidence').open=false;
   renderProjectVersions(d);
+  const lessons = {spatial_memory:[9,'执行验证与失败恢复'], coding:[6,'第一个机器人 Agent 循环'], vision:[8,'从 RGB 图像估计位置'], planner:[5,'把动作封装成技能'], control:[4,'从坐标到机械臂运动']};
+  const lesson = lessons[d.route] || [1,'拆解一次机器人任务'];
+  const relatedCourse = document.querySelector('#course-related');
+  if (relatedCourse) relatedCourse.innerHTML = `<p style="padding:14px;background:#e1ead8;border-radius:5px;font-size:13px;line-height:1.8"><strong>带着问题看案例</strong><br><a href="learn/${String(lesson[0]).padStart(2,'0')}.html">第 ${lesson[0]} 章 · ${lesson[1]} →</a><br>此处为已有实验阅读案例；课程实验包使用独立的简化教学环境。</p>`;
+
   $('#detail-original-description').textContent=d.description;
   $('#detail-badges').innerHTML=badge(sourceNames[d.source]||d.source,d.source)+badge(d.model||d.controller)+badge(d.input);
   $('#detail-metrics').innerHTML=d.metrics.map(m=>`<div><dt>${escapeHTML(m.label)}</dt><dd>${escapeHTML(m.value)}</dd></div>`).join('');

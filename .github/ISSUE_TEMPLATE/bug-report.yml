@@ -1,0 +1,64 @@
+name: 问题报告
+description: 报告程序报错、网页故障或可复现的结果错误。
+title: "[问题] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请提供能复现问题的最短步骤。若只是学习中不知道怎样继续，也可以使用“学习卡点反馈”。
+        Issue 是公开的：不要贴密钥、Authorization 头、Cookie 或完整环境变量；日志与截图先检查并打码。
+  - type: input
+    id: location
+    attributes:
+      label: 问题发生在哪里？
+      placeholder: 章节或页面链接、命令名称、文件路径。
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境与版本
+      description: 填写已知信息；不知道的项目可写“不知道”。网页问题请写浏览器。
+      placeholder: |
+        系统与处理器（若知道）：
+        Python / MuJoCo 或浏览器版本：
+        代码来源、下载日期或 commit：
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      description: 实验问题请包含完整命令、seed、扰动和模式；网页问题请说明点击顺序。
+      placeholder: |
+        1. 打开……
+        2. 执行……
+        3. 出现……
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期结果
+      placeholder: 根据哪段说明，应该发生什么？
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际结果
+      description: 说明结果差异，以及每次都发生还是偶尔发生。
+      placeholder: 实际发生……；重复运行……次，其中……次出现。
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 最小日志或错误输出（可选）
+      description: 可贴 traceback、doctor 输出、summary.json 的相关字段或关键事件。不要上传整个日志目录或模型对话。
+      render: text
+  - type: textarea
+    id: additional
+    attributes:
+      label: 截图、已尝试的办法或其他线索（可选）
+      description: 截图请打码；若有最小代码示例或关联 Issue，也可放在这里。
